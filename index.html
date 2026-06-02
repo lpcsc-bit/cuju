@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蹴鞠：東方足尖的千年傳奇</title>
+    <!-- 引入 Google Fonts 中文字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- 引入 Tailwind CSS 與 FontAwesome 圖標 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crimson: '#9B1C1C',
+                        gold: '#C5A059',
+                        parchment: '#FDFBF7',
+                        ink: '#1C1917'
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif TC', 'serif'],
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 平滑滾動與傳統美學滾動條 */
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #9B1C1C; border-radius: 4px; }
+        
+        /* 宣紙紋理背景 */
+        .paper-texture {
+            background-color: #FDFBF7;
+            background-image: radial-gradient(#EFECE6 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* 漸變與動畫 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 踢球遊戲進度條動畫 */
+        @keyframes pointerMove {
+            0% { left: 0%; }
+            50% { left: 100%; }
+            100% { left: 0%; }
+        }
+        .game-pointer {
+            animation: pointerMove 1.5s infinite linear;
+        }
+
+        /* 鞠球旋轉動畫 */
+        @keyframes rotateBall {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spinning-ball {
+            animation: rotateBall 20s infinite linear;
+        }
+    </style>
+</head>
+<body class="paper-texture font-sans text-ink overflow-x-hidden">
+
+    <!-- 頂部導覽列 -->
+    <nav class="fixed top-0 left-0 w-full bg-parchment/90 backdrop-blur-md border-b border-gold/20 py-4 px-6 md:px-12 flex justify-between items-center z-50">
+        <div class="flex items-center gap-2">
+            <span class="font-serif font-black text-2xl text-crimson tracking-wider">蹴鞠 CUJU</span>
+        </div>
+        <div class="hidden md:flex gap-8 font-serif font-bold text-lg">
+            <a href="#origin" class="hover:text-crimson transition-colors">起源探秘</a>
+            <a href="#evolution" class="hover:text-crimson transition-colors">器具變革</a>
+            <a href="#modes" class="hover:text-crimson transition-colors">競技百態</a>
+            <a href="#game" class="hover:text-crimson transition-colors">技藝模擬</a>
+            <a href="#philosophy" class="hover:text-crimson transition-colors">東方之道</a>
+        </div>
+        <a href="#game" class="bg-crimson text-white font-serif font-bold px-5 py-2 rounded-full hover:bg-red-800 transition-all shadow-md hover:shadow-lg">
+            立即挑戰 <i class="fa-solid fa-gamepad ml-1"></i>
+        </a>
+    </nav>
+
+    <!-- 視覺震撼首頁 (Hero Section) -->
+    <header class="relative min-h-screen flex items-center justify-center bg-ink text-white overflow-hidden pt-16">
+        <!-- 背景半透明水墨畫卷效果 -->
+        <div class="absolute inset-0 opacity-30 bg-cover bg-center" style="background-image: url('https://brewminate.com/wp-content/uploads/2019/12/121619-04-History-Ancient-China-Qin-1024x647.jpg');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/80 to-transparent"></div>
+        
+        <!-- 動態裝飾線 -->
+        <div class="absolute w-[500px] h-[500px] rounded-full border border-gold/10 -top-40 -left-40 spinning-ball"></div>
+        <div class="absolute w-[300px] h-[300px] rounded-full border border-crimson/20 -bottom-20 -right-20"></div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl">
+            <span class="inline-block border border-gold text-gold font-serif text-sm md:text-base tracking-[0.3em] px-4 py-1.5 rounded-full mb-6 uppercase">FIFA 官方認證足球起源</span>
+            <h1 class="font-serif font-black text-6xl md:text-9xl text-gold mb-6 tracking-widest leading-none drop-shadow-lg">
+                蹴鞠
+            </h1>
+            <p class="font-serif text-xl md:text-3xl text-gray-300 tracking-wider font-light mb-12">
+                穿越兩千年的足尖傳奇與東方競技美學
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#origin" class="w-full sm:w-auto bg-crimson text-white hover:bg-red-800 font-serif font-bold text-lg px-8 py-4 rounded-lg transition-all shadow-lg hover:-translate-y-1">
+                    開啟歷史畫卷
+                </a>
+                <a href="#game" class="w-full sm:w-auto border border-gold text-gold hover:bg-gold/10 font-serif font-bold text-lg px-8 py-4 rounded-lg transition-all">
+                    體驗高空射門
+                </a>
+            </div>
+        </div>
+
+        <!-- 向下捲動指示器 -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center animate-bounce z-10">
+            <p class="text-xs tracking-widest text-gold/60 uppercase mb-2 font-serif">向下滾動</p>
+            <i class="fa-solid fa-chevron-down text-gold text-xl"></i>
+        </div>
+    </header>
+
+    <!-- 起源探秘 (Origins) -->
+    <section id="origin" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div class="fade-in-up">
+            <span class="text-crimson font-serif font-bold text-lg tracking-widest block mb-2">✦ THE BEGINNING</span>
+            <h2 class="font-serif font-bold text-4xl md:text-5xl text-ink mb-12 relative pb-4">
+                起源：戰國烽煙與齊國臨淄
+                <span class="absolute bottom-0 left-0 w-20 h-1 bg-crimson"></span>
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <!-- 左側卡片 -->
+            <div class="lg:col-span-7 space-y-6 text-lg text-gray-700 leading-relaxed fade-in-up">
+                <p class="first-letter:text-5xl first-letter:font-serif first-letter:text-crimson first-letter:float-left first-letter:mr-3 first-letter:font-bold">
+                    兩千多年前的春秋戰國時期，齊國都城臨淄（今山東淄博）商賈雲集，市民生活富庶。根據《史記·蘇秦列傳》記載，當時臨淄「甚富而實」，市民無不「吹竽鼓瑟，擊筑彈琴，鬥雞走狗，<strong>六博蹋鞠</strong>」。
+                </p>
+                <div class="p-6 bg-crimson/5 border-l-4 border-crimson rounded-r-xl my-6">
+                    <h3 class="font-serif font-bold text-xl text-crimson mb-2">軍事武備之器</h3>
+                    <p class="text-base text-gray-600">
+                        最初的「蹋鞠」並非單純的休閒娛樂，而是強大的齊國軍隊用以訓練士兵體魄、敏捷度與團體陣法協作的重要軍事手段。
+                    </p>
+                </div>
+                <p>
+                    在黃沙滾滾的演兵場上，一個簡單的鞠球，點燃了士氣，也奠定了這項足尖運動在中華歷史長河中的獨特地位。
+                </p>
+            </div>
+
+            <!-- 右側插圖/多媒體區 -->
+            <div class="lg:col-span-5 fade-in-up relative">
+                <div class="bg-white p-4 rounded-2xl shadow-xl border border-gold/20">
+                    <div class="rounded-xl overflow-hidden aspect-[4/3] bg-amber-50 flex items-center justify-center relative">
+                        <img src="https://brewminate.com/wp-content/uploads/2019/12/121619-04-History-Ancient-China-Qin-1024x647.jpg" alt="戰國臨淄都城想像圖" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                            <span class="text-white text-sm font-serif"><i class="fa-solid fa-map-location-dot mr-2 text-gold"></i>齊國都城臨淄：世界足球的起點</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 裝飾徽章 -->
+                <div class="absolute -bottom-6 -left-6 bg-gold text-ink p-4 rounded-xl shadow-lg border border-white text-center hidden sm:block">
+                    <span class="block text-2xl font-black font-serif">BC 475</span>
+                    <span class="text-xs uppercase tracking-widest font-bold">戰國起源時間</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 器具變革互動區 (Evolution of the Cuju Ball) -->
+    <section id="evolution" class="py-24 bg-stone-100 border-y border-stone-200">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+            <div class="text-center max-w-2xl mx-auto mb-16 fade-in-up">
+                <span class="text-crimson font-serif font-bold text-lg tracking-widest block mb-2">✦ CRAFT EVOLUTION</span>
+                <h2 class="font-serif font-bold text-4xl md:text-5xl mb-6">器具變革：球與球門的演進</h2>
+                <p class="text-gray-600">球體的彈性升級與球門的高度跨越，徹底改寫了蹴鞠的遊戲規則與運動美學。</p>
+            </div>
+
+            <!-- 互動式鞠球對比 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-16 fade-in-up">
+                <!-- 戰國實心鞠 -->
+                <div class="bg-white rounded-3xl p-8 border border-stone-200 shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="bg-stone-200 text-stone-800 text-xs font-bold uppercase px-3 py-1.5 rounded-full">戰國至漢代</span>
+                            <span class="text-sm text-stone-500 font-serif">原始實心結構</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-2xl text-ink mb-4">石重毛實：毛髮實心鞠</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            外層使用熟皮縫製，內裡填充動物毛髮、羽毛。這種球體極為沉重，幾乎沒有彈性。
+                        </p>
+                    </div>
+                    <!-- 互動預覽示意圖 -->
+                    <div class="bg-stone-50 rounded-2xl p-6 flex justify-center items-center h-48 border border-stone-100">
+                        <div class="relative w-32 h-32 rounded-full bg-amber-800/10 flex items-center justify-center border-4 border-dashed border-amber-900/40">
+                            <!-- SVG 實心球 -->
+                            <svg class="w-24 h-24 text-amber-800" fill="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <path d="M12 2a10 10 0 0 0-10 10h20a10 10 0 0 0-10-10z" opacity="0.15"/>
+                                <path d="M12 2a10 10 0 0 0 0 20V2z" opacity="0.25"/>
+                                <path d="M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0 -6 0" fill="none" stroke="currentColor" stroke-dasharray="3"/>
+                            </svg>
+                            <span class="absolute bottom-2 text-xs font-semibold text-amber-900">重而沈：偏地滾動</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 唐代充氣鞠 -->
+                <div class="bg-white rounded-3xl p-8 border-2 border-crimson shadow-lg hover:shadow-2xl transition-all flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-crimson text-white text-xs font-bold tracking-widest px-4 py-1.5 rounded-bl-xl uppercase">歷史性科技突破</div>
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="bg-red-100 text-crimson text-xs font-bold uppercase px-3 py-1.5 rounded-full">唐宋全盛期</span>
+                            <span class="text-sm text-crimson font-serif font-bold">世界首創充氣技術</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-2xl text-crimson mb-4">輕羽飛空：八片與十二片充氣鞠</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            唐代工匠發明了用動物膀胱（如豬膀胱）做內膽，充氣後外面再用皮革包裹縫製。球體變得極為輕巧、彈力十足。
+                        </p>
+                    </div>
+                    <!-- 互動預覽示意圖 -->
+                    <div class="bg-red-50/50 rounded-2xl p-6 flex justify-center items-center h-48 border border-red-100">
+                        <div class="relative w-32 h-32 rounded-full bg-red-100 flex items-center justify-center border-4 border-crimson">
+                            <!-- SVG 充氣球 -->
+                            <svg class="w-24 h-24 text-crimson spinning-ball" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                <path d="M12 2C8 6 8 18 12 22" stroke-width="1.5"/>
+                                <path d="M12 2C16 6 16 18 12 22" stroke-width="1.5"/>
+                                <path d="M2 12C6 8 18 8 22 12" stroke-width="1.5"/>
+                                <path d="M2 12C6 16 18 16 22 12" stroke-width="1.5"/>
+                            </svg>
+                            <span class="absolute bottom-2 text-xs font-bold text-crimson">輕且彈：直上雲霄</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 球門演變時光軸 -->
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-stone-200 shadow-lg fade-in-up">
+                <h3 class="font-serif font-bold text-3xl text-ink mb-8 text-center">球門空間與目標的跨越</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+                    <!-- 中間連線 (僅桌面端) -->
+                    <div class="hidden lg:block absolute top-1/2 left-0 w-full h-1 bg-stone-200 transform -translate-y-1/2 z-0"></div>
+                    
+                    <!-- 階段 1 -->
+                    <div class="relative z-10 bg-white p-6 rounded-2xl border border-stone-100 shadow-sm text-center">
+                        <div class="w-12 h-12 rounded-full bg-stone-200 text-stone-800 flex items-center justify-center font-bold text-lg mx-auto mb-4">1</div>
+                        <h4 class="font-serif font-bold text-lg text-ink mb-2">漢代：地洞球門</h4>
+                        <p class="text-sm text-gray-500">在地上挖出多個坑洞，類似今日高爾夫或冰球，以將球踢入坑中計分。</p>
+                    </div>
+
+                    <!-- 階段 2 -->
+                    <div class="relative z-10 bg-white p-6 rounded-2xl border-2 border-crimson shadow-md text-center">
+                        <div class="w-12 h-12 rounded-full bg-crimson text-white flex items-center justify-center font-bold text-lg mx-auto mb-4">2</div>
+                        <h4 class="font-serif font-bold text-lg text-crimson mb-2">唐宋：風流眼高門</h4>
+                        <p class="text-sm text-gray-500">將球門升至數丈高的竹竿上，中央留下直徑約一尺的圓孔「風流眼」，難度極高。</p>
+                    </div>
+
+                    <!-- 階段 3 -->
+                    <div class="relative z-10 bg-white p-6 rounded-2xl border border-stone-100 shadow-sm text-center">
+                        <div class="w-12 h-12 rounded-full bg-stone-200 text-stone-800 flex items-center justify-center font-bold text-lg mx-auto mb-4">3</div>
+                        <h4 class="font-serif font-bold text-lg text-ink mb-2">現代：寬口落地球門</h4>
+                        <p class="text-sm text-gray-500">演變為現代足球的框架網形球門，回歸地面，追求球速與戰術對抗。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 競技百態 (Gameplay Modes) -->
+    <section id="modes" class="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div class="text-center max-w-2xl mx-auto mb-16 fade-in-up">
+            <span class="text-crimson font-serif font-bold text-lg tracking-widest block mb-2">✦ GAMEPLAY MODES</span>
+            <h2 class="font-serif font-bold text-4xl md:text-5xl mb-6">競技百態：武爭與藝比</h2>
+            <p class="text-gray-600">蹴鞠不僅是力量與速度的抗衡，更是花式技巧與空中藝術的結晶。</p>
+        </div>
+
+        <!-- 交互切換 Tabs 系統 -->
+        <div class="bg-white rounded-3xl shadow-xl border border-gold/20 p-6 md:p-10 fade-in-up">
+            <div class="flex flex-wrap border-b border-stone-200 mb-8 justify-center gap-4">
+                <button onclick="switchTab('confrontation')" id="tab-confrontation" class="tab-btn active px-6 py-3 font-serif font-bold text-xl border-b-4 border-crimson text-crimson transition-all">
+                    <i class="fa-solid fa-swords mr-2"></i>激烈對抗賽
+                </button>
+                <button onclick="switchTab('baida')" id="tab-baida" class="tab-btn px-6 py-3 font-serif font-bold text-xl border-b-4 border-transparent text-stone-500 hover:text-crimson transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>花式白打賽
+                </button>
+            </div>
+
+            <!-- 對抗賽內容 -->
+            <div id="content-confrontation" class="tab-content block transition-opacity duration-300">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-6 space-y-6">
+                        <h3 class="font-serif font-bold text-3xl text-crimson mb-4">力量與戰術的博弈</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            對抗賽分為直接對抗與間接對抗。直接對抗中，雙方球員在同一場地上激烈爭奪，允許身體接觸，將鞠球射入對方球門中，充滿戰術與戰鬥性。
+                        </p>
+                        
+                        <!-- 影視還原特色解說區 -->
+                        <div class="p-6 bg-amber-50/60 border-l-4 border-gold rounded-r-xl space-y-3">
+                            <h4 class="font-serif font-bold text-lg text-amber-900 flex items-center gap-2">
+                                <i class="fa-solid fa-clapperboard"></i> 影視還原：《長歌行》大唐 vs 草原
+                            </h4>
+                            <p class="text-sm text-amber-950/80 leading-relaxed">
+                                如右側影視還原片段所示，在經典古裝大劇《長歌行》中，大唐精銳與草原阿詩勒部展開了一場極高強度的蹴鞠大戰：
+                            </p>
+                            <ul class="text-xs text-amber-950/70 space-y-1 pl-4 list-disc">
+                               <li><strong>力量與對抗：</strong>草原部隊身體極其強悍，攻勢兇猛，大唐隊伍一度在身體接觸與高難度貼身防守下落於下風。</li>
+                               <li><strong>靈活突破（李長歌）：</strong>迪麗熱巴飾演的李長歌女扮男裝，緊急上場救場。她摒棄了強硬的身體對撞，轉而發揮女性身姿輕盈的特點，利用假動作和精妙帶球迅速穿針引線，帶領隊伍逆轉乾坤。</li>
+                               <li><strong>競技細節：</strong>影片中展示了古人「點球」、「護球」、「接應傳球」等行雲流水的蹴鞠身法，生動重現了唐代高規格賽事的激烈場面。</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <span class="bg-red-100 text-crimson p-2 rounded-lg mt-1"><i class="fa-solid fa-users"></i></span>
+                                <div>
+                                    <h4 class="font-serif font-bold text-lg text-ink">球場領袖：球頭</h4>
+                                    <p class="text-gray-500 text-sm">正式對抗賽中，每方隊伍都設有核心領袖「球頭」，負責最後一腳凌空抽射或傳中關鍵突破。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右側：影片嵌入與互動視窗 -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <div class="bg-stone-900 rounded-2xl p-3 border border-stone-800 shadow-2xl relative">
+                            <!-- YouTube Iframe Responsive Wrapper -->
+                            <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black">
+                                <iframe class="absolute top-0 left-0 w-full h-full" 
+                                        src="https://www.youtube.com/embed/zW7usIC_6Gg" 
+                                        title="精彩蹴鞠比賽名場面，百看不厭 🍿 迪麗熱巴 吳磊" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                            <div class="p-3 bg-stone-950/80 rounded-lg mt-2 text-center text-xs text-stone-400">
+                                <i class="fa-brands fa-youtube text-red-600 mr-1"></i> 經典重現：《長歌行》大唐與阿詩勒部蹴鞠決戰，李長歌一擊制勝
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 白打賽內容 -->
+            <div id="content-baida" class="tab-content hidden transition-opacity duration-300">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="font-serif font-bold text-3xl text-gold mb-6">足尖上的雜技：白打</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                            白打是指不設球門，僅作個人或團隊花式控球技巧的表演與比拼。參賽者利用頭、肩、背、膝、腳、腹等部位控球，使鞠球在空中飛舞、旋轉而不落地。
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <span class="bg-amber-100 text-gold p-2 rounded-lg mt-1"><i class="fa-solid fa-feather"></i></span>
+                                <div>
+                                    <h4 class="font-serif font-bold text-lg text-ink">傳奇招式</h4>
+                                    <p class="text-gray-500 text-sm">「轉乾坤」、「大鵬展翅」、「雙肩承露」。球員如同優雅的舞者，展現極致的身法控球。</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <span class="bg-amber-100 text-gold p-2 rounded-lg mt-1"><i class="fa-solid fa-trophy"></i></span>
+                                <div>
+                                    <h4 class="font-serif font-bold text-lg text-ink">計分評判</h4>
+                                    <p class="text-gray-500 text-sm">以技巧難度（解數）、花式連貫性、球不落地的時間與球員姿態作為勝負標準。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Chujutu.jpg/330px-Chujutu.jpg" alt="宋代白打蹴鞠圖" class="w-full h-80 object-cover rounded-xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 蹴鞠踢球模擬器 (Interactive Mini-Game) -->
+    <section id="game" class="py-24 bg-gradient-to-br from-ink to-stone-900 text-white relative">
+        <!-- 裝飾網格與傳統紋樣 -->
+        <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+        
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <span class="text-gold font-serif font-bold text-lg tracking-widest block mb-2">✦ INTERACTIVE SIMULATOR</span>
+            <h2 class="font-serif font-bold text-4xl md:text-5xl mb-6 text-gold">技藝挑戰：風流眼高空射門</h2>
+            <p class="text-stone-300 max-w-2xl mx-auto mb-12">
+                測試你的反應力！在指針移動到黃色或紅色「完美釋放點」時點擊「踢球」，挑戰將球射入空中的「風流眼」！
+            </p>
+
+            <!-- 模擬器機台 -->
+            <div class="bg-stone-800/80 rounded-3xl p-8 border border-gold/30 shadow-2xl backdrop-blur-md max-w-lg mx-auto">
+                <!-- 遊戲畫面 -->
+                <div class="relative bg-stone-950 rounded-2xl h-64 border border-stone-800 overflow-hidden mb-6 flex flex-col justify-between p-4">
+                    <!-- 空中風流眼 -->
+                    <div class="flex justify-center pt-2">
+                        <div id="goal" class="w-20 h-20 rounded-full border-4 border-amber-600/60 bg-amber-950/40 flex items-center justify-center relative transition-transform duration-300">
+                            <!-- 風流眼心 -->
+                            <div class="w-12 h-12 rounded-full border-2 border-dashed border-gold flex items-center justify-center">
+                                <span class="text-[10px] text-gold/80 font-serif font-bold">風流眼</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 球體運動軌跡 -->
+                    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
+                        <div id="game-ball" class="w-12 h-12 bg-amber-100 rounded-full border-2 border-amber-800 flex items-center justify-center shadow-lg transition-all duration-700 ease-out">
+                            <svg class="w-8 h-8 text-amber-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                <path d="M12 2C8 6 8 18 12 22" stroke-width="1.5"/>
+                                <path d="M12 2C16 6 16 18 12 22" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 得分與反饋顯示 -->
+                    <div id="game-feedback" class="absolute inset-x-0 top-1/2 transform -translate-y-1/2 text-center text-xl font-serif font-bold text-gold opacity-0 scale-50 transition-all duration-300">
+                        完美進球！
+                    </div>
+
+                    <!-- 底部提示 -->
+                    <div class="text-center text-xs text-stone-500">
+                        目前進球數：<span id="score" class="text-gold font-bold text-base">0</span> / 5
+                    </div>
+                </div>
+
+                <!-- 反應力條 -->
+                <div class="mb-8">
+                    <p class="text-xs text-stone-400 mb-2 font-serif">反應力度條 (黃色/紅色為完美擊球區)</p>
+                    <div class="relative h-6 w-full rounded-full bg-stone-700 overflow-hidden flex">
+                        <!-- 綠色區域（普通） -->
+                        <div class="h-full bg-emerald-600 w-1/3"></div>
+                        <!-- 黃色區域（極佳） -->
+                        <div class="h-full bg-amber-500 w-1/6"></div>
+                        <!-- 紅色區域（完美！） -->
+                        <div class="h-full bg-rose-600 w-1/12"></div>
+                        <!-- 黃色區域（極佳） -->
+                        <div class="h-full bg-amber-500 w-1/6"></div>
+                        <!-- 綠色區域（普通） -->
+                        <div class="h-full bg-emerald-600 w-1/4"></div>
+
+                        <!-- 跑馬燈指針 -->
+                        <div id="pointer" class="game-pointer absolute top-0 w-2 h-full bg-white shadow-md z-10 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- 動作按鈕 -->
+                <button id="kick-btn" onclick="performKick()" class="w-full bg-gold hover:bg-yellow-600 text-ink font-serif font-black text-xl py-4 rounded-xl transition-all shadow-lg active:scale-95">
+                    起 腳 踢 球 ！
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 東方之道與文化哲學 (Philosophy) -->
+    <section id="philosophy" class="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div class="text-center max-w-2xl mx-auto mb-16 fade-in-up">
+            <span class="text-crimson font-serif font-bold text-lg tracking-widest block mb-2">✦ PHILOSOPHY & INFLUENCE</span>
+            <h2 class="font-serif font-bold text-4xl md:text-5xl mb-6">東方之道：指尖上的宇宙與禮儀</h2>
+            <p class="text-gray-600">這不只是一項運動，更是一個充滿東方自然哲學與儒家倫理的宏大宇宙。</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch fade-in-up">
+            <!-- 哲學 1 -->
+            <div class="bg-white p-8 rounded-3xl border border-gold/20 shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-gold text-2xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-yin-yang"></i>
+                    </div>
+                    <h3 class="font-serif font-bold text-2xl text-ink mb-4">天人合一：曆法象徵</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        古人製鞠，外殼必由<strong>十二片皮革</strong>精密縫合。這並非出於偶然，而是對應一年中的十二個月、一天的十二個時辰，象徵著人與自然天時的共同旋律與生生不息。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 哲學 2 -->
+            <div class="bg-white p-8 rounded-3xl border border-gold/20 shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center text-crimson text-2xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h3 class="font-serif font-bold text-2xl text-crimson mb-4">以禮為先：儒家倫理</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        宋代編纂的《蹴鞠譜》極力強調競技精神在於「禮」。「不求暴力，而求中和」。球員在爭奪中，必須展現謙遜、不傷和氣的「君子之風」，體現儒家文化的自我修養。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 哲學 3 -->
+            <div class="bg-white p-8 rounded-3xl border border-gold/20 shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-stone-100 flex items-center justify-center text-stone-800 text-2xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-earth-asia"></i>
+                    </div>
+                    <h3 class="font-serif font-bold text-2xl text-ink mb-4">世界印記：FIFA官方認證</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        2004年，國際足球總會（FIFA）在嚴格考證後，於北京向全球宣布：<strong>中國山東臨淄為世界足球的發源地。</strong>蹴鞠作為中華傳統體育，已成為全人類共同的文化與體育遺產。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 (Footer & Credits) -->
+    <footer class="bg-ink text-white py-16 px-6 md:px-12 lg:px-24 border-t border-gold/20">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="space-y-4 text-center md:text-left">
+                <h2 class="font-serif font-black text-3xl text-gold tracking-widest">中國傳統體育：蹴鞠</h2>
+                <p class="text-sm text-stone-400">教育部體育署與教育局課程發展處聯合編製</p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-10">
+                <div class="text-center">
+                    <p class="text-xs text-gold uppercase tracking-wider mb-2">香港浸會大學</p>
+                    <h4 class="font-serif font-bold text-lg text-white">劉永松 教授</h4>
+                    <p class="text-xs text-stone-400">運動及健康科學系</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gold uppercase tracking-wider mb-2">香港都會大學</p>
+                    <h4 class="font-serif font-bold text-lg text-white">黃星萌 博士</h4>
+                    <p class="text-xs text-stone-400">運動管理專業</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-stone-800 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <p class="text-xs text-stone-500">© 2026 Millennial Legends of Cuju. All rights reserved.</p>
+            <div class="flex gap-4 text-sm text-stone-400">
+                <a href="#" class="hover:text-gold transition-colors">使用條款</a>
+                <span>|</span>
+                <a href="#" class="hover:text-gold transition-colors">隱私權政策</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 網頁互動 JavaScript 邏輯 -->
+    <script>
+        // 1. 頁面加載時的滾動動畫 (Intersection Observer)
+        document.addEventListener("DOMContentLoaded", function() {
+            const faders = document.querySelectorAll('.fade-in-up');
+            const appearOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('visible');
+                    appearOnScroll.unobserve(entry.target);
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        });
+
+        // 2. 競技百態 Tab 切換
+        function switchTab(tabName) {
+            // 隱藏所有 tab 內容
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-crimson', 'text-crimson');
+                btn.classList.add('border-transparent', 'text-stone-500');
+            });
+
+            // 顯示當前選中 tab 內容
+            const targetContent = document.getElementById('content-' + tabName);
+            const targetBtn = document.getElementById('tab-' + tabName);
+            
+            if (targetContent) targetContent.classList.remove('hidden');
+            if (targetBtn) {
+                targetBtn.classList.add('active', 'border-crimson', 'text-crimson');
+                targetBtn.classList.remove('border-transparent', 'text-stone-500');
+            }
+        }
+
+        // 3. 踢球模擬器遊戲邏輯
+        let score = 0;
+        let isKicking = false;
+
+        function performKick() {
+            if (isKicking) return; // 防止重複點擊
+            isKicking = true;
+
+            const pointer = document.getElementById('pointer');
+            const ball = document.getElementById('game-ball');
+            const goal = document.getElementById('goal');
+            const feedback = document.getElementById('game-feedback');
+            const scoreDisplay = document.getElementById('score');
+
+            // 暫停指針動畫以獲取當前位置
+            pointer.style.animationPlayState = 'paused';
+            
+            // 計算指針當前的百分比位置
+            const pointerRect = pointer.getBoundingClientRect();
+            const barRect = pointer.parentElement.getBoundingClientRect();
+            const percentage = ((pointerRect.left - barRect.left) / barRect.width) * 100;
+
+            // 判斷踢球結果
+            let hitType = 'miss'; // miss, great, perfect
+            
+            // 根據反應力條的顏色區間分配寬度百分比
+            if (percentage >= 50 && percentage <= 58.3) {
+                hitType = 'perfect';
+            } else if ((percentage >= 33.3 && percentage < 50) || (percentage > 58.3 && percentage <= 75)) {
+                hitType = 'great';
+            } else {
+                hitType = 'miss';
+            }
+
+            // 觸發球射門動畫
+            if (hitType === 'perfect') {
+                score++;
+                ball.style.transform = 'translateY(-130px) scale(0.4)';
+                goal.style.borderColor = '#9B1C1C';
+                goal.style.transform = 'scale(1.1)';
+                
+                feedback.innerText = '完美進球！「風流眼」穿針引線 🎯';
+                feedback.style.color = '#C5A059';
+                feedback.style.opacity = '1';
+                feedback.style.transform = 'translateY(-50%) scale(1.1)';
+            } else if (hitType === 'great') {
+                score++;
+                ball.style.transform = 'translateY(-120px) scale(0.5)';
+                goal.style.borderColor = '#C5A059';
+                
+                feedback.innerText = '好球！精準射門 ⚽';
+                feedback.style.color = '#34D399';
+                feedback.style.opacity = '1';
+                feedback.style.transform = 'translateY(-50%) scale(1)';
+            } else {
+                ball.style.transform = 'translateY(-60px) translateX(-40px) rotate(-45deg)';
+                
+                feedback.innerText = '擦柱而過！再接再厲 💥';
+                feedback.style.color = '#EF4444';
+                feedback.style.opacity = '1';
+                feedback.style.transform = 'translateY(-50%) scale(0.9)';
+            }
+
+            scoreDisplay.innerText = score;
+
+            // 2秒後重置遊戲狀態
+            setTimeout(() => {
+                ball.style.transform = 'none';
+                goal.style.borderColor = 'rgba(217, 119, 6, 0.6)';
+                goal.style.transform = 'none';
+                feedback.style.opacity = '0';
+                feedback.style.transform = 'translateY(-50%) scale(0.5)';
+                
+                // 重啟指針動畫
+                pointer.style.animationPlayState = 'running';
+                isKicking = false;
+
+                // 若滿 5 分觸發特別彩蛋
+                if (score >= 5) {
+                    feedback.innerText = '恭喜你！解鎖隱藏技巧：大鵬展翅 🏆';
+                    feedback.style.color = '#C5A059';
+                    feedback.style.opacity = '1';
+                    feedback.style.transform = 'translateY(-50%) scale(1.1)';
+                    score = 0; // 重置
+                }
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
