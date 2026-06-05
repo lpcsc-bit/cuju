@@ -40,7 +40,9 @@
         const SPREADSHEET_ID = '2PACX-1vS-_qE6XPHlEI2czLW37um9rnlWHC76xeYM9GTeDai2IWzHdS9LKW-iQVrxUKqhV0uxC4hzYvZXTChX';
         // ===============================
 
-        const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?output=csv&sheet=resources`;
+        // const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?output=csv&sheet=resources`;
+        const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=1298104869&single=true&output=csv`;
+        
 
         fetch(url)
             .then(res => res.text())
