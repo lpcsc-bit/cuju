@@ -3,87 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>體育科最新資訊</title>
+    <title>最新資訊 - 聖公會李炳中學體育科</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .liping-blue { background-color: #003366; } /* 李炳深藍色 */
+        .liping-border { border-color: #d32f2f; }  /* 李炳紅裝飾 */
+    </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-50 font-sans">
 
-    <nav class="bg-blue-600 text-white p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">🏆 學校體育科網頁</h1>
-           <ul class="flex space-x-6">
+    <nav class="liping-blue text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-3 mb-4 md:mb-0">
+                <div class="bg-white p-1 rounded-full text-blue-900 font-bold w-10 h-10 flex items-center justify-center">LP</div>
+                <div>
+                    <h1 class="text-lg font-bold leading-none">聖公會李炳中學</h1>
+                    <p class="text-xs opacity-80 italic">體育科 PE Department</p>
+                </div>
+            </div>
+            <ul class="flex space-x-8">
                 <li><a href="index.html" class="font-bold border-b-2 border-white pb-1">最新資訊</a></li>
-                <li><a href="resources.html" class="text-blue-100 hover:text-white transition">學習資源</a></li>
+                <li><a href="resources.html" class="text-blue-200 hover:text-white transition">學習資源</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="container mx-auto my-8 px-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📢 最新資訊</h2>
-        
-        <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <p class="text-gray-500">正在載入最新體育消息...</p>
+    <header class="bg-white border-b-4 liping-border py-12 mb-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">📢 最新資訊 <span class="text-blue-600">Latest News</span></h2>
+            <p class="mt-2 text-slate-500">獲取校隊動態、比賽成績及體育科重要通知。</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20">
+        <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="col-span-full text-center py-10">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div>
+                <p class="text-gray-400">正在同步雲端資料...</p>
+            </div>
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-gray-400 text-center py-4 mt-12">
-        <p>&copy; 2026 學校體育科. All Rights Reserved.</p>
+    <footer class="bg-slate-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-bold mb-2">聖公會李炳中學 S.K.H. Li Ping Secondary School</p>
+            <p class="text-sm opacity-60">取生命的水喝 | I Seek, I Act</p>
+        </div>
     </footer>
 
     <script>
-        // ======= ⚠️ 請在這裡修改你的資料 =======
-        // 把下面這行引號內的文字，換成你剛剛複製的那一長串 ID
+        // ======= ⚠️ 你的 Google 試算表 ID =======
         const SPREADSHEET_ID = '2PACX-1vS-_qE6XPHlEI2czLW37um9rnlWHC76xeYM9GTeDai2IWzHdS9LKW-iQVrxUKqhV0uxC4hzYvZXTChX';
         // ======================================
 
-        // 讀取發布試算表的 JSON 網址
-        const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?output=csv`;
-
-        fetch(url)
-            .then(res => res.text())
-            .then(csvText => {
-                const container = document.getElementById('news-container');
-                container.innerHTML = ''; // 清除正在載入的文字
-
-                // 將 CSV 轉換成陣列處理
-                const lines = csvText.split('\n');
-                
-                // 如果除了標題列，沒有其他資料
-                if (lines.length <= 1 || lines[1].trim() === '') {
-                    container.innerHTML = '<p class="text-gray-500">目前沒有最新消息。</p>';
-                    return;
-                }
-
-                // 從第二行（索引值值為 1）開始讀取資料，跳過第一行的欄位名稱
-                for (let i = 1; i < lines.length; i++) {
-                    if (lines[i].trim() === '') continue; // 跳過空白行
-
-                    // 處理 CSV 逗號分隔（簡單處理法）
-                    const columns = lines[i].split(',');
-                    
-                    const date = columns[0] ? columns[0].replace(/"/g, '') : '無日期';
-                    const category = columns[1] ? columns[1].replace(/"/g, '') : '一般';
-                    const title = columns[2] ? columns[2].replace(/"/g, '') : '無標題';
-                    const content = columns[3] ? columns[3].replace(/"/g, '') : '無內容';
-
-                    // 製作卡片 HTML
-                    const cardHTML = `
-                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">${category}</span>
-                                <span class="text-gray-400 text-sm">${date}</span>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">${title}</h3>
-                            <p class="text-gray-600">${content}</p>
-                        </div>
-                    `;
-                    container.innerHTML += cardHTML;
-                }
-            })
-            .catch(error => {
-                console.error('錯誤:', error);
-                document.getElementById('news-container').innerHTML = '<p class="text-red-500">無法載入資料，請檢查網絡連線或試算表設定。</p>';
-            });
-    </script>
-</body>
-</html>
+        // 預
