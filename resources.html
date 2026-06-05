@@ -29,7 +29,7 @@
         </div>
     </nav>
 
-    <header class="bg-white border-b-4 liping-border py-12 mb-10 text-center">
+    <header class="bg-white border-b-4 liping-border py-12 mb-10">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-extrabold text-slate-800">📚 學習資源庫 <span class="text-blue-600">Learning Resources</span></h2>
             <p class="mt-2 text-slate-500">自主學習體育知識，豐富你的運動生活。</p>
@@ -38,7 +38,11 @@
 
     <main class="container mx-auto px-4 pb-20">
         <div id="resources-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-10">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div>
+                <p class="text-gray-400">正在同步雲端資源...</p>
             </div>
+        </div>
     </main>
 
     <footer class="bg-slate-800 text-white py-8">
@@ -50,9 +54,8 @@
 
     <script>
         const SPREADSHEET_ID = '2PACX-1vS-_qE6XPHlEI2czLW37um9rnlWHC76xeYM9GTeDai2IWzHdS9LKW-iQVrxUKqhV0uxC4hzYvZXTChX';
-        
-        // 🚨 重要：請在下面 gid= 後面填入你在 resources 工作表網址看到的數字
-        const GID = '0'; // 範例，請確認後修改
+        // 已成功替換為你提供的專屬 GID
+        const GID = '1298104869'; 
 
         const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=${GID}&single=true&output=csv`;
 
@@ -63,32 +66,41 @@
                 grid.innerHTML = '';
 
                 const lines = csvText.split('\n');
+                if (lines.length <= 1) {
+                    grid.innerHTML = '<p class="col-span-full text-center text-gray-400">目前暫無學習資源。</p>';
+                    return;
+                }
+
                 for (let i = 1; i < lines.length; i++) {
                     if (lines[i].trim() === '') continue;
                     const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     
-                    const grade = columns[0] ? columns[1].replace(/"/g, '') : '全校'; // 注意你的欄位順序
-                    const topic = columns[1] ? columns[0].replace(/"/g, '') : '未命名主題';
+                    // 根據你的 Spreadsheet 欄位正確對應：A: grade, B: topic, C: link, D: photo
+                    const grade = columns[0] ? columns[0].replace(/"/g, '') : '全校';
+                    const topic = columns[1] ? columns[1].replace(/"/g, '') : '未命名主題';
                     const link = columns[2] ? columns[2].replace(/"/g, '') : '#';
-                    const photo = columns[3] ? columns[3].replace(/"/g, '').trim() : 'https://placehold.co/600x400/e2e8f0/64748b?text=PE+Resource';
+                    const photo = columns[3] ? columns[3].replace(/"/g, '').trim() : 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80';
 
                     grid.innerHTML += `
                         <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all overflow-hidden flex flex-col h-full border border-gray-100">
                             <div class="h-44 bg-gray-200">
-                                <img src="${photo}" class="w-full h-full object-cover">
+                                <img src="${photo}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80'">
                             </div>
                             <div class="p-6 flex flex-col flex-grow">
-                                <div class="mb-2"><span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase">${grade}</span></div>
+                                <div class="mb-2"><span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded shadow-sm">${grade}</span></div>
                                 <h3 class="text-lg font-bold text-gray-800 mb-4">${topic}</h3>
                                 <div class="mt-auto">
                                     <a href="${link}" target="_blank" class="block text-center bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
-                                        開啟連結 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
+                                        開啟資源 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     `;
                 }
+            })
+            .catch(err => {
+                document.getElementById('resources-grid').innerHTML = '<p class="text-red-500 text-center col-span-full">載入失敗，請確認網路連線。</p>';
             });
     </script>
 </body>
