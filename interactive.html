@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>體育互動專區 - 聖公會李炳中學體育科</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .liping-blue { background-color: #003366; }
+        .liping-border { border-color: #d32f2f; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <nav class="liping-blue text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-3 mb-4 md:mb-0">
+                <div class="bg-white p-1 rounded-full text-blue-900 font-bold w-10 h-10 flex items-center justify-center">LP</div>
+                <div>
+                    <h1 class="text-lg font-bold leading-none">聖公會李炳中學</h1>
+                    <p class="text-xs opacity-80 italic">體育科 PE Department</p>
+                </div>
+            </div>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="text-blue-200 hover:text-white transition">最新資訊</a></li>
+                <li><a href="resources.html" class="text-blue-200 hover:text-white transition">學習資源</a></li>
+                <li><a href="interactive.html" class="font-bold border-b-2 border-white pb-1">互動專區</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="bg-white border-b-4 liping-border py-12 mb-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">⚡ 體育互動專區 <span class="text-blue-600">Interactive Zone</span></h2>
+            <p class="mt-2 text-slate-500">體適能評估系統：0-5分累積總分獎勵計劃（涵蓋 12 - 17 歲或以上）</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
+                <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-yellow-500"></i> 體適能積分獎勵換算系統
+                </h3>
+                <p class="text-sm text-gray-500 mb-6">輸入成績後，系統會自動轉換為 0-5 分並計算總累積得分。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-slate-50 rounded-xl">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">學生性別</label>
+                        <select id="fit-gender" class="w-full border rounded-lg p-2 bg-white outline-none">
+                            <option value="男">男生 (Male)</option>
+                            <option value="女">女生 (Female)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">學生年齡 (Age)</label>
+                        <select id="fit-age" class="w-full border rounded-lg p-2 bg-white outline-none">
+                            <option value="12">12 歲</option>
+                            <option value="13">13 歲</option>
+                            <option value="14">14 歲</option>
+                            <option value="15">15 歲</option>
+                            <option value="16">16 歲</option>
+                            <option value="17">17 歲或以上</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">1分鐘仰臥起坐 (次)</label>
+                        <input type="number" id="val-situp" placeholder="次數" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-situp" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">坐位體前屈 (cm)</label>
+                        <input type="number" id="val-flex" placeholder="厘米" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-flex" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">15米折返跑 (次)</label>
+                        <input type="number" id="val-shuttle" placeholder="圈數" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-shuttle" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">手握力總和 (kg)</label>
+                        <input type="number" id="val-grip" placeholder="公斤" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-grip" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                </div>
+
+                <button onclick="analyzeFitness()" class="w-full bg-blue-900 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-md">
+                    <i class="fa-solid fa-calculator mr-1"></i> 計算累積總分與獎勵
+                </button>
+                
+                <div id="fitness-summary" class="mt-6 p-5 rounded-xl hidden text-center"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-blue-600"></i> BMI 簡易計算器
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">身高 (cm)</label>
+                            <input type="number" id="bmi-height" placeholder="例如: 170" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">體重 (kg)</label>
+                            <input type="number" id="bmi-weight" placeholder="例如: 60" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button onclick="calculateBMI()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-lg transition">計算我的 BMI</button>
+                    <div id="bmi-result" class="mt-4 p-4 rounded-lg bg-gray-50 hidden text-center font-bold text-lg"></div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-stopwatch text-orange-500"></i> HIIT 體能計時器
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-6">標準設定：高強度運動 30 秒 ➡️ 休息 15 秒（循環進行）</p>
+                </div>
+                
+                <div class="text-center py-6 my-auto bg-slate-900 text-white rounded-xl mb-6">
+                    <div id="timer-status" class="text-orange-400 font-bold tracking-widest text-lg uppercase mb-2">準備就緒</div>
+                    <div id="timer-display" class="text-6xl font-black font-mono">30</div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button id="btn-timer-start" onclick="startHIIT()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition text-center"><i class="fa-solid fa-play mr-1"></i> 開始訓練</button>
+                    <button id="btn-timer-reset" onclick="resetHIIT()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg transition"><i class="fa-solid fa-rotate-left"></i> 重設</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-white py-8 mt-20">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-bold mb-2">聖公會李炳中學 S.K.H. Li Ping Secondary School</p>
+            <p class="text-sm opacity-60">取生命的水喝 | I Seek, I Act</p>
+        </div>
+    </footer>
+
+    <script>
+        const SPREADSHEET_ID = '2PACX-1vS-_qE6XPHlEI2czLW37um9rnlWHC76xeYM9GTeDai2IWzHdS9LKW-iQVrxUKqhV0uxC4hzYvZXTChX';
+        
+        // 🚨 已成功將您的分頁 GID 填入下方
+        const STANDARDS_GID = '464966980'; 
+
+        let standardsDatabase = [];
+
+        window.onload = function() {
+            const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=${STANDARDS_GID}&single=true&output=csv`;
+            fetch(url)
+                .then(res => res.text())
+                .then(csvText => {
+                    const lines = csvText.split('\n');
+                    for(let i=1; i<lines.length; i++) {
+                        if(!lines[i].trim()) continue;
+                        const cols = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                        standardsDatabase.push({
+                            gender: cols[0].replace(/"/g, '').trim(),
+                            age: parseInt(cols[1]),
+                            item: cols[2].replace(/"/g, '').trim(),
+                            score1: parseFloat(cols[3]) || 0,
+                            score2: parseFloat(cols[4]) || 0,
+                            score3: parseFloat(cols[5]) || 0,
+                            score4: parseFloat(cols[6]) || 0,
+                            score5: parseFloat(cols[7]) || 0
+                        });
+                    }
+                    console.log("12-17+ 積分制標準庫已就緒！");
+                });
+        };
+
+        function analyzeFitness() {
+            const gender = document.getElementById('fit-gender').value;
+            const age = parseInt(document.getElementById('fit-age').value);
+            
+            if(standardsDatabase.length === 0) { alert('標準資料庫連線中，請稍候！'); return; }
+
+            const items = [
+                { id: 'situp', name: '仰臥起坐' },
+                { id: 'flex', name: '體前屈' },
+                { id: 'shuttle', name: '折返跑' },
+                { id: 'grip', name: '手握力' }
+            ];
+
+            let totalScore = 0;
+            let filledItemsCount = 0;
+
+            items.forEach(item => {
+                const userVal = parseFloat(document.getElementById(`val-${item.id}`).value);
+                const badge = document.getElementById(`badge-${item.id}`);
+                
+                if (isNaN(userVal)) {
+                    badge.classList.add('hidden');
+                    return;
+                }
+
+                filledItemsCount++;
+                const match = standardsDatabase.find(s => s.gender === gender && s.age === age && s.item === item.name);
+                
+                if(!match) {
+                    badge.className = "mt-1 text-xs font-bold text-center bg-gray-100 text-gray-400 rounded py-0.5";
+                    badge.innerText = "缺少此年齡標準";
+                    badge.classList.remove('hidden');
+                    return;
+                }
+
+                // 查分邏輯 (由高分往低分比對)
+                let itemScore = 0;
+                if (userVal >= match.score5) itemScore = 5;
+                else if (userVal >= match.score4) itemScore = 4;
+                else if (userVal >= match.score3) itemScore = 3;
+                else if (userVal >= match.score2) itemScore = 2;
+                else if (userVal >= match.score1) itemScore = 1;
+                else itemScore = 0;
+
+                totalScore += itemScore;
+
+                badge.className = "mt-1 text-xs font-bold text-center bg-blue-50 text-blue-700 rounded py-0.5";
+                badge.innerText = `得分：${itemScore} 分`;
+                badge.classList.remove('hidden');
+            });
+
+            const summary = document.getElementById('fitness-summary');
+            summary.classList.remove('hidden');
+
+            if (filledItemsCount < 4) {
+                summary.className = "mt-6 p-5 rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-900 font-semibold";
+                summary.innerHTML = `⚠️ 目前僅輸入了 ${filledItemsCount} 個項目。<br>當前累計分數：<span class="text-xl font-bold">${totalScore}</span> 分。請填滿 4 個項目以進行精準獎勵評估！`;
+                return;
+            }
+
+            // 4項填滿，啟動 16 / 13 / 10 判定
+            let awardText = "";
+            let colorClasses = "";
+
+            if (totalScore >= 16) {
+                awardText = "🥇 榮獲【金獎】(Gold Award)！";
+                colorClasses = "bg-amber-50 border-amber-200 text-amber-950 font-bold text-xl";
+            } else if (totalScore >= 13) {
+                awardText = "🥈 榮獲【銀獎】(Silver Award)！";
+                colorClasses = "bg-slate-100 border-slate-300 text-slate-900 font-bold text-xl";
+            } else if (totalScore >= 10) {
+                awardText = "🥉 榮獲【銅獎】(Bronze Award)！";
+                colorClasses = "bg-orange-50 border-orange-200 text-orange-900 font-bold text-xl";
+            } else {
+                awardText = "🏋️ 評估完成（未達標級別）";
+                colorClasses = "bg-gray-100 border-gray-300 text-gray-600 font-semibold";
+            }
+
+            summary.className = `mt-6 p-5 rounded-xl border ${colorClasses}`;
+            summary.innerHTML = `🎯 四項總累積得分：<span class="text-3xl font-black">${totalScore}</span> 分 / 20分滿分<br><div class="mt-2 text-lg">${awardText}</div>`;
+        }
+
+        // BMI 計算
+        function calculateBMI() {
+            const h = document.getElementById('bmi-height').value / 100;
+            const w = document.getElementById('bmi-weight').value;
+            const resultDiv = document.getElementById('bmi-result');
+            if(!h || !w) { alert('請填寫身高和體重！'); return; }
+            const bmi = (w / (h * h)).toFixed(1);
+            let status = '', colorClass = '';
+            if(bmi < 18.5) { status = '體重過輕 (Underweight)'; colorClass = 'text-yellow-600 bg-yellow-50'; }
+            else if(bmi >= 18.5 && bmi < 23.0) { status = '適中健康 (Normal)'; colorClass = 'text-green-600 bg-green-50'; }
+            else { status = '過重/肥胖 (Overweight)'; colorClass = 'text-red-600 bg-red-50'; }
+            resultDiv.className = `mt-4 p-4 rounded-lg text-center font-bold text-lg ${colorClass}`;
+            resultDiv.innerHTML = `你的 BMI 是: ${bmi}<br><span class="text-sm">${status}</span>`;
+            resultDiv.classList.remove('hidden');
+        }
+
+        // HIIT 計時器
+        let timer = null, isWorking = true, timeLeft = 30;
+        function startHIIT() {
+            if (timer !== null) return;
+            document.getElementById('btn-timer-start').disabled = true;
+            document.getElementById('btn-timer-start').classList.add('opacity-50');
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-display').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    isWorking = !isWorking;
+                    if (isWorking) {
+                        timeLeft = 30;
+                        document.getElementById('timer-status').innerText = "🔥 運動時間！加油！";
+                        document.getElementById('timer-status').className = "text-red-500 font-bold tracking-widest text-lg uppercase mb-2";
+                    } else {
+                        timeLeft = 15;
+                        document.getElementById('timer-status').innerText = "🧘 休息時間...吸氣";
+                        document.getElementById('timer-status').className = "text-green-400 font-bold tracking-widest text-lg uppercase mb-2";
+                    }
+                }
+            }, 1000);
+        }
+
+        function resetHIIT() {
+            clearInterval(timer);
+            timer = null; isWorking = true; timeLeft = 30;
+            document.getElementById('timer-display').innerText = "30";
+            document.getElementById('timer-status').innerText = "準備就緒";
+            document.getElementById('btn-timer-start').disabled = false;
+            document.getElementById('btn-timer-start').classList.remove('opacity-50');
+        }
+    </script>
+</body>
+</html>
