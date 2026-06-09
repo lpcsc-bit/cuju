@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖公會李炳中學 - 體育科手球互動教材</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans HK -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700;900&family=Barlow+Condensed:wght=600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans HK', sans-serif;
+        }
+        .font-sport {
+            font-family: 'Barlow Condensed', 'Noto Sans HK', sans-serif;
+        }
+        /* Custom scrollbar for better UX */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-indigo-800 text-white shadow-xl relative overflow-hidden">
+        <!-- Decorative Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="bg-red-500 text-white text-sm font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider">體育科 e-Learning 平台</span>
+                        <span class="bg-amber-500 text-slate-905 text-sm font-bold px-3.5 py-1.5 rounded-full">手球運動專題課程</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl font-black tracking-tight flex items-center gap-2">
+                        <span class="text-amber-400">聖公會李炳中學</span> 
+                        <span class="border-l-2 border-white/30 pl-4 font-extrabold text-white">手球運動專題教材</span>
+                    </h1>
+                    <p class="mt-4 text-indigo-100 text-lg sm:text-xl max-w-3xl leading-relaxed">
+                        探索手球起源發展、掌握符合國際手球聯合會 (IHF) 的最新規則互動指南與裁判手勢。
+                    </p>
+                </div>
+                <!-- Mini Badge -->
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/10 flex items-center gap-4 self-start md:self-auto">
+                    <div class="w-14 h-14 bg-amber-400 rounded-lg flex items-center justify-center text-slate-900 font-black text-2xl font-sport">
+                        IHF
+                    </div>
+                    <div>
+                        <div class="text-xs text-indigo-200 font-bold uppercase tracking-wider">國際專業標準</div>
+                        <div class="text-base font-bold text-white">最新手球學術指南</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4">
+            <nav class="flex space-x-3 overflow-x-auto py-4 -mb-px" aria-label="Tabs">
+                <button onclick="switchTab('history')" id="tab-history" class="tab-btn px-5 py-3 rounded-lg text-base font-extrabold transition-all duration-200 whitespace-nowrap bg-indigo-600 text-white shadow-md">
+                    歷史與發展
+                </button>
+                <button onclick="switchTab('court')" id="tab-court" class="tab-btn px-5 py-3 rounded-lg text-base font-extrabold transition-all duration-200 whitespace-nowrap text-slate-655 hover:bg-slate-100">
+                    互動 3D 質感球場
+                </button>
+                <button onclick="switchTab('rules')" id="tab-rules" class="tab-btn px-5 py-3 rounded-lg text-base font-extrabold transition-all duration-200 whitespace-nowrap text-slate-655 hover:bg-slate-100">
+                    比賽規則與違例
+                </button>
+                <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn px-5 py-3 rounded-lg text-base font-extrabold transition-all duration-200 whitespace-nowrap text-slate-655 hover:bg-slate-100">
+                    裁判手勢圖解
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-5 py-3 rounded-lg text-base font-extrabold transition-all duration-200 whitespace-nowrap text-slate-655 hover:bg-slate-100">
+                    學界知識挑戰站
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- ==================== TAB: HISTORY ==================== -->
+        <section id="content-history" class="tab-content space-y-8">
+            <!-- Combined Global History and HK Team Image -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left: History Timelines (2 Columns wide) -->
+                <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-8">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-slate-900 flex items-center gap-3">
+                            <span class="w-2 h-8 bg-indigo-600 rounded-full"></span>
+                            手球運動的起源與演變
+                        </h2>
+                        <p class="text-slate-555 text-sm mt-1.5">從冬季室內熱身活動演變為高強度奧運核心競技運動。</p>
+                    </div>
+                    
+                    <div class="relative pl-8 border-l-4 border-indigo-100 space-y-10">
+                        <!-- Timeline Event 1 -->
+                        <div class="relative">
+                            <span class="absolute -left-[45px] top-1 bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center ring-4 ring-white"></span>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-xl font-bold text-slate-900">創始於丹麥</h3>
+                                <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded">1898 年</span>
+                            </div>
+                            <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                                丹麥人 <strong class="font-bold text-indigo-900">霍爾格·尼爾森 (Holger Nielson)</strong> 創立了現代手球的雛形。最初在室內場地兩端各設球門，兩隊各派七名球員，純粹以雙手進行傳接球與射門。他於 1906 年制定了首套手球規則，使此運動在北歐迅速盛行。
+                            </p>
+                        </div>
+
+                        <!-- Timeline Event 2 -->
+                        <div class="relative">
+                            <span class="absolute -left-[45px] top-1 bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center ring-4 ring-white"></span>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-xl font-bold text-slate-900">11人制戶外手球的推廣</h3>
+                                <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded">1919 - 1920 年</span>
+                            </div>
+                            <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                                德國人 <strong class="font-bold text-indigo-900">卡爾·謝倫茲 (Carl Schelenz)</strong> 改進了活動方式。他縮小了球體，規定持球者最多跑三步，並利用足球場倡導男子 11 人制手球。1920 年，謝倫茲制定了 11 人制手球規則，極力向國外推介。1928 年，國際業餘手球聯會 (IAHF) 成立，並在 1936 年柏林奧運將 11 人制手球列為正式項目。
+                            </p>
+                        </div>
+
+                        <!-- Timeline Event 3 -->
+                        <div class="relative">
+                            <span class="absolute -left-[45px] top-1 bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center ring-4 ring-white"></span>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-xl font-bold text-slate-900">7人制室內手球稱霸</h3>
+                                <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded">1972 年至今</span>
+                            </div>
+                            <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                                二戰後，11 人制戶外手球逐漸式微，取而代之的是節奏極快、對抗更激烈的 <strong class="font-bold text-indigo-900">7人制室內手球</strong>。1972 年奧林匹克運動會起，7 人制室內手球正式取代 11 人制手球，而女子 7 人制室內手球也在 1976 年被列為正式比賽項目。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Hong Kong Handball Team Action Photo Card (Fixed Image to Handball Action) -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="border-b border-slate-100 pb-4 mb-4">
+                            <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                <span class="text-red-500">🇭🇰</span>
+                                中國香港手球代表隊
+                            </h3>
+                            <p class="text-slate-404 text-xs mt-1">代表香港出戰亞洲與國際最高水平賽事</p>
+                        </div>
+                        
+                        <!-- High Fidelity Photo Box (Polaroid style) -->
+                        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                            <div class="relative bg-slate-950 aspect-[4/3] rounded-lg overflow-hidden border border-slate-300">
+                                <!-- Standard High-Quality Unsplash Handball Action Image -->
+                                <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80" 
+                                     alt="香港男子手球代表隊熱血比賽照片" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <!-- High fidelity Custom SVG Fallback of a jumping handball player -->
+                                <div class="hidden absolute inset-0 bg-indigo-950 text-white flex flex-col items-center justify-center p-4 text-center">
+                                    <svg class="w-20 h-20 text-amber-400 mb-2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Goalpost -->
+                                        <rect x="75" y="30" width="18" height="50" stroke="#475569" stroke-width="2" stroke-dasharray="2 2" fill="none"/>
+                                        <!-- Ball -->
+                                        <circle cx="20" cy="22" r="4.5" fill="#f59e0b"/>
+                                        <!-- Player Head -->
+                                        <circle cx="36" cy="25" r="5" fill="currentColor"/>
+                                        <!-- Player Body & Limbs jumping forward to shoot -->
+                                        <path d="M36 30 L45 45 L50 65" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M40 33 L28 35 L22 25" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M40 33 L55 30 L65 34" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                                        <path d="M45 45 L35 55 L25 50" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="font-extrabold text-sm text-amber-400">[ 中國香港代表隊 · 跳步射門防守戰 ]</span>
+                                    <span class="text-[10px] text-indigo-300 mt-1">（網絡載入受限時顯示）</span>
+                                </div>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[10px] px-2.5 py-1 rounded backdrop-blur-sm font-mono tracking-wider">
+                                    HK Team · Handball Action
+                                </div>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <p class="text-slate-555 text-xs italic">「在快攻防守與躍起射門的瞬間，團隊合作是勝負關鍵。」</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-slate-600 text-base leading-relaxed mt-4">
+                            手球在香港擁有悠久的發展歷史。**中國香港手球總會**成立於 1970 年，持續派隊出戰亞洲運動會、全國運動會等大型賽事，向大眾傳遞追求卓越、團結一致的體育精神。
+                        </p>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-indigo-50 border border-indigo-100 rounded-xl text-xs text-indigo-800">
+                        <strong>💡 課堂提示：</strong> 觀察影片及照片中運動員的起跳角度與核心收縮，這是提升射門爆發力的關鍵。
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== VIDEO LIBRARY GALLERY ==================== -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-8">
+                <div class="border-b border-slate-100 pb-4">
+                    <h3 class="text-2xl font-extrabold text-slate-900 flex items-center gap-3">
+                        <span>📺</span>
+                        手球多媒體教學影音庫
+                    </h3>
+                    <p class="text-slate-555 text-sm mt-1">精選香港手球隊實戰及專業手球技術示範影片，請點擊播放學習。</p>
+                </div>
+
+                <!-- Part 1: Technical Instructional Videos (Double Columns) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Video Card 1: Technical Basics (傳接球要領) - Configured with stw7nBpcgXY -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-150 flex flex-col justify-between hover:shadow-lg transition-all">
+                        <div class="space-y-4">
+                            <div class="relative w-full rounded-lg overflow-hidden bg-black aspect-video shadow-inner">
+                                <iframe class="absolute inset-0 w-full h-full" 
+                                        src="https://www.youtube.com/embed/stw7nBpcgXY" 
+                                        title="手球基礎技術：傳接球要領" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-500 uppercase tracking-wider block">Video 01 · 技術基礎</span>
+                            <h4 class="font-bold text-slate-900 text-lg">手球基礎技術：傳接球要領</h4>
+                            <p class="text-slate-655 text-base leading-relaxed">
+                                體育課必學！詳細剖析單手肩上傳球、雙手胸前傳球及移動中安全接球的核心動作要領。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-150/60 text-xs text-slate-400 flex justify-between items-center">
+                            <span>⏱️ 基礎教學</span>
+                            <span class="text-indigo-600 font-bold">體育課必看</span>
+                        </div>
+                    </div>
+
+                    <!-- Video Card 2: Advanced Tactics (進階戰術) - Configured with 7YRvw47C8P4 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-150 flex flex-col justify-between hover:shadow-lg transition-all">
+                        <div class="space-y-4">
+                            <div class="relative w-full rounded-lg overflow-hidden bg-black aspect-video shadow-inner">
+                                <iframe class="absolute inset-0 w-full h-full" 
+                                        src="https://www.youtube.com/embed/7YRvw47C8P4" 
+                                        title="進階戰術：團隊配合與強力射門" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                            <span class="text-xs font-bold text-amber-600 uppercase tracking-wider block">Video 02 · 進階戰術</span>
+                            <h4 class="font-bold text-slate-900 text-lg">進階戰術：團隊配合與強力射門</h4>
+                            <p class="text-slate-655 text-base leading-relaxed">
+                                深入學習陣地進攻中的小組交叉配合、躍起射門（Jump Shot）的發力機制與落點選擇。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-150/60 text-xs text-slate-400 flex justify-between items-center">
+                            <span>⏱️ 進階實戰</span>
+                            <span class="text-indigo-600 font-bold">校隊必修</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 2: HK Representative Match (香港代表隊實錄) - Configured with gSUFXC01vZA (bottom-full) -->
+                <div class="mt-8 border-t border-slate-100 pt-6">
+                    <div class="bg-gradient-to-br from-indigo-900/10 to-blue-900/5 rounded-2xl p-6 border border-indigo-100 flex flex-col lg:flex-row gap-6 items-center">
+                        <!-- Left inside Video block (Widescreen Showcase) -->
+                        <div class="w-full lg:w-3/5">
+                            <div class="relative w-full rounded-xl overflow-hidden bg-black aspect-video shadow-lg border border-indigo-200">
+                                <iframe class="absolute inset-0 w-full h-full" 
+                                        src="https://www.youtube.com/embed/gSUFXC01vZA" 
+                                        title="香港男子手球代表隊熱血實錄" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <!-- Right inside description block -->
+                        <div class="w-full lg:w-2/5 space-y-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                                Video 03 · 香港精英實戰觀摩
+                            </span>
+                            <h4 class="font-extrabold text-slate-900 text-xl sm:text-2xl">香港男子手球代表隊熱血實錄</h4>
+                            <p class="text-slate-705 text-base sm:text-lg leading-relaxed">
+                                感受頂尖手球運動員在賽場上的對抗強度，仔細觀察防守防線的快速橫移與配合。
+                            </p>
+                            <div class="p-4 bg-white/80 rounded-xl border border-indigo-100 text-xs text-slate-555 space-y-1">
+                                <p class="font-bold text-indigo-900">🔍 學習觀摩要點：</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>觀察防守隊員如何通過「快速橫移」封堵進攻路線。</li>
+                                    <li>注意進攻時隊員之間如何進行無球跑位與配合。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: INTERACTIVE COURT ==================== -->
+        <section id="content-court" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                
+                <!-- Main Tab Header -->
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-3xl font-extrabold text-slate-900 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-indigo-600 rounded-full"></span>
+                        大屏互動式手球場地
+                    </h2>
+                    <p class="text-slate-555 text-base mt-2">
+                        點擊場地中的「高亮黃色閃爍標籤」，即可在右側即時查閱該區域之香港學界與國際賽事的詳細規則與尺寸規格。
+                    </p>
+                </div>
+
+                <!-- LARGER DISPLAY LAYOUT: 2-Column Split (More space for SVG) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- LEFT COLUMN (SVG Court 本體) - Gained more grid span for a LARGER visual footprint -->
+                    <div class="lg:col-span-8 bg-slate-950 p-5 sm:p-8 rounded-2xl border border-slate-800 shadow-inner">
+                        <div class="relative w-full overflow-hidden" style="padding-top: 52.5%;">
+                            <!-- Court SVG - Now displays significantly wider and larger on all break-points -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Background (Court Floor) -->
+                                <rect width="800" height="420" fill="#1e293b" />
+                                <rect x="10" y="10" width="780" height="400" fill="#1e3a8a" stroke="#ffffff" stroke-width="3" />
+                                
+                                <!-- Center Line -->
+                                <line x1="400" y1="10" x2="400" y2="410" stroke="#ffffff" stroke-width="3" />
+                                <!-- Center Circle (Indicator for start of play) -->
+                                <circle cx="400" cy="210" r="15" fill="none" stroke="#ffffff" stroke-dasharray="5,5" stroke-width="2" />
+                                
+                                <!-- LEFT SIDE LINES -->
+                                <!-- 6-Meter Goal Area (Solid Line) -->
+                                <path d="M 10 110 A 60 60 0 0 1 70 170 L 70 250 A 60 60 0 0 1 10 310" fill="none" stroke="#ffffff" stroke-width="3" />
+                                <!-- 9-Meter Free Throw Line (Dashed Line) -->
+                                <path d="M 10 80 A 90 90 0 0 1 100 170 L 100 250 A 90 90 0 0 1 10 340" fill="none" stroke="#ffffff" stroke-dasharray="10,8" stroke-width="2" />
+                                <!-- 7-Meter Penalty Line -->
+                                <line x1="80" y1="200" x2="80" y2="220" stroke="#ffffff" stroke-width="3" />
+                                <!-- 4-Meter Goalkeeper Restraining Line -->
+                                <line x1="50" y1="205" x2="50" y2="215" stroke="#ffffff" stroke-width="3" />
+                                <!-- Left Goal -->
+                                <rect x="-5" y="170" width="15" height="80" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+
+                                <!-- RIGHT SIDE LINES -->
+                                <!-- 6-Meter Goal Area (Solid Line) -->
+                                <path d="M 790 110 A 60 60 0 0 0 730 170 L 730 250 A 60 60 0 0 0 790 310" fill="none" stroke="#ffffff" stroke-width="3" />
+                                <!-- 9-Meter Free Throw Line (Dashed Line) -->
+                                <path d="M 790 80 A 90 90 0 0 0 700 170 L 700 250 A 90 90 0 0 0 790 340" fill="none" stroke="#ffffff" stroke-dasharray="10,8" stroke-width="2" />
+                                <!-- 7-Meter Penalty Line -->
+                                <line x1="720" y1="200" x2="720" y2="220" stroke="#ffffff" stroke-width="3" />
+                                <!-- 4-Meter Goalkeeper Restraining Line -->
+                                <line x1="750" y1="205" x2="750" y2="215" stroke="#ffffff" stroke-width="3" />
+                                <!-- Right Goal -->
+                                <rect x="790" y="170" width="15" height="80" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+
+                                <!-- Substitution Areas (Bottom Sideline) -->
+                                <line x1="310" y1="405" x2="310" y2="415" stroke="#e11d48" stroke-width="4" />
+                                <line x1="490" y1="405" x2="490" y2="415" stroke="#e11d48" stroke-width="4" />
+
+                                <!-- INTERACTIVE BUTTONS / LABELS -->
+                                <!-- 1. Goal (Left/Right) -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('goal')">
+                                    <circle cx="795" cy="210" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="795" cy="210" r="11" fill="#d97706" />
+                                    <text x="765" y="214" fill="#ffffff" font-size="12" font-weight="black">球門</text>
+                                </g>
+                                <!-- 2. 6m Goal Area (Left) -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('6m')">
+                                    <circle cx="70" cy="170" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="70" cy="170" r="11" fill="#d97706" />
+                                    <text x="78" y="165" fill="#ffffff" font-size="12" font-weight="black">6米禁區線</text>
+                                </g>
+                                <!-- 3. 7m Line (Left) -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('7m')">
+                                    <circle cx="80" cy="210" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="80" cy="210" r="11" fill="#d97706" />
+                                    <text x="92" y="214" fill="#ffffff" font-size="12" font-weight="black">7米罰球線</text>
+                                </g>
+                                <!-- 4. 9m Free Throw Line (Right) -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('9m')">
+                                    <circle cx="700" cy="170" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="700" cy="170" r="11" fill="#d97706" />
+                                    <text x="610" y="165" fill="#ffffff" font-size="12" font-weight="black">9米自由球線</text>
+                                </g>
+                                <!-- 5. 4m GK Restraining Line (Left) -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('4m')">
+                                    <circle cx="50" cy="210" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="50" cy="210" r="11" fill="#d97706" />
+                                    <text x="15" y="195" fill="#ffffff" font-size="12" font-weight="black">4米限制線</text>
+                                </g>
+                                <!-- 6. Substitution Area -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('sub')">
+                                    <circle cx="310" cy="410" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="310" cy="410" r="11" fill="#d97706" />
+                                    <text x="250" y="395" fill="#ffffff" font-size="12" font-weight="black">替補區線</text>
+                                </g>
+                                <!-- 7. Midline -->
+                                <g class="cursor-pointer group" onclick="showCourtInfo('mid')">
+                                    <circle cx="400" cy="110" r="16" fill="#f59e0b" class="animate-ping opacity-75" />
+                                    <circle cx="400" cy="110" r="11" fill="#d97706" />
+                                    <text x="415" y="114" fill="#ffffff" font-size="12" font-weight="black">中線</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN (Information Display Card) -->
+                    <div class="lg:col-span-4 bg-indigo-50 border border-indigo-200 p-6 sm:p-8 rounded-2xl h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-5">
+                                <span class="text-3xl" id="court-info-icon">🏟️</span>
+                                <h3 class="text-xl font-black text-indigo-900" id="court-info-title">點擊地圖標籤查閱規格</h3>
+                            </div>
+                            <div id="court-info-text-container" class="space-y-4">
+                                <p class="text-slate-705 text-base sm:text-lg leading-relaxed" id="court-info-desc">
+                                    上方的手球場已全面放大！請點擊球場內各個黃色閃爍的高亮按鈕，右側卡片將會即時呈現與此線路區域相關的重要手球比賽規範。
+                                </p>
+                                <div class="p-4 bg-white/80 rounded-xl border border-indigo-100 text-sm text-slate-500 italic">
+                                    點選左側任意球場閃爍點以啟用即時互動教學。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-indigo-200 mt-8 flex justify-between items-center text-sm text-indigo-700">
+                            <span>* 點選球場標誌動態切換</span>
+                            <span class="font-bold">李炳中學體育科</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM CONTAINER -->
+                <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 sm:p-8 rounded-2xl shadow-md border border-indigo-950 mt-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-indigo-900/60 pb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-amber-400">🏟️ 手球場地標準規格與幾何設計</h3>
+                            <p class="text-slate-400 text-xs mt-1">符合國際手球聯合會 (IHF) 的標準官方場地劃線要求</p>
+                        </div>
+                        <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase">標準比賽場</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
+                        <!-- Stat 1 -->
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                            <div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">場地總面積</div>
+                            <div class="text-xl font-black font-sport text-white">40公尺 × 20公尺</div>
+                            <p class="text-slate-400 text-xs mt-1">寬度必須為 20 公尺，長度為 40 公尺，為標線外沿計起。</p>
+                        </div>
+
+                        <!-- Stat 2 -->
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                            <div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">球門幾何尺寸</div>
+                            <div class="text-xl font-black font-sport text-white">高 2.0公尺 × 寬 3.0公尺</div>
+                            <p class="text-slate-400 text-xs mt-1">球門柱寬為 8 厘米，其餘場地線條均寬 5 厘米。</p>
+                        </div>
+
+                        <!-- Stat 3 -->
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                            <div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">6米禁區線設置</div>
+                            <div class="text-xl font-black font-sport text-white">半徑 6 公尺</div>
+                            <p class="text-slate-405 text-xs mt-1">由兩側門柱內沿後角為圓心，朝向場內畫出半徑為 6 米弧線。</p>
+                        </div>
+
+                        <!-- Stat 4 -->
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                            <div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">替補線邊沿</div>
+                            <div class="text-xl font-black font-sport text-white">4.5 公尺長</div>
+                            <p class="text-slate-400 text-xs mt-1">從中線垂直於邊線向外量度 4.5 米建立替補通道界線。</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB: RULES ==================== -->
+        <section id="content-rules" class="tab-content hidden space-y-8">
+            <!-- Basic Rules Grid (WITH ADJUSTED BOLD AND RED TEXT RULES) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Team & Substitution -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 mb-5">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">人數與替補規則</h3>
+                        <ul class="space-y-3 text-base sm:text-lg text-slate-605 list-disc list-inside leading-relaxed">
+                            <li><strong class="font-extrabold text-red-600">每隊最多登記14人</strong><span class="text-slate-600 font-medium">（場上作賽7人，替補7人）。</span></li>
+                            <li>不設換人次數限制，替補球員不需通知裁判，可隨時上下場。</li>
+                            <li><strong class="font-extrabold text-red-600">重要規定</strong>：<span class="text-slate-600 font-medium">退場球員必須完全跨越己方替補區邊線，進場隊員方可踏入。若替補出錯，會被判罰<strong class="font-bold text-red-600">退場兩分鐘</strong>。</span></li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-sm text-indigo-600 font-semibold">
+                        💡 備註：守門員隨時可換成普通場上球員。
+                    </div>
+                </div>
+
+                <!-- Card 2: Match Duration -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 mb-5">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">比賽時間與暫停</h3>
+                        <ul class="space-y-3 text-base sm:text-lg text-slate-605 list-disc list-inside leading-relaxed">
+                            <li><strong class="font-extrabold text-red-600">正常比賽時間</strong>：<span class="text-slate-600 font-medium">上、下半場各 30分鐘，中場休息10分鐘。</span></li>
+                            <li><strong class="font-extrabold text-red-600">隊暫停</strong>：<span class="text-slate-600 font-medium">雙方在整場比賽中有 3次 1分鐘隊暫停，每半場最多使用2次。</span></li>
+                            <li><strong class="font-extrabold text-red-600">延長賽(加時)</strong>：<span class="text-slate-600 font-medium">法定時間賽和，休息 5 分鐘後進行加時。上、下半場各 5分鐘。仍賽和則進行第二次加時，最後以<strong class="font-bold text-red-600">7公尺定點球</strong>決勝。</span></li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-sm text-indigo-600 font-semibold">
+                        💡 註：16歲以下組別比賽時間可能縮減至20 or 25分鐘。
+                    </div>
+                </div>
+
+                <!-- Card 3: Ball Specifications -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 mb-5">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">比賽用球規格</h3>
+                        <p class="text-slate-655 text-base sm:text-lg mb-4">手球根據年齡及性別使用不同大小與重量的專用球：</p>
+                        <div class="space-y-2.5 text-sm sm:text-base">
+                            <div class="flex justify-between p-2.5 bg-slate-50 rounded">
+                                <span class="font-extrabold text-red-600">3 號球 (58-60cm)</span>
+                                <span class="text-indigo-600">16 歲 or 以上男子</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-slate-50 rounded">
+                                <span class="font-extrabold text-red-600">2 號球 (54-56cm)</span>
+                                <span class="text-indigo-600">14 歲以上女子 / 12-16 歲男子</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-slate-50 rounded">
+                                <span class="font-extrabold text-red-600">1 號球 (50-52cm)</span>
+                                <span class="text-indigo-600">8-12 歲兒童 / 國小組別</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">
+                        * 註：球表面不得發亮或太滑。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Major Violations Highlight -->
+            <div class="bg-red-50 border border-red-200 p-6 sm:p-8 rounded-2xl shadow-sm">
+                <h3 class="text-2xl font-bold text-red-900 flex items-center gap-3 mb-5">
+                    ⚠️ 常見違例行為 (對方將獲得自由球)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-white p-5 rounded-xl border border-red-100 shadow-sm">
+                        <span class="text-red-500 font-bold block mb-2 text-base">01. 持球違例</span>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            不得持球超過 <strong class="font-extrabold text-red-600">3 秒</strong>，或在不運球情況下走多過 <strong class="font-extrabold text-red-600">3 步</strong>。守門員於己方禁區內則不受此限。
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-red-100 shadow-sm">
+                        <span class="text-red-500 font-bold block mb-2 text-base">02. 重覆運球</span>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            手球一經在地上拍打（運球）後雙手接住，<strong class="font-extrabold text-red-600">不得重覆再次拍球</strong>，否則判為重覆運球（俗稱「兩次」）。
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-red-100 shadow-sm">
+                        <span class="text-red-500 font-bold block mb-2 text-base">03. 越區 (踏入禁區)</span>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            除守門員外，所有進攻或防守球員均<strong class="font-extrabold text-red-600">不得持球 or 無球進入 6 米球門區（禁區）</strong>。射門後凌空落地則不在此限。
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-red-100 shadow-sm">
+                        <span class="text-red-505 font-bold block mb-2 text-base">04. 球觸膝以下</span>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            比賽中（守門員在禁區內除外），場上球員<strong class="font-extrabold text-red-600">不能以膝部以下部位觸球</strong>，否則判違例。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progressive Punishment Section -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-2xl font-bold text-slate-955 mb-6 flex items-center gap-3">
+                    <span class="w-2 h-8 bg-amber-500 rounded-full"></span>
+                    犯規與漸進式罰則
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-xl border-t-4 border-yellow-400 bg-yellow-50/50 shadow-xs">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-lg font-bold text-yellow-800">1. 黃牌警告 (Warning)</span>
+                            <span class="w-7 h-9 bg-yellow-400 rounded shadow-sm"></span>
+                        </div>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            針對不君子行為、或阻擋對手不當身體碰撞進行警告。<strong class="font-bold text-red-600">個人限制1次</strong>，全隊限制 <strong class="font-bold text-red-600">3 次</strong>。
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-xl border-t-4 border-orange-500 bg-orange-50/50 shadow-xs">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-lg font-bold text-orange-800">2. 退場兩分鐘 (2-Min)</span>
+                            <span class="font-sport font-black text-3xl text-orange-600">2 MIN</span>
+                        </div>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            超過黃牌次數、重複違規或極其不君子行為。球隊在 2 分鐘內須<strong class="font-bold text-red-600">少打一人</strong>，時間過後方可補回隊員。
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-xl border-t-4 border-red-500 bg-red-50/50 shadow-xs">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-lg font-bold text-red-800">3. 紅牌取消資格 (DQ)</span>
+                            <span class="w-7 h-9 bg-red-500 rounded shadow-sm"></span>
+                        </div>
+                        <p class="text-slate-605 text-sm sm:text-base leading-relaxed">
+                            <strong class="font-bold text-red-600">同一球員累計 3 次退場 2 分鐘</strong>，或作出嚴重危害對手安全的粗野犯規。被罰球員整場不得重回賽場。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: SIGNALS (REALISTIC TEXTBOOK DOCUMENTS DRAWING) ==================== -->
+        <section id="content-signals" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-slate-900 flex items-center gap-3">
+                            <span class="w-2 h-8 bg-indigo-600 rounded-full"></span>
+                            手球裁判官方手勢演示圖解
+                        </h2>
+                        <p class="text-slate-550 text-base mt-1.5">
+                            採用符合手冊規範的專業技術繪圖風格，精確展示身穿天藍色裁判服、深色運動褲的專業手球裁判規範手勢。
+                        </p>
+                    </div>
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-bold px-4 py-2 rounded-xl border border-indigo-200 flex items-center gap-2">
+                        <span>📊</span> 官方教案規範技術圖
+                    </span>
+                </div>
+
+                <!-- 8 High-Fidelity SVG Document Technical Drawing Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <!-- Signal 1: 越區 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <!-- Document-style Technical SVG Diagram -->
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Background grid for blueprint/textbook feel -->
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Referee Figure: Sky Blue Shirt, Dark Trousers -->
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso: Sky Blue Shirt -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 1 (Sweeping hands downwards in front of the body) -->
+                                    <!-- Left arm pointing down & forward -->
+                                    <path d="M 47 40 L 32 68 L 26 82" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+                                    <!-- Right arm pointing down & forward -->
+                                    <path d="M 73 40 L 88 68 L 94 82" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+                                    <!-- Dynamic Red Action Arrows (Scanning movement) -->
+                                    <path d="M 24 88 C 40 102 80 102 96 88" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+                                    <path d="M 20 86 L 24 90 L 22 84 Z" fill="#ef4444"/>
+                                    <path d="M 100 86 L 96 90 L 98 84 Z" fill="#ef4444"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-1 · GOAL AREA
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 01</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">1. 越區 (進入球門區)</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                場地隊員持球或無球跨入 6 米球門區，裁判雙手臂向下前方平伸，作橫向掃動。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.1</span>
+                            <span class="font-extrabold text-red-600">一般違例</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 2: 兩次運球 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 2 (Hands clapping up and down) -->
+                                    <!-- Left arm bent in front -->
+                                    <path d="M 47 40 L 35 52 L 52 56" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Right arm bent in front -->
+                                    <path d="M 73 40 L 85 52 L 68 56" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Red Action Arrows (Vertical movement) -->
+                                    <path d="M 50 48 L 50 64" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M 48 50 L 50 46 L 52 50 Z" fill="#ef4444"/>
+                                    <path d="M 48 62 L 50 66 L 52 62 Z" fill="#ef4444"/>
+
+                                    <path d="M 70 64 L 70 48" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M 68 62 L 70 66 L 72 62 Z" fill="#ef4444"/>
+                                    <path d="M 68 50 L 70 46 L 72 50 Z" fill="#ef4444"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-2 · DRIBBLING
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 02</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">2. 兩次運球或再觸球</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                運球停手後再度運球违例，裁判雙手在身體正前方，掌心向下交替上下移動，作拍擊動作。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.2</span>
+                            <span class="font-extrabold text-red-600">一般違例</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 3: 帶球走 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 3 (Rotating fists) -->
+                                    <path d="M 47 40 L 40 55 L 55 60" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M 73 40 L 80 55 L 65 60" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Red Action Circle Arrows (Rotational Motion) -->
+                                    <path d="M 60 50 A 8 8 0 1 1 59.9 50" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2 2"/>
+                                    <path d="M 68 50 L 68 46 L 72 49 Z" fill="#ef4444"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-3 · TRAVELING
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 03</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">3. 帶球走或持球三秒</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                大力拍擊或在原地不拍球持球超過3秒，裁判雙手握拳，在前臂平行進行圓形轉動。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.3</span>
+                            <span class="font-extrabold text-red-600">一般違例</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 4: 抱人/推人 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 4 (Fists hitting chest/together) -->
+                                    <path d="M 47 40 L 32 50 L 52 50" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M 73 40 L 88 50 L 68 50" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Red Action Arrows (Inward push force) -->
+                                    <path d="M 26 44 L 46 44" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M 48 44 L 44 42 L 44 46 Z" fill="#ef4444"/>
+                                    <path d="M 94 44 L 74 44" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M 72 44 L 76 42 L 76 46 Z" fill="#ef4444"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-4 · HOLDING
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 04</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">4. 壓制、抱人或推人</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                針對非法的身體碰撞、環抱或正面大力推搡，裁判雙手握拳置於胸前，拳心相對並相互頂碰示警。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.4</span>
+                            <span class="font-extrabold text-amber-500">犯規罰則</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 5: 打手 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 5 (Slapping wrist) -->
+                                    <path d="M 47 40 L 32 58 L 54 62" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M 73 40 L 68 54 L 46 54" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Red Action Impact lines on wrist area -->
+                                    <line x1="50" y1="58" x2="48" y2="48" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="43" y1="58" x2="40" y2="48" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-5 · HITTING
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 05</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">5. 打手犯規</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                防守隊員惡意擊打或拉下攻方射門手臂，裁判用一手掌向下擊打另一手前臂，判罰自由球或七米球。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.5</span>
+                            <span class="font-extrabold text-amber-500">犯規罰則</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 6: 攻隊犯規 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 6 (Fist striking palm) -->
+                                    <path d="M 47 40 L 32 55 L 48 55" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M 73 40 L 80 50 L 58 50" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Red Action Impact Point -->
+                                    <circle cx="50" cy="52" r="3" fill="#ef4444"/>
+                                    <line x1="45" y1="46" x2="48" y2="50" stroke="#ef4444" stroke-width="1.5"/>
+                                    <line x1="55" y1="46" x2="52" y2="50" stroke="#ef4444" stroke-width="1.5"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-6 · OFFENSIVE FOUL
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 06</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">6. 攻隊犯規 (帶球撞人)</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                進攻隊員強行衝撞防守隊已站穩的持法位置，裁判單手握拳擊打另一手掌心，判罰交换球權。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.6</span>
+                            <span class="font-extrabold text-red-600">球權轉換</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 7: 保持三米 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 7 (Pushing outwards) -->
+                                    <path d="M 47 40 L 25 40 L 15 40" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+                                    <path d="M 73 40 L 95 40 L 105 40" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+                                    <!-- Red action force indicators (Pushing outward arrows) -->
+                                    <path d="M 22 34 L 10 34" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M 8 34 L 12 32 L 12 36 Z" fill="#ef4444"/>
+                                    <path d="M 98 34 L 110 34" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M 112 34 L 108 32 L 108 36 Z" fill="#ef4444"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-7 · KEEP 3M
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 07</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">7. 保持三公尺距離</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                擲自由球或邊線球時防守球員緊逼阻擾，裁判雙手臂兩側平伸，掌心朝外推出示意防守隊員。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.7</span>
+                            <span class="font-extrabold text-indigo-600">比賽秩序</span>
+                        </div>
+                    </div>
+
+                    <!-- Signal 8: 消極比賽 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-[4/5] mb-5 border border-slate-700 shadow-inner flex items-center justify-center p-4">
+                                <svg class="w-full h-full text-white" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 0 0 L 120 150 M 0 30 H 120 M 0 60 H 120 M 0 90 H 120 M 0 120 H 120 M 30 0 V 150 M 60 0 V 150 M 90 0 V 150" stroke="#334155" stroke-width="0.5"/>
+                                    <!-- Head -->
+                                    <circle cx="60" cy="30" r="8" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                                    <!-- Torso -->
+                                    <path d="M 50 38 L 70 38 L 75 80 L 45 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+                                    <!-- Dark Trousers -->
+                                    <path d="M 45 80 L 75 80 L 73 140 L 62 140 L 60 95 L 58 140 L 47 140 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+                                    <!-- Arms: Gesture 8 (One arm raised straight up) -->
+                                    <path d="M 73 40 L 80 55" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+                                    <path d="M 47 40 L 43 20 L 43 5" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+                                    <!-- Red exclamation/warning dynamic highlight -->
+                                    <path d="M 51 2 C 55 2 55 12 51 12" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 1"/>
+                                </svg>
+                                <div class="absolute bottom-3 left-3 bg-black/75 text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    IHF SPEC-8 · PASSIVE PLAY
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">SIGNAL 08</span>
+                            <h4 class="font-extrabold text-slate-900 text-lg mb-1.5">8. 消極性比賽的警告</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                進攻隊無實質進攻意圖試圖拖延，裁判單手臂向天空垂直高舉表示。提示後，必須在 6 次傳球內射門。
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span>📋 手冊圖 4.8</span>
+                            <span class="font-extrabold text-amber-600">戰術警告</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: QUIZ ==================== -->
+        <section id="content-quiz" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 max-w-3xl mx-auto">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-900">學界手球知識挑戰站</h2>
+                        <p class="text-slate-550 text-base mt-1.5">自我檢測對手球規則、技術以及相關發展知識的認識。</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm text-slate-400 block font-bold uppercase tracking-wider">當前得分</span>
+                        <span class="text-3xl font-black text-indigo-600 font-sport" id="quiz-score">0 / 10</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Interface Container -->
+                <div id="quiz-box" class="space-y-6">
+                    <!-- Dynamic Question rendering in JS -->
+                    <div id="question-card">
+                        <span class="inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-bold bg-indigo-50 text-indigo-700 mb-4" id="q-number">
+                            問題 1 / 10
+                        </span>
+                        <h3 class="text-xl font-bold text-slate-900 leading-snug" id="q-title">
+                            載入中...
+                        </h3>
+                        
+                        <div class="mt-5 space-y-4" id="q-options">
+                            <!-- Options will go here -->
+                        </div>
+                    </div>
+
+                    <!-- Action and Explanation -->
+                    <div id="quiz-feedback" class="hidden p-5 rounded-xl border text-base leading-relaxed">
+                        <div class="font-extrabold text-lg mb-1.5" id="feedback-status"></div>
+                        <p id="explanation" class="text-slate-700 text-sm sm:text-base"></p>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-5">
+                        <button onclick="restartQuiz()" class="text-sm text-slate-455 hover:text-indigo-600 font-bold transition-all">
+                            🔄 重新挑戰
+                        </button>
+                        <button id="next-btn" onclick="nextQuestion()" class="bg-indigo-600 text-white text-base font-extrabold px-8 py-3.5 rounded-xl shadow-md hover:bg-indigo-700 active:scale-95 transition-all">
+                            下一題
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Score Summary Display (Hidden initially) -->
+                <div id="quiz-summary" class="hidden text-center py-10 space-y-6">
+                    <div class="text-7xl">🏆</div>
+                    <h3 class="text-3xl font-black text-slate-900">恭喜你完成 10 題手球大挑戰！</h3>
+                    <p class="text-slate-555 text-base max-w-sm mx-auto">
+                        你在這次手球知識測驗中獲得了以下分數。加油！
+                    </p>
+                    <div class="text-6xl font-black text-indigo-600 font-sport py-3" id="summary-score">
+                        0 / 10
+                    </div>
+                    <div class="text-lg font-bold text-slate-655" id="summary-eval"></div>
+                    <button onclick="restartQuiz()" class="bg-slate-900 text-white text-base font-extrabold px-8 py-4 rounded-xl shadow-md hover:bg-slate-800 transition-all mt-6">
+                        再考一次
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-455 py-12 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-base">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🏫</span>
+                    <div>
+                        <div class="font-bold text-white text-lg">聖公會李炳中學</div>
+                        <div class="text-sm text-slate-500 mt-0.5">體育科教材編寫小組 © 2026</div>
+                    </div>
+                </div>
+                <div class="flex gap-5 text-sm font-semibold">
+                    <a href="#" onclick="switchTab('history'); return false;" class="hover:text-white">歷史背景</a>
+                    <a href="#" onclick="switchTab('court'); return false;" class="hover:text-white">場地規格</a>
+                    <a href="#" onclick="switchTab('rules'); return false;" class="hover:text-white">比賽球例</a>
+                    <a href="#" onclick="switchTab('signals'); return false;" class="hover:text-white">裁判手勢</a>
+                </div>
+                <div class="text-sm text-slate-500">
+                    中國香港手球總會推廣教材參考
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core JavaScript logic -->
+    <script>
+        // 1. Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(element => {
+                element.classList.add('hidden');
+            });
+            // Show current tab
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+
+            // Reset active styles on all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-655', 'hover:bg-slate-100');
+            });
+            // Add active style to selected tab button
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.remove('text-slate-655', 'hover:bg-slate-100');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+        }
+
+        // 2. Interactive Court Info Display Data
+        const courtData = {
+            goal: {
+                icon: '🥅',
+                title: '手球球門 (Goals)',
+                desc: '球門位於兩側球門線中央。規格為**高 2 公尺 × 寬 3 公尺**。球門網通常有黑白相間或紅白相間的粗條紋，非常醒目。',
+                rules: [
+                    '球必須完整穿過球門界線方可算作得分。',
+                    '除守門員球射入己方球門外，所有合法拋擲球均能直接射門得分。'
+                ]
+            },
+            '6m': {
+                icon: '🚫',
+                title: '6公尺球門區/禁區 (Goal Area Line)',
+                desc: '這是一條以球門為中心、半徑 6 公尺所畫出的實線弧。**此區域為守門員專屬防守區**。',
+                rules: [
+                    '任何場地隊員踏入此區域（越區）均屬違例，守方持球越區判自由球，攻方持球越區判球權轉換。',
+                    '球員可以「在空中」切入並射門，但腳必須在起跳時留在線外，且球在落地前必須離手。'
+                ]
+            },
+            '7m': {
+                icon: '🎯',
+                title: '7公尺罰球線 (7-Meter Line)',
+                desc: '這是一條位於球門正前方 7 公尺、長度 1 公尺的實線。當對隊因為犯規**阻礙了顯然可以得分的機會**時，裁判會判罰 7 公尺罰球。',
+                rules: [
+                    '射門隊員在裁判鳴哨後 3 秒內必須將球射出。',
+                    '射門時，射門隊員的腳不得觸碰 or 跨越 7 公尺線，否則判為違例。'
+                ]
+            },
+            '9m': {
+                icon: '🔄',
+                title: '9公尺自由球線 (Free Throw Line)',
+                desc: '這是一條距離球門 9 公尺、與 6 米禁區線平行的**虛線弧**。',
+                rules: [
+                    '如果守方在己方的 6 公尺線與 9 公尺線之間違例，攻方必須在此 9 公尺線外重新開球（擲自由球）。',
+                    '在擲自由球前，攻方的所有進攻球員都必須退出 9 公尺虛線之外。'
+                ]
+            },
+            '4m': {
+                icon: '🛡️',
+                title: '4公尺守門員限制線 (GK Restraining Line)',
+                desc: '這是一條在球門正前方 4 公尺、長度為 15 公分的短實線。',
+                rules: [
+                    '僅在執行 **7公尺罰球** 時生效。',
+                    '守門員此時向前防守時，腳絕不能跨越 or 踏在此 4 公尺限制線外，但身體可以向前傾斜。'
+                ]
+            },
+            sub: {
+                icon: '🔁',
+                title: '替補線與替補席 (Substitution Line)',
+                desc: '位於中線兩側各 4.5 公尺長的邊線上，替補隊員必須在這裡進出球場。',
+                rules: [
+                    '手球不限替補次數，但必須實施「先出後進」原則。',
+                    '如替補犯規（跨越非替補線或先入後出），違規球員會被立刻罰**退場兩分鐘**。'
+                ]
+            },
+            mid: {
+                icon: '🏁',
+                title: '中線 (Center Line)',
+                desc: '中線將長 40 米的球場平分為左右各 20 米的半場。',
+                rules: [
+                    '用於比賽開始、半場開始，以及每次**進球後重新開球**。',
+                    '重新開球時，開球隊員必須有一隻腳踩在中線上，並在 3 秒內將球傳出，對手必須保持至少 3 公尺距離。'
+                ]
+            }
+        };
+
+        function showCourtInfo(key) {
+            const data = courtData[key];
+            if (!data) return;
+
+            // Update UI
+            document.getElementById('court-info-icon').innerText = data.icon;
+            document.getElementById('court-info-title').innerText = data.title;
+            
+            let rulesListHtml = `<div class="font-bold text-indigo-800 text-base">📌 香港與國際賽規：</div>
+                                 <ul class="list-disc list-inside space-y-2 text-slate-700 text-base">`;
+            data.rules.forEach(rule => {
+                rulesListHtml += `<li>${rule}</li>`;
+            });
+            rulesListHtml += `</ul>`;
+
+            const container = document.getElementById('court-info-text-container');
+            container.innerHTML = `
+                <p class="text-slate-655 text-base sm:text-lg leading-relaxed">${data.desc}</p>
+                <div class="p-5 bg-white rounded-xl border border-indigo-150 space-y-3 mt-4">
+                    ${rulesListHtml}
+                </div>
+            `;
+        }
+
+        // 3. Quiz Game Logic - Extended to 10 Questions
+        const quizQuestions = [
+            {
+                title: "手球比賽時，每隊上場作賽的球員人數（包括守門員）是多少人？",
+                options: [
+                    "5人",
+                    "7人",
+                    "11人",
+                    "14人"
+                ],
+                correct: 1,
+                explanation: "標準手球比賽每隊上場作賽的人數為 7 人（包括 1 名守門員與 6 名場地隊員）。登記名單最多可至 14 人。"
+            },
+            {
+                title: "普通場地隊員在沒有拍球的情況下，最多可以持球幾秒或走多少步？",
+                options: [
+                    "3秒 / 3步",
+                    "5秒 / 5步",
+                    "3秒 / 不限步數",
+                    "5秒 / 3步"
+                ],
+                correct: 0,
+                explanation: "手球規則規定，場地隊員持球不得超過 3 秒，且最多只能移動 3 步（守門員在禁區內除外），否則判違例並由對方擲自由球。"
+            },
+            {
+                title: "在香港及標準手球賽中，14歲以上女子及12-16歲男子球員，應使用幾號手球？",
+                options: [
+                    "1 號球",
+                    "2 號球",
+                    "3 號球",
+                    "4 號球"
+                ],
+                correct: 1,
+                explanation: "14歲以上女子、12-16歲男子組別使用的是中號 2 號手球；而 16 歲或以上男子組別使用的是 3 號球；小學兒童通常使用 1 號球。"
+            },
+            {
+                title: "當一個隊員在球場內被罰「退場兩分鐘」時，該球員與球隊會面臨什麼懲罰？",
+                options: [
+                    "隊員必須下場，但替補球員可以立即補上",
+                    "隊員被終身禁賽",
+                    "球員須下場，且球隊在兩分鐘內不能派替補，必須少打一人",
+                    "直接被判輸球"
+                ],
+                correct: 2,
+                explanation: "手球的「退場兩分鐘 (2-Minute Suspension)」是漸進式罰則。被處罰的球員須離場，球隊在兩分鐘內少打一人，過後方可補回球員。"
+            },
+            {
+                title: "在正式手球比賽中，如果進攻隊被裁判舉起「消極比賽」手勢警告後，該隊最多還有多少次傳球機會來進行射門？",
+                options: [
+                    "3次",
+                    "4次",
+                    "6次",
+                    "沒有次數限制，只要進攻即可"
+                ],
+                correct: 2,
+                explanation: "根據最新手球規則，裁判出示「消極性比賽」警告手勢後，控球隊伍在被判罰之前，最多只能再進行 6 次傳球射門，否則判違例由對手獲得自由球。"
+            },
+            {
+                title: "守門員在己方球門區（6米禁區）內防守及控球時，關於持球與移動的規則是什麼？",
+                options: [
+                    "必須在 3 秒內將球傳出，且不能走多於 3 步",
+                    "不受普通球員「持球3秒」與「最多走3步」規則的限制",
+                    "只能用腳踢球，絕對不能用雙手接球",
+                    "可以走步但每次持球最長不得超過 10 秒"
+                ],
+                correct: 1,
+                explanation: "守門員在自己 6 米禁區內時，屬於防守特權區域，不受 3 秒與 3 步規則限制，可以自由移動。但若攜球離開禁區，則與普通球員同受限制。"
+            },
+            {
+                title: "當防守球員試圖阻礙對方「顯然得分機會」（例如單刀射門）時作出嚴重犯規，裁判應判罰什麼？",
+                options: [
+                    "守門員球，由門將重新組織進攻",
+                    "邊線界外球",
+                    "7 公尺罰球 (7-Meter Penalty)",
+                    "進攻球犯規並直接交換控球權"
+                ],
+                correct: 2,
+                explanation: "任何通過違規破壞明顯得分機會的防守行為，裁判均應判給攻方一個「7公尺罰球」；同時往往會伴隨對該防守隊員的黃牌或退場處罰。"
+            },
+            {
+                title: "在手球比賽中，當裁判示警「消極比賽」警告後，控球隊伍若在規定的 6 次傳球內仍未進行射門，將面臨什麼判罰？",
+                options: [
+                    "判罰 7 公尺定點球",
+                    "判由對方獲得「自由球」（交換控球權）",
+                    "控球球員被判退場 2 分鐘",
+                    "判雙方在中線重新開球"
+                ],
+                correct: 1,
+                explanation: "當裁判舉手示警消極比賽（被動進攻）後，控球隊必須在 6 次傳球之內完成射門，否則會被判違例，並由對方隊伍在違例發生地點獲得「自由球」以交換控球權。"
+            },
+            {
+                title: "在進行手球的「邊線球（界外球）」拋擲時，擲球隊員必須遵守以下哪一項規定？",
+                options: [
+                    "擲球隊員必須雙腳完全踩在邊線上並保持靜止",
+                    "擲球隊員必須至少有一隻腳踩在邊線上",
+                    "擲球時必須採用雙手過頂拋球方式（類似足球）",
+                    "擲球時防守隊員可以站在擲球隊員 1 米內進行攔截"
+                ],
+                correct: 1,
+                explanation: "手球邊線球的規定是擲球隊員必須「至少有一隻腳踩在邊線上」，直至球離手。執行時對手必須與其保持至少 3 公尺的距離。"
+            },
+            {
+                title: "同一名手球運動員在單場比賽中，累計被裁判判罰多少次「退場兩分鐘」後，將會被出示紅牌取消該場比賽資格 (DQ)？",
+                options: [
+                    "累計 2 次",
+                    "累計 3 次",
+                    "累計 4 次",
+                    "累計 5 次"
+                ],
+                correct: 1,
+                explanation: "在手球比賽中，同一名球員如果累計遭到 3 次「退場兩分鐘」的判罰，裁判會自動對其出示紅牌取消資格（DQ），該球員不能再在該場比賽上場。"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            answered = false;
+            const q = quizQuestions[currentQuestionIndex];
+            
+            // Render Q number & text
+            document.getElementById('q-number').innerText = `問題 ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+            document.getElementById('q-title').innerText = q.title;
+            
+            // Hide feedback
+            document.getElementById('quiz-feedback').className = "hidden";
+            
+            // Render options
+            const optionsContainer = document.getElementById('q-options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const button = document.createElement('button');
+                button.className = "w-full text-left p-4.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all font-bold text-base sm:text-lg flex items-center justify-between group shadow-sm";
+                button.onclick = () => selectOption(idx);
+                button.id = `opt-${idx}`;
+                button.innerHTML = `
+                    <span>${opt}</span>
+                    <span class="w-8 h-8 rounded-full border border-slate-355 flex items-center justify-center text-sm group-hover:border-indigo-400 font-bold font-sport text-slate-500">
+                        ${String.fromCharCode(65 + idx)}
+                    </span>
+                `;
+                optionsContainer.appendChild(button);
+            });
+
+            // Adjust Next Button Text
+            const nextBtn = document.getElementById('next-btn');
+            if (currentQuestionIndex === quizQuestions.length - 1) {
+                nextBtn.innerText = "查看總結";
+            } else {
+                nextBtn.innerText = "下一題";
+            }
+        }
+
+        function selectOption(selectedIndex) {
+            if (answered) return; // Prevent multiple clicks
+            answered = true;
+            
+            const q = quizQuestions[currentQuestionIndex];
+            const feedbackBox = document.getElementById('quiz-feedback');
+            const statusText = document.getElementById('feedback-status');
+            const explanationText = document.getElementById('explanation');
+            
+            // Disable options styling, highlight correct/wrong
+            q.options.forEach((opt, idx) => {
+                const optBtn = document.getElementById(`opt-${idx}`);
+                optBtn.onclick = null; // Remove click listener
+                
+                if (idx === q.correct) {
+                    optBtn.className = "w-full text-left p-4.5 rounded-xl border-2 border-green-500 bg-green-50 font-black text-base sm:text-lg flex items-center justify-between shadow-sm";
+                    optBtn.querySelector('span:last-child').className = "w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold";
+                    optBtn.querySelector('span:last-child').innerHTML = "✓";
+                } else if (idx === selectedIndex) {
+                    optBtn.className = "w-full text-left p-4.5 rounded-xl border-2 border-red-500 bg-red-50 font-black text-base sm:text-lg flex items-center justify-between shadow-sm";
+                    optBtn.querySelector('span:last-child').className = "w-8 h-8 rounded-full bg-red-550 text-white flex items-center justify-center text-sm font-bold";
+                    optBtn.querySelector('span:last-child').innerHTML = "✗";
+                } else {
+                    optBtn.className = "w-full text-left p-4.5 rounded-xl border border-slate-200 opacity-50 text-base sm:text-lg flex items-center justify-between shadow-sm";
+                }
+            });
+
+            // Handle Score and Feedback box
+            if (selectedIndex === q.correct) {
+                score++;
+                document.getElementById('quiz-score').innerText = `${score} / ${quizQuestions.length}`;
+                feedbackBox.className = "p-5 rounded-xl border border-green-200 bg-green-50 text-green-900 text-base leading-relaxed shadow-xs";
+                statusText.innerText = "🎉 答對了！非常優秀！";
+            } else {
+                feedbackBox.className = "p-5 rounded-xl border border-red-200 bg-red-50 text-red-900 text-base leading-relaxed shadow-xs";
+                statusText.innerText = `❌ 答錯了，正確答案是【${q.options[q.correct]}】`;
+            }
+            explanationText.innerText = q.explanation;
+        }
+
+        function nextQuestion() {
+            if (!answered) {
+                // Custom UI indicator instead of alert
+                const feedbackBox = document.getElementById('quiz-feedback');
+                feedbackBox.className = "p-5 rounded-xl border border-amber-200 bg-amber-50 text-amber-905 text-base leading-relaxed shadow-xs";
+                document.getElementById('feedback-status').innerText = "💡 提示";
+                document.getElementById('explanation').innerText = "請先點選答案，再進行下一題。";
+                return;
+            }
+
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                // Quiz completed, show summary
+                document.getElementById('quiz-box').classList.add('hidden');
+                document.getElementById('quiz-summary').classList.remove('hidden');
+                document.getElementById('summary-score').innerText = `${score} / ${quizQuestions.length}`;
+                
+                // Set custom evaluation message based on performance (adapted for 10 questions)
+                let evaluation = "";
+                if (score === 10) {
+                    evaluation = "🥇 滿分神級表現！你對手球規則、港隊亞運戰績的理解簡真完美，達到了專業裁判水準！";
+                } else if (score >= 8) {
+                    evaluation = "🥈 優異成績！你掌握了手球的大部分進階規則與港隊歷史，是一名出色的手球戰術通！";
+                } else if (score >= 6) {
+                    evaluation = "🥉 還不錯的分數！你已具備手球的基本規則意識，稍加複習必定能更進一步！";
+                } else {
+                    evaluation = "⚠️ 仍需努力！建議你重新閱讀教材中的「比賽規則」以及點擊「互動 3D 質感球場」進行複習，然後再次挑戰！";
+                }
+                document.getElementById('summary-eval').innerText = evaluation;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('quiz-score').innerText = `0 / ${quizQuestions.length}`;
+            document.getElementById('quiz-box').classList.remove('hidden');
+            document.getElementById('quiz-summary').classList.add('hidden');
+            loadQuestion();
+        }
+
+        // Initialize App on Load
+        window.onload = function() {
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>

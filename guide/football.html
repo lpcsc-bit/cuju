@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖公會李炳中學 — 體育科足球筆記</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        
+        /* 全域字體比例放大與平滑渲染 */
+        html {
+            font-size: 18px; /* 提升基準字型大小 */
+        }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* 3D 卡片翻轉樣式 - 配合大字體微調高度 */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-16">
+
+    <!-- 頂部精美 Banner -->
+    <header class="relative bg-gradient-to-r from-green-800 via-emerald-800 to-teal-950 text-white py-14 px-8 shadow-lg overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <!-- 足球背景紋理簡約幾何線條 -->
+            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50%" cy="50%" r="40%" fill="none" stroke="white" stroke-width="2" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" stroke="white" stroke-width="2" />
+            </svg>
+        </div>
+        <div class="max-w-6xl mx-auto relative z-10 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <span class="bg-emerald-500 text-white text-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-md">S.K.H. Li Ping Secondary School</span>
+                <h1 class="text-4xl md:text-5xl font-bold mt-3 tracking-tight">體育科：足球運動教材</h1>
+            </div>
+            <div class="flex gap-3">
+                <span class="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-xl text-base font-bold border border-white/20">⚽ 互動教學版</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主選單 Tab 導航 (大字體、好點擊) -->
+    <div class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 overflow-x-auto flex gap-3 py-4">
+            <button onclick="switchTab('history')" id="tab-history" class="tab-btn shrink-0 px-5 py-2.5 text-base font-bold rounded-full transition-all duration-300 bg-emerald-600 text-white shadow-md shadow-emerald-100">
+                🕒 歷史發展
+            </button>
+            <button onclick="switchTab('pitch')" id="tab-pitch" class="tab-btn shrink-0 px-5 py-2.5 text-base font-bold rounded-full transition-all duration-300 text-slate-600 hover:bg-slate-100">
+                📐 場地與賽規
+            </button>
+            <button onclick="switchTab('restart')" id="tab-restart" class="tab-btn shrink-0 px-5 py-2.5 text-base font-bold rounded-full transition-all duration-300 text-slate-600 hover:bg-slate-100">
+                🏃 重新開始比賽
+            </button>
+            <button onclick="switchTab('fouls')" id="tab-fouls" class="tab-btn shrink-0 px-5 py-2.5 text-base font-bold rounded-full transition-all duration-300 text-slate-600 hover:bg-slate-100">
+                ⚠️ 自由球與犯規
+            </button>
+            <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn shrink-0 px-5 py-2.5 text-base font-bold rounded-full transition-all duration-300 text-slate-600 hover:bg-slate-100">
+                🙋 裁判手號圖卡
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn shrink-0 px-5 py-2.5 text-base font-bold rounded-full transition-all duration-300 text-slate-600 hover:bg-slate-100 flex items-center gap-1">
+                ✍️ 知識自測
+            </button>
+        </div>
+    </div>
+
+    <!-- 主要內容區 -->
+    <main class="max-w-6xl mx-auto px-4 mt-10">
+
+        <!-- 1. 歷史發展 Tab -->
+        <div id="content-history" class="tab-content block space-y-8">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 起源與早期 -->
+                <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-amber-100 text-amber-800 p-3 rounded-2xl font-bold text-2xl">🇨🇳</div>
+                        <h2 class="text-2xl font-bold text-slate-900">起源與早期發展</h2>
+                    </div>
+                    <ul class="space-y-5 text-lg">
+                        <li class="flex gap-3">
+                            <span class="text-emerald-500 font-bold mt-1 text-xl">✓</span>
+                            <p class="text-slate-600"><strong class="text-slate-900">古代蹴鞠</strong>：足球起源於中國，古代中國的「蹴鞠」就是現代足球的前身。</p>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-emerald-500 font-bold mt-1 text-xl">✓</span>
+                            <p class="text-slate-600"><strong class="text-slate-900">現代起源</strong>：現代足球起源於 <strong>19 世紀中期的英國</strong>，最早的職業聯賽也在同地開始。</p>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-emerald-500 font-bold mt-1 text-xl">✓</span>
+                            <p class="text-slate-600"><strong class="text-slate-900">英格蘭足總 (1863)</strong>：世界第一個正式足球組織「英格蘭足球協會」在英國倫敦成立，現代足球比賽規章皆基於其版本上演化而成。</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 國際化與賽事 -->
+                <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-blue-100 text-blue-800 p-3 rounded-2xl font-bold text-2xl">🌍</div>
+                        <h2 class="text-2xl font-bold text-slate-900">國際化與現代賽事</h2>
+                    </div>
+                    <ul class="space-y-5 text-lg">
+                        <li class="flex gap-3">
+                            <span class="text-emerald-500 font-bold mt-1 text-xl">✓</span>
+                            <p class="text-slate-600"><strong class="text-slate-900">國際足協 (1904)</strong>：於法國成立「國際足球協會」（FIFA），全面推廣現代足球國際化。</p>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-emerald-500 font-bold mt-1 text-xl">✓</span>
+                            <p class="text-slate-600"><strong class="text-slate-900">首屆世界盃 (1930)</strong>：1928 年國際足協決定每四年舉行一屆世界盃，並與奧運會相間舉行，第一屆於 1930 年正式開踢。</p>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-emerald-500 font-bold mt-1 text-xl">✓</span>
+                            <p class="text-slate-600"><strong class="text-slate-900">女子世界盃 (1991)</strong>：國際足協亦籌辦多個世界賽事，首屆女子世界盃於 1991 年成功舉行。</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 歷史教學影片區 -->
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎥</span> 【運動教室 101】第十集：足球【Learning Sports 101】Episode 10 - Football
+                </h3>
+                <div class="relative w-full pb-[56.25%] h-0 rounded-2xl overflow-hidden shadow-inner border border-slate-200">
+                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/_9tnELlTESc" title="運動教室 101】第十集：足球【Learning Sports 101】Episode 10 - Football" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 場地與賽規 Tab -->
+        <div id="content-pitch" class="tab-content hidden space-y-8">
+            <!-- 互動足球場說明區 -->
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">⚽ 互動足球場結構圖</h2>
+                <p class="text-base text-slate-500 mb-8">點擊球場上的 <span class="text-emerald-600 font-bold">閃爍定位標記 (📍)</span>，可查看該區域的詳細規格與對應球例規則！</p>
+                
+                <div class="relative w-full max-w-3xl mx-auto bg-green-700 p-4 md:p-8 rounded-2xl shadow-inner border-4 border-green-900 overflow-hidden">
+                    <!-- 足球場 SVG 圖 -->
+                    <svg viewBox="0 0 100 64" class="w-full h-auto stroke-white fill-none stroke-[0.8]">
+                        <!-- 外框線/邊線與底線 -->
+                        <rect x="0" y="0" width="100" height="64" />
+                        <!-- 中線 -->
+                        <line x1="50" y1="0" x2="50" y2="64" />
+                        <!-- 中圈 -->
+                        <circle cx="50" cy="32" r="9.15" />
+                        <circle cx="50" cy="32" r="0.5" class="fill-white" />
+                        <!-- 左側禁區 -->
+                        <rect x="0" y="11" width="16.5" height="42" />
+                        <rect x="0" y="23" width="5.5" height="18" />
+                        <circle cx="11" cy="32" r="0.5" class="fill-white" />
+                        <path d="M 16.5,23.85 A 9.15,9.15 0 0,1 16.5,40.15" />
+                        <!-- 右側禁區 -->
+                        <rect x="83.5" y="11" width="16.5" height="42" />
+                        <rect x="94.5" y="23" width="5.5" height="18" />
+                        <circle cx="89" cy="32" r="0.5" class="fill-white" />
+                        <path d="M 83.5,23.85 A 9.15,9.15 0 0,0 83.5,40.15" />
+                    </svg>
+
+                    <!-- 互動定位標記 -->
+                    <!-- 1. 邊線 -->
+                    <button onclick="showPitchDetail('sideline')" class="absolute top-[8%] left-[50%] -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/90 text-white text-lg font-bold hover:scale-125 transition-transform animate-bounce shadow-lg">📍</button>
+                    <!-- 2. 球門線/底線 -->
+                    <button onclick="showPitchDetail('goalline')" class="absolute top-[50%] left-[5%] -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/90 text-white text-lg font-bold hover:scale-125 transition-transform animate-bounce shadow-lg">📍</button>
+                    <!-- 3. 中線/中圈 -->
+                    <button onclick="showPitchDetail('center')" class="absolute top-[55%] left-[50%] -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/90 text-white text-lg font-bold hover:scale-125 transition-transform animate-bounce shadow-lg">📍</button>
+                    <!-- 4. 禁區 -->
+                    <button onclick="showPitchDetail('penalty')" class="absolute top-[35%] left-[12%] -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/90 text-white text-lg font-bold hover:scale-125 transition-transform animate-bounce shadow-lg">📍</button>
+                    <!-- 5. 十二碼罰球點 -->
+                    <button onclick="showPitchDetail('spot')" class="absolute top-[50%] left-[14.5%] -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/90 text-white text-lg font-bold hover:scale-125 transition-transform animate-bounce shadow-lg">📍</button>
+                </div>
+
+                <!-- 點擊呈現說明卡片 (大字體加強易讀性) -->
+                <div id="pitch-detail-card" class="mt-8 p-6 bg-slate-100 rounded-2xl border border-slate-200 transition-all duration-300">
+                    <div class="flex items-center gap-3 text-emerald-800 font-bold text-xl mb-3">
+                        <span class="text-2xl">💡</span>
+                        <span id="pitch-title">請點擊上方球場中任一處 📍 標記</span>
+                    </div>
+                    <p id="pitch-desc" class="text-slate-700 text-lg leading-relaxed">上方互動圖中標記了足球場關鍵的長度、寬度與特殊功能區。點擊了解體育科課程要求的場地規格與基本判罰規則！</p>
+                </div>
+            </div>
+
+            <!-- 基本賽規卡片 -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 基本賽制 -->
+                <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100 space-y-6">
+                    <h3 class="text-xl font-bold text-slate-900 border-b pb-3 flex items-center gap-3">
+                        <span class="text-2xl">⏱️</span> 比賽時間與人數
+                    </h3>
+                    <ul class="space-y-4 text-slate-600 text-lg">
+                        <li><strong>比賽人數</strong>：每隊上場 11 人（最少 7 人）。自 2022 年 7 月 1 日起，每場每隊最多可替換 <strong class="text-slate-900 font-bold">5 人</strong>。</li>
+                        <li><strong>法定時間</strong>：全場 <strong class="text-slate-900 font-bold">90 分鐘</strong>（上、下半場各 45 分鐘），中場休息 15 分鐘。</li>
+                        <li><strong>延長賽與點球</strong>：若淘汰賽打平，進入 30 分鐘延長賽；仍無法分出勝負則以<strong>定點球（點球）</strong>決勝。</li>
+                    </ul>
+                </div>
+
+                <!-- 球員裝備與裁判 -->
+                <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100 space-y-6">
+                    <h3 class="text-xl font-bold text-slate-900 border-b pb-3 flex items-center gap-3">
+                        <span class="text-2xl">🧦</span> 裝備與裁判團隊
+                    </h3>
+                    <ul class="space-y-4 text-slate-600 text-lg">
+                        <li><strong>服裝規定</strong>：所有球員必須穿整齊球衣並<strong class="text-slate-900 font-bold">配戴護脛</strong>。除守門員可穿長褲外，所有球員必須穿短褲。</li>
+                        <li><strong>禁止配戴飾物</strong>：頸鍊、手錶、戒指等一律<strong class="text-red-600 font-bold">禁止配戴</strong>，以策安全。</li>
+                        <li><strong>裁判團隊 (共 4 名)</strong>：
+                            <br>• <strong>主裁判 (主審)</strong>：在場上執法，配有哨子。
+                            <br>• <strong>助理裁判 (邊審, 2名)</strong>：主要負責<strong>監察越位線</strong>。
+                            <br>• <strong>第四裁判</strong>：負責監督教練與休息區。
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 重新開始比賽 Tab -->
+        <div id="content-restart" class="tab-content hidden">
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100 space-y-8">
+                <h2 class="text-2xl font-bold text-slate-900">🏃 比賽開始、中斷與重新開始方法</h2>
+                <p class="text-slate-500 text-base">根據皮球出界及中斷位置，足球規則規定了以下 5 種不同的重新開始方式：</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- 開球 -->
+                    <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-100">
+                        <span class="inline-block bg-emerald-100 text-emerald-800 text-sm font-bold px-3 py-1 rounded-full mb-3">1. 中圈開球</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">開球 (Kick-off)</h4>
+                        <p class="text-slate-600 text-base leading-relaxed">由裁判訊號指示於中圈開球。皮球被踢及明顯移動後比賽正式開始，開球<strong class="text-emerald-700 font-bold">可直接射門取得入球</strong>。</p>
+                    </div>
+
+                    <!-- 界外球 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
+                        <span class="inline-block bg-slate-200 text-slate-700 text-sm font-bold px-3 py-1 rounded-full mb-3">2. 邊線出界</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">擲界外球 (Throw-in)</h4>
+                        <p class="text-slate-600 text-base leading-relaxed">皮球越過邊線時判給最後觸球者之對方。球員擲球時必須<strong class="text-slate-800 font-bold">雙足站立在邊線上或邊線外地面</strong>，並<strong class="text-slate-800 font-bold">雙手持球從頭後經頭頂</strong>擲出。</p>
+                    </div>
+
+                    <!-- 球門球 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
+                        <span class="inline-block bg-slate-200 text-slate-700 text-sm font-bold px-3 py-1 rounded-full mb-3">3. 攻方踢出底線</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">球門球 (Goal Kick)</h4>
+                        <p class="text-slate-600 text-base leading-relaxed">皮球越過底線（未進球）且最後觸球者為攻方球員。由守方球員從<strong>球門區內</strong>踢球門球重新開始比賽。</p>
+                    </div>
+
+                    <!-- 角球 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
+                        <span class="inline-block bg-slate-200 text-slate-700 text-sm font-bold px-3 py-1 rounded-full mb-3">4. 守方踢出底線</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">角球 (Corner Kick)</h4>
+                        <p class="text-slate-600 text-base leading-relaxed">皮球越過底線且最後觸球者為守方。由攻方在出界那一方的<strong>角球點</strong>上開出角球。</p>
+                    </div>
+
+                    <!-- 越位 -->
+                    <div class="p-6 rounded-2xl bg-red-50 border border-red-100 md:col-span-2">
+                        <span class="inline-block bg-red-100 text-red-800 text-sm font-bold px-3 py-1 rounded-full mb-3">5. 進攻戰術犯規</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">越位 (Offside)</h4>
+                        <p class="text-slate-600 text-base leading-relaxed">阻止對方進攻的防守戰術，亦是球員進攻限制。當隊友傳球向前瞬間，有<strong>一位或以上</strong>的進攻隊員<strong class="text-red-700 font-bold">比對方的球員更前（更靠近守方底線）</strong>，即構成越位犯規，判給守方開間接自由球。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 自由球與犯規 Tab -->
+        <div id="content-fouls" class="tab-content hidden space-y-8">
+            <!-- 間接自由球 -->
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <div class="flex items-center justify-between border-b pb-4 mb-5">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+                        <span class="text-3xl">☝️</span> 1. 間接自由球
+                    </h2>
+                    <span class="bg-blue-100 text-blue-800 text-sm font-bold px-4 py-1.5 rounded-full">不可直接射門入球</span>
+                </div>
+                
+                <div class="p-5 mb-5 bg-blue-50 border-l-4 border-blue-500 rounded-r-2xl text-base text-blue-900">
+                    💡 <strong class="text-lg">重要規則限制</strong>：應在犯規點開出，但若踢出後<strong class="text-red-700 font-bold">未經過其他任何球員觸碰而直接入網，不算作入球</strong>（判給對方踢球門球重新開始）。
+                </div>
+
+                <p class="font-bold text-base text-slate-700 mb-3">當球員在場上觸犯下列情況時，判對方得一間接自由球：</p>
+                <ul class="grid md:grid-cols-2 gap-4 text-base text-slate-600">
+                    <li class="bg-slate-50 p-4 rounded-xl shadow-sm border border-slate-100">• 以<strong>危險動作</strong>用球。</li>
+                    <li class="bg-slate-50 p-4 rounded-xl shadow-sm border border-slate-100">• <strong>阻礙對方推進</strong>（過程中未觸及對方身體）。</li>
+                    <li class="bg-slate-50 p-4 rounded-xl shadow-sm border border-slate-100">• 語言犯規（如冒犯性、侮辱性或辱罵性言語）。</li>
+                    <li class="bg-slate-50 p-4 rounded-xl shadow-sm border border-slate-100">• <strong>阻撓守門員開球</strong>，或在守門員正釋放球時踢向球。</li>
+                    <li class="bg-slate-50 p-4 rounded-xl shadow-sm border border-slate-100 md:col-span-2">• 觸犯任何未在規則中提及的犯規，導致裁判中斷比賽來給予黃/紅牌警告。</li>
+                </ul>
+            </div>
+
+            <!-- 直接自由球與處罰分級 -->
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <div class="flex items-center justify-between border-b pb-4 mb-5">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+                        <span class="text-3xl">🫵</span> 2. 直接自由球
+                    </h2>
+                    <span class="bg-emerald-100 text-emerald-800 text-sm font-bold px-4 py-1.5 rounded-full">可以直接射門得分</span>
+                </div>
+                
+                <div class="p-5 mb-6 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-2xl text-base text-emerald-900">
+                    💡 <strong class="text-lg">重要規則限制</strong>：主踢直接自由球時，<strong>直接射球入網算作入球</strong>。
+                </div>
+
+                <p class="font-bold text-base text-slate-700 mb-5">球員向對方做出衝撞、跳向、踢/意圖踢、推、擊打/意圖擊打、攔截、絆倒/意圖絆倒時，主裁判依其判定動作給予以下紀律處分：</p>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- 不小心 -->
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 relative flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block bg-slate-500 text-white text-xs font-bold px-3 py-1 rounded mb-3">⚙️ 不小心</span>
+                            <h4 class="font-bold text-slate-900 text-lg mb-2">與對方爭球時未專注或考慮</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-4 border-t pt-3">判罰：直接自由球。<strong>毋須採取紀律行動</strong>。</p>
+                    </div>
+
+                    <!-- 魯莽 -->
+                    <div class="p-5 rounded-2xl border border-yellow-200 bg-yellow-50 relative flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded mb-3">🟨 魯莽</span>
+                            <h4 class="font-bold text-slate-900 text-lg mb-2">爭球時沒有顧及對方危害</h4>
+                        </div>
+                        <p class="text-sm text-amber-900 mt-4 border-t pt-3 font-semibold">判罰：直接自由球。<strong>犯規球員必須被黃牌警告</strong>。</p>
+                    </div>
+
+                    <!-- 過度力量 -->
+                    <div class="p-5 rounded-2xl border border-red-200 bg-red-50 relative flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded mb-3">🟥 過度使用力量</span>
+                            <h4 class="font-bold text-slate-900 text-lg mb-2">力量超出需要並危及安危</h4>
+                        </div>
+                        <p class="text-sm text-red-900 mt-4 border-t pt-3 font-bold">判罰：直接自由球。<strong>犯規球員必須被紅牌直接驅逐離場</strong>。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12碼罰球 -->
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-3">
+                    <span class="text-3xl">🎯</span> 3. 十二碼罰球 (點球)
+                </h2>
+                <ul class="space-y-4 text-slate-600 text-lg">
+                    <li><strong>判罰條件</strong>：守方球員在<strong>己方禁區內</strong>觸犯可導致判罰「直接自由球」的犯規條。</li>
+                    <li><strong>執行規則</strong>：當執行時，除主踢球員及守門員外，所有其餘球員皆要離開禁區，且最少距離罰球點<strong>十碼之外</strong>。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 5. 裁判手號 Tab -->
+        <div id="content-signals" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">🙋 互動裁判手號圖卡</h2>
+                <p class="text-base text-slate-500 mb-8">點擊下方的卡片，即可翻轉查看該手號對應的執法指引與判定方法！</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- 手號 1: 間接自由球 -->
+                    <div class="flip-card h-52 cursor-pointer" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">☝️</span>
+                                <h4 class="font-bold text-slate-800 text-lg">間接自由球</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-emerald-800 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">主裁判手勢</h4>
+                                <p class="text-sm text-green-100 leading-relaxed">單手高舉，手指指向天空。應在犯規點開出，未經他人觸球前入網不算得分。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手號 2: 直接自由球 -->
+                    <div class="flip-card h-52 cursor-pointer" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">🫵</span>
+                                <h4 class="font-bold text-slate-800 text-lg">直接自由球</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-emerald-800 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">主裁判手勢</h4>
+                                <p class="text-sm text-green-100 leading-relaxed">單臂斜舉，指向進攻方的進攻方向。可以直接射門得分。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手號 3: 黃牌警告 -->
+                    <div class="flip-card h-52 cursor-pointer" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">🟨</span>
+                                <h4 class="font-bold text-slate-800 text-lg">黃牌警告</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-amber-500 text-slate-900 p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">主裁判處置</h4>
+                                <p class="text-sm text-slate-800 leading-relaxed font-medium">主裁判高舉黃牌示意。判罰針對「魯莽」等嚴重違反體育精神的行為。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手號 4: 紅牌警告 -->
+                    <div class="flip-card h-52 cursor-pointer" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">🟥</span>
+                                <h4 class="font-bold text-slate-800 text-lg">紅牌離場</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-red-600 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">主裁判處置</h4>
+                                <p class="text-sm text-red-100 leading-relaxed">主裁判高舉紅牌示意。判罰過度使用力量等危急安全行為，受罰球員需退場。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手號 5: 界外球 -->
+                    <div class="flip-card h-52 cursor-pointer" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">🚩</span>
+                                <h4 class="font-bold text-slate-800 text-lg">界外球</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-slate-800 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">邊審手勢</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">助理裁判（邊審）手持信號旗指向前，斜斜朝向出界方，提示界外球應由哪方投擲。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手號 6: 越位 -->
+                    <div class="flip-card h-52 cursor-pointer" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">🚶</span>
+                                <h4 class="font-bold text-slate-800 text-lg">越位</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-slate-800 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">邊審手勢</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">助理裁判直立高舉旗子示意越位，或用旗桿斜指場內越位發生的橫線位置。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手號 7: 更換球員 -->
+                    <div class="flip-card h-52 cursor-pointer sm:col-span-2" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner shadow-sm border border-slate-100 hover:border-emerald-500 transition-all duration-300">
+                            <!-- 正面 -->
+                            <div class="flip-card-front bg-slate-50 p-6 flex flex-col justify-center items-center">
+                                <span class="text-5xl mb-3">🔄</span>
+                                <h4 class="font-bold text-slate-800 text-lg">更換球員</h4>
+                                <span class="text-xs text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mt-3 font-medium">點擊查看說明</span>
+                            </div>
+                            <!-- 反面 -->
+                            <div class="flip-card-back bg-slate-800 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="font-bold text-lg mb-2">邊審手勢</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">助理裁判雙手高舉，橫向握著旗桿，向球場主審示意需要更換場上隊員（換人）。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 裁判手號示範影片區 -->
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎥</span> 裁判手號示範短片
+                </h3>
+                <div class="relative w-full pb-[56.25%] h-0 rounded-2xl overflow-hidden shadow-inner border border-slate-200">
+                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/wdFXHhcyxDA" title="裁判手號示範短片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 知識自測 Tab (10題四選項測驗) -->
+        <div id="content-quiz" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-slate-100">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-5 mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900">✍️ 足球線上測驗</h2>
+                        <p class="text-base text-slate-500 mt-2">針對本學科筆記範圍的自我挑戰，考考你的學習成效！</p>
+                    </div>
+                    <span id="quiz-progress" class="bg-emerald-100 text-emerald-800 font-bold px-5 py-2 rounded-full text-base shadow">得分：0 / 10</span>
+                </div>
+
+                <!-- 題目區 -->
+                <div class="space-y-8">
+                    <!-- Q1 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q1-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q1. 判罰規則</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">踢間接自由球時，主踢球員直接射門入網，在沒有其他人碰觸的情況下，此進球是否有效？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(1, 'A', 'incorrect')" class="option-q1 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 有效，直接算作入球得分</button>
+                            <button onclick="checkAnswer(1, 'B', 'correct')" class="option-q1 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 無效，不算作入球，應判由守方踢球門球重新開始</button>
+                            <button onclick="checkAnswer(1, 'C', 'incorrect')" class="option-q1 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 有效，但必須由主裁判口頭警告後重踢</button>
+                            <button onclick="checkAnswer(1, 'D', 'incorrect')" class="option-q1 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 無效，應判由攻方在底線重新開角球</button>
+                        </div>
+                        <div id="q1-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q2-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q2. 比賽細則</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">自 2022 年 7 月 1 日生效之國際足協新規例，每場每隊可替換之球員人數上限為幾人？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(2, 'A', 'incorrect')" class="option-q2 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 3 人</button>
+                            <button onclick="checkAnswer(2, 'B', 'incorrect')" class="option-q2 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 4 人</button>
+                            <button onclick="checkAnswer(2, 'C', 'correct')" class="option-q2 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 5 人</button>
+                            <button onclick="checkAnswer(2, 'D', 'incorrect')" class="option-q2 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 7 人</button>
+                        </div>
+                        <div id="q2-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q3-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q3. 禁區犯規</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">若守方球員在己方的「禁區內」觸犯了可導致判罰直接自由球的規條，則會被判罰何種處置？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(3, 'A', 'incorrect')" class="option-q3 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 判給攻方一個禁區內的直接自由球</button>
+                            <button onclick="checkAnswer(3, 'B', 'correct')" class="option-q3 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 判給攻方一個十二碼罰球（點球）</button>
+                            <button onclick="checkAnswer(3, 'C', 'incorrect')" class="option-q3 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 判給攻方一個禁區內的間接自由球</button>
+                            <button onclick="checkAnswer(3, 'D', 'incorrect')" class="option-q3 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 直接判罰攻方得分，守方球員紅牌離場</button>
+                        </div>
+                        <div id="q3-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q4-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q4. 界外球投擲</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">在執行擲界外球時，擲球員的雙足位置必須符合以下何種條件？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(4, 'A', 'incorrect')" class="option-q4 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 一隻腳在場內，一隻腳在場外</button>
+                            <button onclick="checkAnswer(4, 'B', 'correct')" class="option-q4 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 雙足站立在邊線上或邊線外的地面</button>
+                            <button onclick="checkAnswer(4, 'C', 'incorrect')" class="option-q4 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 可以單腳躍起在空中，只要身體面向球場投擲</button>
+                            <button onclick="checkAnswer(4, 'D', 'incorrect')" class="option-q4 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 必須完全站在離邊線一公尺以外的場外草地上</button>
+                        </div>
+                        <div id="q4-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q5-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q5. 歷史起源</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">現代足球運動被公認起源於哪一個國家，且最早的職業聯賽也是在該國開始？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(5, 'A', 'incorrect')" class="option-q5 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 中國</button>
+                            <button onclick="checkAnswer(5, 'B', 'correct')" class="option-q5 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 英國（英格蘭）</button>
+                            <button onclick="checkAnswer(5, 'C', 'incorrect')" class="option-q5 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 法國</button>
+                            <button onclick="checkAnswer(5, 'D', 'incorrect')" class="option-q5 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 巴西</button>
+                        </div>
+                        <div id="q5-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q6-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q6. 場地尺寸</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">根據國際賽事標準，標準足球場地的「長度（邊線）」應在以下哪一個範圍之內？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(6, 'A', 'incorrect')" class="option-q6 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 90 至 100 公尺</button>
+                            <button onclick="checkAnswer(6, 'B', 'correct')" class="option-q6 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 100 至 110 公尺</button>
+                            <button onclick="checkAnswer(6, 'C', 'incorrect')" class="option-q6 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 110 至 120 公尺</button>
+                            <button onclick="checkAnswer(6, 'D', 'incorrect')" class="option-q6 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 120 至 130 公尺</button>
+                        </div>
+                        <div id="q6-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q7-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q7. 犯規處置</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">當球員在爭奪皮球時「沒有顧及對方球員的危害或後果」，裁判判定此動作為「魯莽」，會給予何種處分？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(7, 'A', 'incorrect')" class="option-q7 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 僅判罰直接自由球，不給予任何牌卡警告</button>
+                            <button onclick="checkAnswer(7, 'B', 'correct')" class="option-q7 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 判罰直接自由球，且犯規球員必須被黃牌警告</button>
+                            <button onclick="checkAnswer(7, 'C', 'incorrect')" class="option-q7 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 判罰直接自由球，且犯規球員必須被紅牌驅逐離場</button>
+                            <button onclick="checkAnswer(7, 'D', 'incorrect')" class="option-q7 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 判定為雙方無意接觸，僅口頭警告並給予爭球重新開始</button>
+                        </div>
+                        <div id="q7-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q8-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q8. 比賽重新開始</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">當皮球越過守方底線（且非入球），而最後觸球者為「守方球員」，攻方重新開始比賽的方式是？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(8, 'A', 'correct')" class="option-q8 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 在皮球越過底線一側的角球點開角球</button>
+                            <button onclick="checkAnswer(8, 'B', 'incorrect')" class="option-q8 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 在球門區內踢球門球</button>
+                            <button onclick="checkAnswer(8, 'C', 'incorrect')" class="option-q8 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 由最近的出界位置投擲界外球</button>
+                            <button onclick="checkAnswer(8, 'D', 'incorrect')" class="option-q8 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 在底線正中央由攻方球員踢自由球</button>
+                        </div>
+                        <div id="q8-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q9-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q9. 裁判團隊</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">足球比賽中，主要負責手持信號旗在邊線上執法，並監察「越位線」的裁判是誰？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(9, 'A', 'incorrect')" class="option-q9 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 主裁判員（主審）</button>
+                            <button onclick="checkAnswer(9, 'B', 'incorrect')" class="option-q9 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 第四裁判</button>
+                            <button onclick="checkAnswer(9, 'C', 'correct')" class="option-q9 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 助理裁判員（邊審）</button>
+                            <button onclick="checkAnswer(9, 'D', 'incorrect')" class="option-q9 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 守門員教練</button>
+                        </div>
+                        <div id="q9-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm" id="q10-container">
+                        <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded">Q10. 球員裝備</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-3 mb-4">關於足球比賽時對球員裝備與飾物的安全限制，以下哪一項敘述是正確的？</h3>
+                        <div class="grid gap-3">
+                            <button onclick="checkAnswer(10, 'A', 'incorrect')" class="option-q10 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">A. 球員可以配戴項鍊與膠質運動手錶作賽</button>
+                            <button onclick="checkAnswer(10, 'B', 'incorrect')" class="option-q10 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">B. 只要用繃帶貼住，即可在比賽中佩戴戒指與耳環</button>
+                            <button onclick="checkAnswer(10, 'C', 'correct')" class="option-q10 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">C. 所有球員必須穿短褲（除守門員外）並配戴護脛，飾物一律禁止配戴</button>
+                            <button onclick="checkAnswer(10, 'D', 'incorrect')" class="option-q10 p-4 text-left text-base rounded-xl border bg-white hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">D. 護脛是選配裝備，非強制配戴，但飾物需要由教練簽字准許才可佩戴</button>
+                        </div>
+                        <div id="q10-feedback" class="hidden mt-4 p-4 text-sm rounded-xl font-medium"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="max-w-6xl mx-auto px-4 mt-16 text-center text-slate-400 text-sm border-t pt-8">
+        <p class="font-semibold text-slate-600 mb-2 text-base">聖公會李炳中學 S.K.H. Li Ping Secondary School</p>
+        <p>體育科足球教學平台 © 2026 數位教材系統</p>
+    </footer>
+
+    <!-- 交互邏輯 JavaScript -->
+    <script>
+        // Tab 切換
+        function switchTab(tabId) {
+            // 隱藏所有 tab 內容
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.add('hidden'));
+            
+            // 移除所有按鈕的啟用樣式
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => {
+                b.classList.remove('bg-emerald-600', 'text-white', 'shadow-md', 'shadow-emerald-100');
+                b.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+
+            // 顯示當前選中的 tab
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            
+            // 設定當前選中按鈕的啟用樣式
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+            activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-md', 'shadow-emerald-100');
+        }
+
+        // 互動足球場數據定義
+        const pitchData = {
+            sideline: {
+                title: "📐 邊線 (Touchline)",
+                desc: "足球場長度較長的一側。國際標準規格介於 100 至 110 公尺。若足球在比賽中整球滾出邊線外，將判定最後觸球者的對方球員以「擲界外球」重新開始比賽。"
+            },
+            goalline: {
+                title: "📐 球門線 / 底線 (Goal line)",
+                desc: "球場寬度較短的一側，國際標準介於 65 至 75 公尺。球門立於此線上。攻方將球踢出守方底線，判由守方開「球門球」；若守方自己碰出底線，則判由攻方在底線角球點開「角球」。"
+            },
+            center: {
+                title: "🟢 中線與中圈 (Center Line & Circle)",
+                desc: "位於足球場中央，用於分隔兩隊半場。比賽開球（上半場、下半場或進球後重新開球）都必須從正中央點開始踢，開球球踢出並明顯移動後比賽即算開始。"
+            },
+            penalty: {
+                title: "🧱 禁區 (Penalty Area)",
+                desc: "守門員可以用手觸球的合法範圍（大禁區）。若守方球員在此區內觸犯本應判直接自由球的犯規（如手球、絆倒人、暴力攔截），裁判將直接宣判攻方獲得「十二碼點球罰球」。"
+            },
+            spot: {
+                title: "🎯 罰球點 / 十二碼點 (Penalty Spot)",
+                desc: "距離球門線正中央前方的 12 碼（約 11 公尺）處。當裁判判定罰十二碼罰球時，皮球會置於此處，除主踢隊員與對方守門員外，所有其餘隊員必須退至禁區外及距離此點至少 10 碼處。"
+            }
+        };
+
+        function showPitchDetail(id) {
+            const detail = pitchData[id];
+            const card = document.getElementById('pitch-detail-card');
+            
+            // 添加切換效果
+            card.classList.add('scale-95', 'opacity-50');
+            
+            setTimeout(() => {
+                document.getElementById('pitch-title').innerText = detail.title;
+                document.getElementById('pitch-desc').innerText = detail.desc;
+                card.classList.remove('scale-95', 'opacity-50');
+            }, 150);
+        }
+
+        // 卡片翻轉
+        function toggleFlip(card) {
+            card.classList.toggle('flipped');
+        }
+
+        // 10題四選項測驗邏輯
+        let score = 0;
+        const answersChecked = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+        
+        const correctAnswers = {
+            1: 'B', 2: 'C', 3: 'B', 4: 'B', 5: 'B',
+            6: 'B', 7: 'B', 8: 'A', 9: 'C', 10: 'C'
+        };
+
+        const answerExplanations = {
+            1: "間接自由球若未經其他任何隊員碰觸就直接入網，入球不算，並應判給守方在球門區重新開「球門球」。",
+            2: "自 2022 年 7 月 1 日起，國際足協生效新規例，每隊每場法定時間內最多可以替換 5 名球員。",
+            3: "守方球員在己方禁區內觸犯本可導致被判直接自由球的犯規，裁判應判定給攻方獲得一個「十二碼罰球（點球）」。",
+            4: "擲球時，球員雙足不能離開地面，且必須站在邊線上或邊線外地面投擲。",
+            5: "現代足球起源於 19 世紀中葉的英國（英格蘭），最早的組織與職業賽規也由此發展演變。",
+            6: "國際賽事標準足球場長度必須介於 100 至 110 公尺，寬度則在 65 至 75 公尺之間。",
+            7: "若裁判認為球員动作性質屬於「魯莽」（意即不顧危害與後果），則必須向該球員出示「黃牌」警告。",
+            8: "若最後觸球者為守方球員，皮球越出守方底線，裁判應判給攻方在該側角球點上重新踢「角球」。",
+            9: "助理裁判員（即邊審）手持旗子，在邊線上執法，最核心的職責之一就是協助主裁判監察並示意「越位線」。",
+            10: "球員裝備規範嚴禁配戴任何類型的飾物（包含戒指、項鍊、手錶），以確保所有球員作賽時的身體安全。"
+        };
+
+        function checkAnswer(questionNum, optionSelected, result) {
+            if (answersChecked[questionNum]) return; // 不允許重複回答
+            answersChecked[questionNum] = true;
+
+            const feedback = document.getElementById(`q${questionNum}-feedback`);
+            feedback.classList.remove('hidden');
+
+            // 禁用該題按鈕並上色
+            const options = document.querySelectorAll(`.option-q${questionNum}`);
+            options.forEach(opt => {
+                opt.disabled = true;
+                opt.classList.add('opacity-50');
+            });
+
+            const correctOpt = correctAnswers[questionNum];
+
+            if (result === 'correct') {
+                score += 1;
+                feedback.classList.add('bg-green-100', 'text-green-800');
+                feedback.innerHTML = `<strong>🎉 答對了！</strong> 正確答案是 ${correctOpt}。<br><span class="mt-1 block text-slate-600">${answerExplanations[questionNum]}</span>`;
+                // 標記綠色
+                event.target.classList.remove('opacity-50');
+                event.target.classList.add('bg-green-500', 'text-white', 'border-green-600', '!opacity-100');
+            } else {
+                feedback.classList.add('bg-red-100', 'text-red-800');
+                feedback.innerHTML = `<strong>❌ 答錯了！</strong> 正確答案是：${correctOpt}。<br><span class="mt-1 block text-slate-600">${answerExplanations[questionNum]}</span>`;
+                // 標記紅色
+                event.target.classList.remove('opacity-50');
+                event.target.classList.add('bg-red-500', 'text-white', 'border-red-600', '!opacity-100');
+            }
+
+            // 更新分數進度 (10 題版)
+            document.getElementById('quiz-progress').innerText = `得分：${score} / 10`;
+        }
+    </script>
+</body>
+</html>

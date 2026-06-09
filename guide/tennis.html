@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖公會李炳中學 - 體育科：網球篇 (大字體升級版)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;950&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        /* 增加全局行高與字距，使大字體更易閱讀 */
+        p, li, select, button {
+            line-height: 1.8;
+            letter-spacing: 0.03em;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 transition-colors duration-500 min-h-screen flex flex-col">
+
+    <!-- 頂部導航欄與場地主題切換 -->
+    <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-50 transition-colors duration-500" id="header-theme">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <!-- 網球 SVG Logo (加大) -->
+                <div class="bg-lime-500 p-3 rounded-full shadow-inner animate-bounce shrink-0">
+                    <svg class="w-8 h-8 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 13v1c0 1.1.9 2 2 2v3.93zm5.22-2.72c-.19-.44-.56-.75-.99-.92-.66-.25-1.12-.9-1.12-1.62v-1.1c0-.28-.22-.5-.5-.5H11v-2h1c.55 0 1-.45 1-1V8h2c.55 0 1-.45 1-1V5.79c1.91.88 3.39 2.56 3.9 4.62l-1.68.81c-.42.2-.68.64-.68 1.11v2.1c0 .48.24.93.64 1.2l1.04.83c-.49.92-1.19 1.71-2.02 2.33z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-black text-2xl sm:text-3xl tracking-wide">聖公會李炳中學</h1>
+                    <p class="text-sm sm:text-base text-lime-400 font-bold tracking-wider">體育科電子教材 · 網球單元</p>
+                </div>
+            </div>
+
+            <!-- 大滿貫場地主題切換器 (按鈕加大，字體放大) -->
+            <div class="flex flex-wrap items-center gap-3 bg-slate-800 p-2 rounded-xl border border-slate-700">
+                <span class="text-xs sm:text-sm text-slate-300 px-2 font-bold">場地模擬：</span>
+                <button onclick="changeTheme('hard')" id="btn-theme-hard" class="px-4 py-2 text-sm sm:text-base font-bold rounded-lg transition-all bg-sky-600 text-white shadow-md">
+                    澳美硬地 (藍)
+                </button>
+                <button onclick="changeTheme('clay')" id="btn-theme-clay" class="px-4 py-2 text-sm sm:text-base font-bold rounded-lg transition-all text-slate-300 hover:bg-slate-700">
+                    法網紅土 (紅)
+                </button>
+                <button onclick="changeTheme('grass')" id="btn-theme-grass" class="px-4 py-2 text-sm sm:text-base font-bold rounded-lg transition-all text-slate-300 hover:bg-slate-700">
+                    溫網草地 (綠)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 頂部虛擬分頁導航選單 -->
+    <nav class="bg-white border-b-4 border-slate-200 sticky top-[92px] md:top-[84px] z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex overflow-x-auto py-2.5 gap-3 scrollbar-none justify-start lg:justify-between items-center">
+                <button onclick="switchTab('tab-history')" id="nav-tab-history" class="flex-shrink-0 px-6 py-3 text-base sm:text-lg font-black rounded-xl transition-all duration-300 border-2 border-slate-900 bg-slate-900 text-white shadow-md">
+                    🎾 1. 歷史與大滿貫
+                </button>
+                <button onclick="switchTab('tab-rules')" id="nav-tab-rules" class="flex-shrink-0 px-6 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 border-2 border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                    📜 2. 核心規則與違例
+                </button>
+                <button onclick="switchTab('tab-scoring')" id="nav-tab-scoring" class="flex-shrink-0 px-6 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 border-2 border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                    📊 3. 計分法與模擬器
+                </button>
+                <button onclick="switchTab('tab-coleman')" id="nav-tab-coleman" class="flex-shrink-0 px-6 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 border-2 border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                    🇭🇰 4. 香港之光：黃澤林
+                </button>
+                <button onclick="switchTab('tab-quiz')" id="nav-tab-quiz" class="flex-shrink-0 px-6 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 border-2 border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                    📝 5. 自我檢測挑戰 (10題)
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主體內容區 (分頁顯示) -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 w-full">
+
+        <!-- ==========================================
+             版面 1: 網球歷史與大滿貫 (預設顯示)
+             ========================================== -->
+        <section id="tab-history" class="tab-content block animate-fadeIn">
+            <!-- Hero Banner style welcome -->
+            <div class="relative overflow-hidden transition-all duration-500 text-white py-12 px-6 sm:px-12 rounded-3xl shadow-2xl mb-8" id="hero-banner" style="background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);">
+                <div class="absolute inset-0 opacity-15 bg-grid-white bg-[size:30px_30px]"></div>
+                <div class="max-w-4xl relative z-10">
+                    <span class="bg-lime-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-sm sm:text-base uppercase tracking-widest shadow-md">
+                        網球 (Tennis) 歷史與發展
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black mt-4 mb-2 tracking-tight leading-tight">
+                        起源自法國，盛行於全球
+                    </h2>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3 mb-6">
+                <span class="w-2.5 h-8 bg-lime-500 rounded-full"></span>
+                <h3 class="text-3xl font-black text-slate-900">網球發展與字源</h3>
+            </div>
+
+            <!-- Word Origin Alert Card (大字體) -->
+            <div class="bg-gradient-to-r from-lime-500/10 to-emerald-500/10 border-l-8 border-lime-500 p-6 rounded-r-2xl mb-8 flex items-start space-x-4">
+                <div class="bg-lime-500 text-slate-950 p-3 rounded-full font-black text-xl shrink-0">💡</div>
+                <div>
+                    <h4 class="font-black text-lime-900 text-xl">網球字源小故事</h4>
+                    <p class="text-base sm:text-lg text-slate-700 mt-2 leading-relaxed">
+                        早在 13 世紀的法國就出現了類似網球的遊戲，當時法文中的 <strong class="text-lime-800 text-lg sm:text-xl">"TENEZ"</strong> 代表「比賽、注意」的意思；當這個遊戲傳入英國後，英語發音便演變成了今天的 <strong class="text-lime-800 text-lg sm:text-xl">"TENNIS"</strong>。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Wingfield少校歷史 -->
+            <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm font-black text-lime-600 bg-lime-50 px-3 py-1.5 rounded-full">現代網球創始人</span>
+                    <span class="text-sm font-bold text-slate-400">1873 年關鍵突破</span>
+                </div>
+                <h4 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">溫菲爾德少校與「草地網球」</h4>
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                    現代網球是由英國駐印度軍隊的退役少校 <strong>溫菲爾德 (Walter Clopton Wingfield)</strong> 所發明。他於 1873 年將網球由室內大廳移至室外，完成了這項運動歷史上的偉大改革。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-100">
+                        <span class="text-2xl">📐</span>
+                        <h5 class="font-black text-lg text-slate-900 mt-2 mb-1">關鍵發明 (1873年)</h5>
+                        <p class="text-sm sm:text-base text-slate-600">他發明了「Sphairistike」（希臘文意指：需要運用技術的球類活動），為現代網球奠定最初框架。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-100">
+                        <span class="text-2xl">🌱</span>
+                        <h5 class="font-black text-lg text-slate-900 mt-2 mb-1">草地網球 (Lawn Tennis)</h5>
+                        <p class="text-sm sm:text-base text-slate-600">大膽將網球場由室內大廳改至室外草地進行，並出版網球規則書籍，使網球走向大眾與自然。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-100">
+                        <span class="text-2xl">📅</span>
+                        <h5 class="font-black text-lg text-slate-900 mt-2 mb-1">大賽確立 (1877年)</h5>
+                        <p class="text-sm sm:text-base text-slate-600">英國於 1875 年正式制訂現代比賽規則，隨後在 1877 年於倫敦郊外舉辦了第一屆溫布頓大賽。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grand Slams Card -->
+            <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-3xl">🏆</span>
+                        <h4 class="text-2xl sm:text-3xl font-black text-slate-900">當代四大大滿貫賽事 (Grand Slam)</h4>
+                    </div>
+                    <div class="bg-lime-100 text-lime-900 px-4 py-1.5 rounded-xl text-sm font-black animate-pulse">
+                        💡 點擊下方圖片中的任意場地，直接進行「場地模擬」切換！
+                    </div>
+                </div>
+                <p class="text-base text-slate-600 mb-6">四大大滿貫是職業網球運動的最高榮譽殿堂。下方的高清合成圖展示了四大賽事的實景球場：</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <!-- 左欄：大滿貫高清合成對照圖 + 內嵌象限切換與半透明遮罩模擬 -->
+                    <div class="lg:col-span-7 flex flex-col justify-between">
+                        <div class="relative overflow-hidden rounded-3xl border-4 border-slate-200 shadow-2xl aspect-[1.8/1] bg-slate-950">
+                            <!-- Base Image -->
+                            <img src="image_53ad08.jpg" 
+                                 alt="當代四大大滿貫賽事對照圖 (澳洲、法國、溫布頓、美國)" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=1000&auto=format&fit=crop&q=80'"
+                                 class="w-full h-full object-cover">
+                            
+                            <!-- 互動覆蓋網格 -->
+                            <div class="absolute inset-0 grid grid-cols-2 grid-rows-2">
+                                
+                                <!-- 象限 1: AO 澳洲公開賽 (左上) -->
+                                <div onclick="changeTheme('hard')" id="img-quad-ao" class="relative cursor-pointer transition-all duration-500 border-4 border-transparent flex flex-col justify-between p-3 sm:p-5 group">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-sky-500/10 transition-colors duration-300" id="mask-ao"></div>
+                                    <span class="relative z-10 self-start bg-sky-600 text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg opacity-90 shadow">澳洲公開賽 🇦🇺</span>
+                                    <span class="relative z-10 self-end text-[10px] sm:text-xs text-white/90 font-bold bg-slate-900/60 px-2 py-0.5 rounded">點擊模擬 👆</span>
+                                </div>
+                                
+                                <!-- 象限 2: FO 法國公開賽 (右上) -->
+                                <div onclick="changeTheme('clay')" id="img-quad-fo" class="relative cursor-pointer transition-all duration-500 border-4 border-transparent flex flex-col justify-between p-3 sm:p-5 group">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-orange-600/10 transition-colors duration-300" id="mask-fo"></div>
+                                    <span class="relative z-10 self-start bg-orange-600 text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg opacity-90 shadow">法國公開賽 🇫🇷</span>
+                                    <span class="relative z-10 self-end text-[10px] sm:text-xs text-white/90 font-bold bg-slate-900/60 px-2 py-0.5 rounded">點擊模擬 👆</span>
+                                </div>
+                                
+                                <!-- 象限 3: Wimbledon 溫布頓 (左下) -->
+                                <div onclick="changeTheme('grass')" id="img-quad-wim" class="relative cursor-pointer transition-all duration-500 border-4 border-transparent flex flex-col justify-between p-3 sm:p-5 group">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-emerald-600/10 transition-colors duration-300" id="mask-wim"></div>
+                                    <span class="relative z-10 self-start bg-emerald-700 text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg opacity-90 shadow">溫布頓大賽 🇬🇧</span>
+                                    <span class="relative z-10 self-end text-[10px] sm:text-xs text-white/90 font-bold bg-slate-900/60 px-2 py-0.5 rounded">點擊模擬 👆</span>
+                                </div>
+                                
+                                <!-- 象限 4: USO 美國公開賽 (right下) -->
+                                <div onclick="changeTheme('hard')" id="img-quad-uso" class="relative cursor-pointer transition-all duration-500 border-4 border-transparent flex flex-col justify-between p-3 sm:p-5 group">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-indigo-500/10 transition-colors duration-300" id="mask-uso"></div>
+                                    <span class="relative z-10 self-start bg-indigo-700 text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg opacity-90 shadow">美國公開賽 🇺🇸</span>
+                                    <span class="relative z-10 self-end text-[10px] sm:text-xs text-white/90 font-bold bg-slate-900/60 px-2 py-0.5 rounded">點擊模擬 👆</span>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <!-- 圖片內置「物理特性動態資訊面板」 -->
+                        <div class="mt-4 p-5 rounded-2xl text-white flex flex-col sm:flex-row justify-between items-center gap-4 transition-all duration-500" id="court-physics-panel" style="background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);">
+                            <div>
+                                <span class="text-xs font-black uppercase bg-white/20 px-2.5 py-1 rounded-md tracking-widest text-lime-300">模擬物理特性 (Physics Stats)</span>
+                                <h5 class="text-xl font-black mt-2">當前場地：<span id="physics-court-name" class="text-lime-400">澳美硬地球場</span></h5>
+                            </div>
+                            <div class="flex gap-6 text-center">
+                                <div class="bg-black/25 px-4 py-2 rounded-xl border border-white/10 min-w-[100px]">
+                                    <div class="text-xs text-slate-300">球速 (Speed)</div>
+                                    <div class="text-lg font-black text-lime-300" id="physics-speed">中偏快 (Medium-Fast)</div>
+                                </div>
+                                <div class="bg-black/25 px-4 py-2 rounded-xl border border-white/10 min-w-[100px]">
+                                    <div class="text-xs text-slate-300">彈跳高度 (Bounce)</div>
+                                    <div class="text-lg font-black text-lime-300" id="physics-bounce">中規中矩 (Medium)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右欄：四大賽事細節卡片 -->
+                    <div class="lg:col-span-5 space-y-4 flex flex-col justify-between">
+                        <!-- AO -->
+                        <div onclick="changeTheme('hard')" class="bg-sky-50 border-l-8 border-sky-500 p-4.5 rounded-2xl flex justify-between items-center transition-all hover:translate-x-1 cursor-pointer" id="card-ao">
+                            <div>
+                                <h5 class="font-black text-xl text-sky-950 flex items-center gap-2">
+                                    澳洲公開賽 
+                                    <span class="text-xs bg-sky-200 text-sky-800 font-bold px-2 py-0.5 rounded">AO</span>
+                                </h5>
+                                <p class="text-sm font-bold text-sky-700">Australian Open</p>
+                                <p class="text-base text-slate-600 mt-1">📅 舉辦時間：<span class="font-bold text-slate-800">1 月份</span></p>
+                                <p class="text-base text-slate-600">🏟️ 場地類型：<span class="font-bold text-sky-800">藍色硬地 (Hard Court)</span></p>
+                            </div>
+                        </div>
+                        <!-- FO -->
+                        <div onclick="changeTheme('clay')" class="bg-orange-50 border-l-8 border-orange-600 p-4.5 rounded-2xl flex justify-between items-center transition-all hover:translate-x-1 cursor-pointer" id="card-fo">
+                            <div>
+                                <h5 class="font-black text-xl text-orange-950 flex items-center gap-2">
+                                    法國公開賽 
+                                    <span class="text-xs bg-orange-200 text-orange-800 font-bold px-2 py-0.5 rounded">FO</span>
+                                </h5>
+                                <p class="text-sm font-bold text-orange-700">French Open</p>
+                                <p class="text-base text-slate-600 mt-1">📅 舉辦時間：<span class="font-bold text-slate-800">5 月至 6 月份</span></p>
+                                <p class="text-base text-slate-600">🏟️ 場地類型：<span class="font-bold text-orange-800">泥地 / 紅土 (Clay Court)</span></p>
+                            </div>
+                        </div>
+                        <!-- Wimbledon -->
+                        <div onclick="changeTheme('grass')" class="bg-emerald-50 border-l-8 border-emerald-600 p-4.5 rounded-2xl flex justify-between items-center transition-all hover:translate-x-1 cursor-pointer" id="card-wim">
+                            <div>
+                                <h5 class="font-black text-xl text-emerald-950 flex items-center gap-2">
+                                    溫布頓大賽 
+                                    <span class="text-xs bg-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded">Wim</span>
+                                </h5>
+                                <p class="text-sm font-bold text-emerald-700">Wimbledon</p>
+                                <p class="text-base text-slate-600 mt-1">📅 舉辦時間：<span class="font-bold text-slate-800">6 月至 7 月份</span></p>
+                                <p class="text-base text-slate-600">🏟️ 場地類型：<span class="font-bold text-emerald-800">草地 (Grass Court)</span></p>
+                            </div>
+                        </div>
+                        <!-- US Open -->
+                        <div onclick="changeTheme('hard')" class="bg-indigo-50 border-l-8 border-indigo-600 p-4.5 rounded-2xl flex justify-between items-center transition-all hover:translate-x-1 cursor-pointer" id="card-uso">
+                            <div>
+                                <h5 class="font-black text-xl text-indigo-950 flex items-center gap-2">
+                                    美國公開賽 
+                                    <span class="text-xs bg-indigo-200 text-indigo-800 font-bold px-2 py-0.5 rounded">USO</span>
+                                </h5>
+                                <p class="text-sm font-bold text-indigo-700">US Open</p>
+                                <p class="text-base text-slate-600 mt-1">📅 舉辦時間：<span class="font-bold text-slate-800">8 月至 9 月份</span></p>
+                                <p class="text-base text-slate-600">🏟️ 場地類型：<span class="font-bold text-indigo-800">藍色硬地 (Hard Court)</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 教學影片區 -->
+            <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 mb-8">
+                <div class="flex items-center space-x-3 mb-6">
+                    <span class="text-3xl">🎥</span>
+                    <h4 class="text-2xl sm:text-3xl font-black text-slate-900">
+                        【運動教室 101】第三集：網球 【Learning Sports 101】Episode 3 – Tennis
+                    </h4>
+                </div>
+                <p class="text-base text-slate-600 mb-6">觀看以下精選網球影片，結合剛學到的歷史與大滿貫場地物理特性，更直觀地感受實戰的競賽節奏：</p>
+                <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-200">
+                    <iframe class="absolute top-0 left-0 w-full h-full" 
+                            src="https://www.youtube.com/embed/hnJhv2vUDUo" 
+                            title="【運動教室 101】第三集：網球 【Learning Sports 101】Episode 3 – Tennis" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             版面 2: 網球核心規則與違例
+             ========================================== -->
+        <section id="tab-rules" class="tab-content hidden animate-fadeIn">
+            <div class="flex items-center space-x-3 mb-6">
+                <span class="w-2.5 h-8 bg-lime-500 rounded-full"></span>
+                <h3 class="text-3xl font-black text-slate-900">二、 網球核心規則 (Rules & Faults)</h3>
+            </div>
+
+            <!-- Selection and Calculator Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- Select Side & Coin Toss -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 lg:col-span-4">
+                    <div class="w-14 h-14 bg-lime-100 text-lime-700 rounded-2xl flex items-center justify-center text-3xl font-bold mb-4">
+                        🪙
+                    </div>
+                    <h4 class="font-black text-2xl text-slate-900 mb-3">1. 賽前選擇權</h4>
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                        在第一局比賽前，雙方透過<strong>擲硬幣</strong>或<strong>旋轉球拍</strong>決定選擇優先權。
+                    </p>
+                    <div class="bg-slate-50 p-5 rounded-2xl text-sm sm:text-base space-y-3 text-slate-700 border-2 border-slate-100">
+                        <p class="font-semibold text-slate-900">🎁 獲勝方的權利：</p>
+                        <p>可選擇「發球/接發球」或「球場邊區」。</p>
+                        <p class="border-t border-slate-200 pt-2 text-slate-500">
+                            *註：若獲勝方選了發球，對手即自動獲得選邊權；反之亦然。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Live Service Calculator -->
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl lg:col-span-8 relative overflow-hidden border border-slate-800">
+                    <div class="absolute right-0 top-0 w-40 h-40 bg-lime-500/10 rounded-full blur-3xl"></div>
+                    <div class="relative z-10 flex flex-col justify-between h-full">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-black text-2xl text-white">2. 互動發球位置與邊界延伸計算機</h4>
+                                <span class="text-sm bg-lime-500 text-slate-950 font-black px-3 py-1 rounded-full shadow-md">實用工具</span>
+                            </div>
+                            <p class="text-base text-slate-300 mb-6 leading-relaxed">
+                                規則：當雙方<strong>總得分相加為 0 或偶數</strong>時在<strong>右邊</strong>發球；<strong>奇數</strong>時則在<strong>左邊</strong>發球。請在下方輸入比分模擬：
+                            </p>
+
+                            <!-- Inputs -->
+                            <div class="grid grid-cols-2 gap-6 bg-slate-800 p-6 rounded-2xl mb-6 border-2 border-slate-700">
+                                <div>
+                                    <label class="block text-xs sm:text-sm font-black text-slate-400 uppercase tracking-widest mb-2">發球員得分</label>
+                                    <select id="calc-server-pt" onchange="calculateServeSide()" class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-lg font-bold text-lime-400 focus:outline-none focus:border-lime-500">
+                                        <option value="0">0 分 (Love)</option>
+                                        <option value="1">1 分 (15)</option>
+                                        <option value="2">2 分 (30)</option>
+                                        <option value="3">3 分 (40)</option>
+                                        <option value="4">4 分 (獲勝分)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs sm:text-sm font-black text-slate-400 uppercase tracking-widest mb-2">接發球員得分</label>
+                                    <select id="calc-receiver-pt" onchange="calculateServeSide()" class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-lg font-bold text-lime-400 focus:outline-none focus:border-lime-500">
+                                        <option value="0">0 分 (Love)</option>
+                                        <option value="1">1 分 (15)</option>
+                                        <option value="2">2 分 (30)</option>
+                                        <option value="3">3 分 (40)</option>
+                                        <option value="4">4 分 (獲勝分)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Display Panel -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-slate-800">
+                            <div class="text-left w-full sm:w-auto">
+                                <div class="text-sm sm:text-base text-slate-400">當前總得分：<span id="calc-total-pts" class="font-black text-white text-lg">0</span> 分</div>
+                                <div class="text-lg sm:text-xl font-black mt-1">發球員應站在：<br class="sm:hidden"><span id="calc-side-result" class="text-lime-400 text-2xl">右邊 (Deuce Court)</span></div>
+                                <!-- 新增：安全站位安全界限文字提示 -->
+                                <div class="mt-2 text-xs sm:text-sm text-amber-300 font-bold" id="calc-limit-hint">
+                                    ⚠️ 安全界限：必須站在「中心標誌假想延伸線」右側，且不超越「邊線假想延伸線」。
+                                </div>
+                            </div>
+                            <div class="text-left w-full sm:w-auto text-base text-slate-400 space-y-2 border-l-0 sm:border-l-2 sm:border-slate-800 sm:pl-6 shrink-0">
+                                <p>⏱️ <strong>每分限時：</strong>不超過 <span class="text-white font-bold">25 秒</span></p>
+                                <p>🔄 <strong>換邊限時：</strong>單數局限時 <span class="text-white font-bold">90 秒</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Court Graphic & Foot Fault -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- Foot Fault Interactive Box -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 lg:col-span-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-black text-2xl text-slate-900">3. 腳失誤 (Foot Fault) 🚫</h4>
+                            <span class="text-sm bg-red-100 text-red-700 font-black px-3 py-1 rounded-full">發球違例</span>
+                        </div>
+                        <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                            發球擊球瞬間，雙腳不可隨意奔跑或改變位置，且<strong>不可觸及/越過</strong>以下線條。點擊按鈕查看詳情並在球場上即時觀看線條位置：
+                        </p>
+
+                        <!-- Tap buttons -->
+                        <div class="space-y-3">
+                            <button onclick="showFootFaultDetail(1)" id="ff-btn-1" class="w-full text-left p-4 rounded-xl border-2 border-slate-100 text-base sm:text-lg flex items-center justify-between group transition-all font-medium text-slate-700 hover:bg-slate-50">
+                                <span>① 底線或場區之內</span>
+                                <span class="text-sm text-slate-400 group-hover:translate-x-1 transition-transform">點擊查看 &rarr;</span>
+                            </button>
+                            <button onclick="showFootFaultDetail(2)" id="ff-btn-2" class="w-full text-left p-4 rounded-xl border-2 border-slate-100 text-base sm:text-lg flex items-center justify-between group transition-all font-medium text-slate-700 hover:bg-slate-50">
+                                <span>② 邊線假想延伸線的外側</span>
+                                <span class="text-sm text-slate-400 group-hover:translate-x-1 transition-transform">點擊查看 &rarr;</span>
+                            </button>
+                            <button onclick="showFootFaultDetail(3)" id="ff-btn-3" class="w-full text-left p-4 rounded-xl border-2 border-slate-100 text-base sm:text-lg flex items-center justify-between group transition-all font-medium text-slate-700 hover:bg-slate-50">
+                                <span>③ 中心標誌假想延伸線</span>
+                                <span class="text-sm text-slate-400 group-hover:translate-x-1 transition-transform">點擊查看 &rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic detail card -->
+                    <div class="mt-6 p-6 bg-slate-950 text-white rounded-2xl relative" id="ff-desc-card">
+                        <div class="font-black text-lime-400 text-base sm:text-lg mb-2" id="ff-desc-title">① 底線或場區之內</div>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed" id="ff-desc-content">
+                            發球過程中，發球員在球拍擊到球之前，腳部任何部位皆不可以踏在底線上或底線之內，否則直接被判定為一次發球失誤。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2D Court Visualizer -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 lg:col-span-7 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-black text-2xl text-slate-900 mb-2">發球位置與斜對角落點落區</h4>
+                        <p class="text-sm sm:text-base text-slate-500 mb-6">點擊下方切換按鈕，直接觀察發球時對應的斜對角目標區以及不可踩踏的「假想延伸界線」：</p>
+
+                        <div class="flex gap-3 mb-6">
+                            <button onclick="highlightCourt('deuce')" id="court-tab-deuce" class="px-4 py-2.5 text-sm sm:text-base font-black rounded-lg bg-lime-500 text-slate-950 shadow-md">
+                                右半區發球 (偶數分)
+                            </button>
+                            <button onclick="highlightCourt('ad')" id="court-tab-ad" class="px-4 py-2.5 text-sm sm:text-base font-bold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">
+                                Left 半區發球 (奇數分)
+                            </button>
+                        </div>
+
+                        <!-- Interactive SVG Court (重構：底線移至 X=90，延伸線加長至 X=108，創造超長延伸效果) -->
+                        <div class="border-4 border-slate-200 bg-emerald-800 rounded-2xl p-6 flex justify-center items-center relative overflow-hidden h-72" id="court-container">
+                            <svg class="w-full h-full max-w-lg" viewBox="0 0 110 60" fill="none" stroke="white" stroke-width="1.2">
+                                <!-- Outer boundary (底線移動到 X=90，寬度為 85) -->
+                                <rect x="5" y="5" width="85" height="50" stroke-width="1.8"/>
+                                <!-- Singles Sideline -->
+                                <line x1="5" y1="12" x2="90" y2="12" />
+                                <line x1="5" y1="48" x2="90" y2="48" />
+                                <!-- Service Lines -->
+                                <line x1="26.25" y1="12" x2="26.25" y2="48" />
+                                <line x1="68.75" y1="12" x2="68.75" y2="48" />
+                                <!-- Net Line (X=47.5 是中央位置) -->
+                                <line x1="47.5" y1="5" x2="47.5" y2="55" stroke-dasharray="1.5 1.5" stroke-width="2.5" />
+                                <!-- Center Service Line -->
+                                <line x1="26.25" y1="30" x2="68.75" y2="30" />
+                                <!-- Center Marks -->
+                                <line x1="5" y1="30" x2="8" y2="30" />
+                                <line x1="87" y1="30" x2="90" y2="30" />
+
+                                <!-- Deuce (Right) Court Highlight (畫面上方，對角發球落球區) -->
+                                <rect id="svg-deuce-zone" x="26.25" y="12" width="21.25" height="18" fill="rgba(250, 204, 21, 0.5)" class="transition-opacity duration-300" stroke="none" />
+                                <!-- Ad (Left) Court Highlight (畫面下方，對角發球落球區) -->
+                                <rect id="svg-ad-zone" x="26.25" y="30" width="21.25" height="18" fill="rgba(250, 204, 21, 0)" class="transition-opacity duration-300" stroke="none" />
+
+                                <!-- ==========================================
+                                     動態紅色「超長假想延伸邊界線」
+                                     ========================================== -->
+                                <!-- 1. 中心標誌假想延伸線 (從 X=90 底線處，向右超長延伸至 X=108) -->
+                                <line id="ff-line-center" x1="90" y1="30" x2="108" y2="30" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="1.5 1" class="transition-all duration-300" />
+                                <!-- 2. 單打下邊線假想延伸線 (從 X=90 底線處，向右超長延伸至 X=108) -->
+                                <line id="ff-line-sideline-bottom" x1="90" y1="48" x2="108" y2="48" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="1.5 1" class="transition-all duration-300" />
+                                <!-- 3. 單打上邊線假想延伸線 (從 X=90 底線處，向右超長延伸至 X=108) -->
+                                <line id="ff-line-sideline-top" x1="90" y1="12" x2="108" y2="12" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="1.5 1" class="transition-all duration-300" />
+
+                                <!-- ==========================================
+                                     安全發球站位「卡位區」 (隨著切換動態顯示綠色安全光)
+                                     ========================================== -->
+                                <!-- 偶數分(右下側)安全發球卡位區 (X=90~108, Y=30~48) -->
+                                <rect id="safe-zone-deuce" x="90.5" y="30.5" width="17" height="17" fill="rgba(163, 230, 53, 0.15)" class="transition-all duration-300 stroke-none" />
+                                <!-- 奇數分(右上側)安全發球卡位區 (X=90~108, Y=12~30) -->
+                                <rect id="safe-zone-ad" x="90.5" y="12.5" width="17" height="17" fill="rgba(163, 230, 53, 0)" class="transition-all duration-300 stroke-none" />
+
+                                <!-- 腳失誤假想延伸線高亮警告背景區 -->
+                                <rect id="ff-danger-zone" x="90" y="12" width="18" height="36" fill="rgba(239, 68, 68, 0)" class="transition-all duration-500" />
+
+                                <!-- Player marker (發球球員標記，站在底線後方 X=93，偶數時 cy=39，奇數時 cy=21，完美卡位) -->
+                                <circle id="player-marker" cx="93" cy="39" r="3" fill="#a3e635" stroke="black" stroke-width="0.8" class="transition-all duration-500 animate-pulse" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs sm:text-sm text-slate-600 flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span>🟢 <strong class="text-slate-900">綠色圓點：</strong>發球者站位</span>
+                        <span>🔴 <strong class="text-red-600">紅色虛線：</strong>超長假想延伸限制線 (不可踩踏)</span>
+                        <span>🟡 <strong class="text-slate-900">黃色區塊：</strong>斜對角發球落球目標區</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Point Loss Conditions -->
+            <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100">
+                <div class="flex items-center space-x-3 mb-6">
+                    <span class="text-3xl">❌</span>
+                    <h4 class="text-2xl sm:text-3xl font-black text-slate-900">判罰要點：球員在什麼情況下會「直接失分」？</h4>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-red-500">
+                        <h5 class="font-black text-lg sm:text-xl text-slate-900 mb-2">1. 雙發失誤</h5>
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            發球員連續<strong>兩次發球均不成功</strong>（雙發失誤 / Double Fault），直接判對手得分。
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-red-500">
+                        <h5 class="font-black text-lg sm:text-xl text-slate-900 mb-2">2. 球落地雙落</h5>
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            在球<strong>第二次落地</strong>前，未能成功將球擊回並過網，視為漏球失分。
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-red-500">
+                        <h5 class="font-black text-lg sm:text-xl text-slate-900 mb-2">3. 擊球出界或觸物</h5>
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            擊球出界，或者球落到對方場地外並觸及場外的裁判椅、網柱等任何固定設備物。
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-red-500">
+                        <h5 class="font-black text-lg sm:text-xl text-slate-900 mb-2">4. 違規空中截擊</h5>
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            接發球員在對手發過來的球<strong>尚未落地前</strong>就直接在空中將球擊回.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-red-500">
+                        <h5 class="font-black text-lg sm:text-xl text-slate-900 mb-2">5. 身體/球拍觸網</h5>
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            比賽進行中，球員的<strong>身體、衣物或球拍</strong>不小心碰觸到球網、網柱或跨過球網。
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-red-500">
+                        <h5 class="font-black text-lg sm:text-xl text-slate-900 mb-2">6. 球拍脫手擊球</h5>
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            將球拍扔出碰觸球，或球拍脫手。另外，雙打時同組隊員<strong>同時揮拍且兩人均觸球</strong>也算違例。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             版面 3: 計分模擬器
+             ========================================== -->
+        <section id="tab-scoring" class="tab-content hidden animate-fadeIn">
+            <div class="flex items-center space-x-3 mb-6">
+                <span class="w-2.5 h-8 bg-lime-500 rounded-full"></span>
+                <h3 class="text-3xl font-black text-slate-900">三、 網球計分方法與模擬器 (Scoring System)</h3>
+            </div>
+
+            <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800 mb-8">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    
+                    <!-- Left: Score Explanations -->
+                    <div class="w-full lg:w-2/5 space-y-6">
+                        <span class="bg-lime-500 text-slate-950 font-black px-3.5 py-1.5 rounded-lg text-sm sm:text-base uppercase tracking-wider shadow-md">
+                            計分層級與特色
+                        </span>
+                        <h4 class="text-3xl sm:text-4xl font-black">分 &rarr; 局 &rarr; 盤 &rarr; 場</h4>
+                        <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+                            網球讀分起源於中古世紀的六十進制與時鐘指針，第 1 分代表 15，第 2 分代表 30，第 3 分代表 40 (原45)。
+                        </p>
+                        
+                        <div class="space-y-3 pt-2">
+                            <div class="bg-slate-800 p-4 rounded-xl border-2 border-slate-700/50 text-sm sm:text-base">
+                                <span class="font-black text-lime-400">分 (Point)：</span>Love (0分) ➡️ 15 ➡️ 30 ➡️ 40 ➡️ Win。
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border-2 border-slate-700/50 text-sm sm:text-base">
+                                <span class="font-black text-lime-400">局 (Game)：</span>先得 4 分且至少領先對手 2 分者贏得該局。
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border-2 border-slate-700/50 text-sm sm:text-base">
+                                <span class="font-black text-lime-400">盤 (Set)：</span>先勝 6 局且領先 2 局贏得該盤。(打至 6:6 時進搶7)。
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border-2 border-slate-700/50 text-sm sm:text-base">
+                                <span class="font-black text-lime-400">場 (Match)：</span>男單常為五盤三勝，女單及雙打通常為三盤兩勝.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Large Simulator Box -->
+                    <div class="w-full lg:w-3/5 bg-slate-950 border-2 border-slate-800 p-6 sm:p-8 rounded-3xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h4 class="font-black text-sm text-lime-400 uppercase tracking-widest">Score Simulator</h4>
+                                <h5 class="text-xl sm:text-2xl font-black text-white">網球單局模擬廣播讀分器</h5>
+                            </div>
+                            <button onclick="resetScoreboard()" class="px-4 py-2 text-base font-bold bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-200 hover:text-white rounded-xl transition-all">
+                                🔄 重置本局
+                            </button>
+                        </div>
+
+                        <!-- Huge Score Displays -->
+                        <div class="grid grid-cols-2 gap-4 text-center py-8 bg-slate-900 rounded-2xl mb-6 relative border border-slate-800">
+                            <!-- Court net line -->
+                            <div class="absolute left-1/2 top-4 bottom-4 w-[2px] bg-slate-800"></div>
+                            
+                            <!-- Server Column -->
+                            <div class="flex flex-col justify-center items-center">
+                                <span class="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-widest">發球方 (Server)</span>
+                                <div id="display-server-score" class="text-5xl sm:text-7xl font-black text-lime-400 my-4 tracking-tight">Love</div>
+                                <span id="display-server-raw" class="text-sm sm:text-base text-slate-500 font-bold">累計：0 球</span>
+                            </div>
+
+                            <!-- Receiver Column -->
+                            <div class="flex flex-col justify-center items-center">
+                                <span class="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-widest">接發球方 (Receiver)</span>
+                                <div id="display-receiver-score" class="text-5xl sm:text-7xl font-black text-slate-300 my-4 tracking-tight">Love</div>
+                                <span id="display-receiver-raw" class="text-sm sm:text-base text-slate-500 font-bold">累計：0 球</span>
+                            </div>
+                        </div>
+
+                        <!-- Score Controls -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                            <button onclick="addPoint('server')" id="btn-add-server" class="py-4.5 bg-lime-500 hover:bg-lime-400 text-slate-950 font-black text-lg sm:text-xl rounded-2xl transition-all shadow-lg active:scale-95">
+                                🎾 發球方得分 (+1)
+                            </button>
+                            <button onclick="addPoint('receiver')" id="btn-add-receiver" class="py-4.5 bg-slate-800 hover:bg-slate-700 text-white font-black text-lg sm:text-xl rounded-2xl border-2 border-slate-700 transition-all shadow-lg active:scale-95">
+                                🎾 接發球方得分 (+1)
+                            </button>
+                        </div>
+
+                        <!-- Broadcast Announcement Box -->
+                        <div class="bg-slate-955 border border-slate-800 rounded-xl p-4 text-center">
+                            <span class="text-sm sm:text-base text-slate-400 block mb-1">主裁判廣播讀分 (Score Call)：</span>
+                            <strong id="display-score-announcement" class="text-xl sm:text-2xl text-white font-black">"Love All" (0比0)</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Double Details: Deuce and Tie-break -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Deuce Detail -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2.5 mb-4">
+                            <span class="bg-lime-100 text-lime-800 text-sm font-black px-3 py-1 rounded-full">重要</span>
+                            <h4 class="font-black text-2xl text-slate-900">雙方平分 (Deuce) 規則</h4>
+                        </div>
+                        <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
+                            當單局打成 <strong>40:40</strong> 時稱為 <strong>Deuce</strong>。此時，雙方任何一方必須在平分後<strong>連續奪得兩分</strong>才能拿下該局：
+                        </p>
+                        <ul class="text-sm sm:text-base space-y-2 text-slate-500 list-disc list-inside leading-relaxed">
+                            <li><strong>優勢 (Advantage)：</strong>平分後拿到第一分者。</li>
+                            <li><strong>發球方領先 (Ad-In)：</strong>發球方拿到優勢分。</li>
+                            <li><strong>接發球方領先 (Ad-Out)：</strong>接發球方拿到優勢分。</li>
+                            <li>若獲得優勢的球員輸掉下一球，分數會重新回歸「<strong>Deuce (平分)</strong>」。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tie-Break Details -->
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2.5 mb-4">
+                            <span class="bg-slate-900 text-lime-400 text-xs sm:text-sm font-black px-3 py-1 rounded-full">搶7局</span>
+                            <h4 class="font-black text-2xl text-slate-900">決勝局制 (Tie-Break)</h4>
+                        </div>
+                        <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
+                            一盤比賽中，如果局數打成 <strong>6比6 平手</strong>，則不繼續打普通局，而是打決勝局 (搶 7)：
+                        </p>
+                        <ul class="text-sm sm:text-base space-y-2 text-slate-500 list-disc list-inside leading-relaxed">
+                            <li>計分制不再採用 15、30、40，而是採用常規 <strong>1、2、3... 計分</strong>。</li>
+                            <li><strong>先奪得 7 分</strong>且領先對手至少 2 分者贏得該決勝局及該盤 (7:6 拿下)。</li>
+                            <li>若打到 6:6 平，必須有一方領先 2 分（如 8:6, 9:7）才算結束。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             版面 4: 香港網球傳奇 - 黃澤林 (Coleman Wong)
+             ========================================== -->
+        <section id="tab-coleman" class="tab-content hidden animate-fadeIn">
+            <!-- Hero Banner - Coleman Wong -->
+            <div class="relative overflow-hidden text-white py-12 px-6 sm:px-12 rounded-3xl shadow-2xl mb-8" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+                <div class="absolute inset-0 opacity-10 bg-grid-white bg-[size:30px_30px]"></div>
+                <div class="max-w-4xl relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <span class="bg-amber-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-sm sm:text-base uppercase tracking-widest shadow-md">
+                            🇭🇰 香港網球新星
+                        </span>
+                        <h2 class="text-3xl sm:text-5xl font-black mt-4 mb-2 tracking-tight leading-tight">
+                            黃澤林 Coleman Wong
+                        </h2>
+                        <p class="text-base sm:text-xl text-slate-300 font-light leading-relaxed">
+                            創下多項歷史的香港網球傳奇，展現不屈不撓的拼搏體育精神！
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coleman Biography, Achievement -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- Achievement List Cards -->
+                <div class="lg:col-span-6 bg-white p-8 rounded-3xl shadow-md border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">👑 生平與職業生涯里程碑</h4>
+                        
+                        <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                            黃澤林自小便在香港接受網球訓練，憑藉其身高優勢、驚人的爆發力與冷靜的心理質素，迅速於國際網壇嶄露頭角：
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-amber-50/70 border-l-4 border-amber-500 p-4 rounded-xl">
+                                <h5 class="font-black text-lg text-amber-950">🏆 兩屆大滿貫青年組雙打冠軍</h5>
+                                <p class="text-sm sm:text-base text-slate-700 mt-1">
+                                    先後勇奪 <strong>2021 年美國網球公開賽</strong> 及 <strong>2022 年澳洲網球公開賽</strong> 青年組男子雙打冠軍，成為香港第一人！
+                                </p>
+                            </div>
+                            <div class="bg-amber-50/70 border-l-4 border-amber-500 p-4 rounded-xl">
+                                <h5 class="font-black text-lg text-amber-950">📈 創造香港男子單打最高排名</h5>
+                                <p class="text-sm sm:text-base text-slate-700 mt-1">
+                                    轉戰成人職業賽事後，於 ATP 職業巡迴賽中取得突破，世界男子單打排名挺進 <strong>前 150 名內</strong>，刷新香港網球歷史紀錄！
+                                </p>
+                            </div>
+                            <div class="bg-amber-50/70 border-l-4 border-amber-500 p-4 rounded-xl">
+                                <h5 class="font-black text-lg text-amber-950">🔥 世大運男單銅牌與台維斯盃主力</h5>
+                                <p class="text-sm sm:text-base text-slate-700 mt-1">
+                                    代表香港出戰世界大學生運動會勇奪男單銅牌，並多次代表香港在台維斯盃（Davis Cup）國家隊賽事中擔任第一單打，為港爭光。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Video Player -->
+                <div class="lg:col-span-6 bg-white p-8 rounded-3xl shadow-md border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">🎾 黃澤林賽事精彩片段</h4>
+                        <p class="text-base text-slate-600 mb-6">欣賞黃澤林在世界職業巡迴賽中的精彩擊球與得分精華，學習頂尖運動員的腳步移動與正反手抽擊技術：</p>
+                        
+                        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-200 bg-slate-950">
+                            <iframe class="absolute top-0 left-0 w-full h-full" 
+                                    src="https://www.youtube.com/embed/f-GFNIfBjZI" 
+                                    title="黃澤林賽事精彩精華" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             版面 5: 自我檢測挑戰 (10 題)
+             ========================================== -->
+        <section id="tab-quiz" class="tab-content hidden animate-fadeIn">
+            <div class="flex items-center space-x-3 mb-6">
+                <span class="w-2.5 h-8 bg-slate-900 rounded-full"></span>
+                <h3 class="text-3xl font-black text-slate-900">五、 同學自我檢測 (Interactive Quiz)</h3>
+            </div>
+
+            <!-- Quiz Container -->
+            <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-md border border-slate-100">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b-2 border-slate-100 pb-6 mb-8 gap-4">
+                    <div>
+                        <h4 class="font-black text-2xl text-slate-900">網球單元複習挑戰</h4>
+                        <p class="text-base text-slate-500 mt-1">體育科課程大綱理論知識與實戰規則考核</p>
+                    </div>
+                    <span id="quiz-progress" class="text-sm sm:text-base bg-slate-100 text-slate-700 font-black px-4 py-2 rounded-full self-start sm:self-center border border-slate-200 shrink-0">
+                        第 1 / 10 題
+                    </span>
+                </div>
+
+                <!-- Quiz Main Area -->
+                <div id="quiz-question-container">
+                    <!-- Dynamic Question Text -->
+                    <div id="quiz-question" class="text-xl sm:text-2xl font-black text-slate-900 mb-8 leading-relaxed">
+                        正在加載題目，請稍候...
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="quiz-options" class="grid grid-cols-1 gap-4 mb-8">
+                        <!-- Options buttons render here -->
+                    </div>
+
+                    <!-- Feedback Display -->
+                    <div id="quiz-feedback" class="hidden p-6 rounded-2xl mb-8 flex items-start space-x-4 transition-all duration-300">
+                        <span id="quiz-feedback-icon" class="text-2xl sm:text-3xl"></span>
+                        <div>
+                            <h5 id="quiz-feedback-title" class="font-black text-lg sm:text-xl"></h5>
+                            <p id="quiz-feedback-text" class="text-base mt-2 leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex justify-between items-center">
+                        <button onclick="resetQuiz()" class="text-base font-bold text-slate-500 hover:text-slate-900 transition-all py-2 px-3">
+                            🔄 重新開始測驗
+                        </button>
+                        <button id="btn-next-question" onclick="nextQuestion()" class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-black text-base sm:text-lg rounded-xl shadow-lg transition-all flex items-center gap-2">
+                            下一題 &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Score Card -->
+                <div id="quiz-score-card" class="hidden text-center py-12">
+                    <div class="w-24 h-24 bg-lime-100 text-lime-600 rounded-full flex items-center justify-center font-bold text-5xl mx-auto mb-6 shadow-inner animate-bounce">
+                        🏆
+                    </div>
+                    <h4 class="text-3xl sm:text-4xl font-black text-slate-900">恭喜你完成全部測驗！</h4>
+                    <p class="text-lg sm:text-xl text-slate-500 mt-4">
+                        你的最終得分：<span id="quiz-score-display" class="font-black text-lime-600 text-3xl">0 / 10</span> 
+                    </p>
+                    <div class="max-w-2xl mx-auto mt-8 bg-slate-50 p-6 rounded-2xl border-2 border-slate-100">
+                        <p id="quiz-performance-comment" class="text-base sm:text-lg text-slate-700 leading-relaxed font-medium">
+                            做得好！這說明你已經對網球規則有了扎實的理解。
+                        </p>
+                    </div>
+                    <button onclick="restartQuizEntirely()" class="mt-8 px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-black text-lg rounded-xl shadow-xl transition-all transform hover:scale-105">
+                        再次挑戰 🔁
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-4 transition-colors duration-500 border-t border-slate-800" id="footer-theme">
+        <div class="max-w-7xl mx-auto text-center space-y-6">
+            <p class="text-base sm:text-lg text-slate-400 font-bold">聖公會李炳中學 - 體育科網球(Tennis)電子學習平台</p>
+            <div class="pt-4 border-t border-slate-800/60 text-slate-500 text-xs sm:text-sm">
+                &copy; 2026 SKH Li Ping Secondary School. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JS Scripts -->
+    <script>
+        // 1. 虛擬分頁切換系統
+        function switchTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('block');
+            });
+
+            // Show selected tab
+            const activeTab = document.getElementById(tabId);
+            if (activeTab) {
+                activeTab.classList.remove('hidden');
+                activeTab.classList.add('block');
+            }
+
+            // Update Tab Button Active Styles
+            const tabIds = ['tab-history', 'tab-coleman', 'tab-rules', 'tab-scoring', 'tab-quiz'];
+            const navPrefix = 'nav-';
+
+            tabIds.forEach(id => {
+                const btn = document.getElementById(navPrefix + id);
+                if (btn) {
+                    if (id === tabId) {
+                        // Active styles
+                        btn.className = "flex-shrink-0 px-6 py-3 text-base sm:text-lg font-black rounded-xl transition-all duration-300 border-2 border-slate-900 bg-slate-900 text-white shadow-md";
+                    } else {
+                        // Inactive styles
+                        btn.className = "flex-shrink-0 px-6 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 border-2 border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900";
+                    }
+                }
+            });
+
+            // Scroll back to top of main on tab change
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 2. Theme switching variables + 整合大滿貫圖片內覆蓋效果
+        const themeConfigs = {
+            hard: {
+                header: "bg-slate-900",
+                footer: "bg-slate-900",
+                hero: "linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%)",
+                courtBg: "bg-emerald-800",
+                physicsBg: "linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%)",
+                physicsTitle: "澳美硬地球場 (Australian & US Open)",
+                physicsSpeed: "中偏快 (Medium-Fast)",
+                physicsBounce: "中規中矩 (Medium)",
+                activeBtn: "btn-theme-hard",
+                highlights: ['ao', 'uso'],
+                dimmed: ['fo', 'wim']
+            },
+            clay: {
+                header: "bg-orange-950",
+                footer: "bg-orange-950",
+                hero: "linear-gradient(135deg, #ea580c 0%, #9a3412 100%)",
+                courtBg: "bg-orange-700",
+                physicsBg: "linear-gradient(135deg, #ea580c 0%, #9a3412 100%)",
+                physicsTitle: "法網紅土泥地球場 (Roland Garros)",
+                physicsSpeed: "偏慢 (Slow)",
+                physicsBounce: "極高 (High)",
+                activeBtn: "btn-theme-clay",
+                highlights: ['fo'],
+                dimmed: ['ao', 'wim', 'uso']
+            },
+            grass: {
+                header: "bg-emerald-950",
+                footer: "bg-emerald-950",
+                hero: "linear-gradient(135deg, #15803d 0%, #064e3b 100%)",
+                courtBg: "bg-emerald-700",
+                physicsBg: "linear-gradient(135deg, #15803d 0%, #064e3b 100%)",
+                physicsTitle: "溫網草地球場 (Wimbledon)",
+                physicsSpeed: "極快 (Very Fast)",
+                physicsBounce: "偏低 (Low)",
+                activeBtn: "btn-theme-grass",
+                highlights: ['wim'],
+                dimmed: ['ao', 'fo', 'uso']
+            }
+        };
+
+        function changeTheme(themeName) {
+            const cfg = themeConfigs[themeName];
+            if (!cfg) return;
+
+            // Header & Footer Theme
+            const header = document.getElementById('header-theme');
+            const footer = document.getElementById('footer-theme');
+            header.className = `${cfg.header} text-white shadow-xl sticky top-0 z-50 transition-colors duration-500`;
+            footer.className = `${cfg.footer} text-white py-12 px-4 transition-colors duration-500 border-t border-slate-800`;
+
+            // Hero Banner Theme
+            const hero = document.getElementById('hero-banner');
+            if (hero) {
+                hero.style.background = cfg.hero;
+            }
+
+            // Court Outer Theme
+            const courtContainer = document.getElementById('court-container');
+            if (courtContainer) {
+                courtContainer.className = `border-4 border-slate-200 ${cfg.courtBg} rounded-2xl p-6 flex justify-center items-center relative overflow-hidden h-72`;
+            }
+
+            // Theme Switcher Header Buttons Active Styles
+            ['btn-theme-hard', 'btn-theme-clay', 'btn-theme-grass'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (id === cfg.activeBtn) {
+                    btn.className = "px-4 py-2 text-sm sm:text-base font-bold rounded-lg transition-all bg-lime-500 text-slate-950 shadow-md";
+                } else {
+                    btn.className = "px-4 py-2 text-sm sm:text-base font-bold rounded-lg transition-all text-slate-300 hover:bg-slate-700";
+                }
+            });
+
+            // 圖片內置場地模擬同步邏輯
+            const allQuads = ['ao', 'fo', 'wim', 'uso'];
+            allQuads.forEach(q => {
+                const quadElement = document.getElementById(`img-quad-${q}`);
+                const maskElement = document.getElementById(`mask-${q}`);
+                const cardElement = document.getElementById(`card-${q}`);
+
+                if (cfg.highlights.includes(q)) {
+                    quadElement.className = "relative cursor-pointer transition-all duration-500 border-4 border-lime-400 scale-[0.99] shadow-[inset_0_0_20px_rgba(163,230,53,0.6)] z-10 rounded-2xl";
+                    maskElement.className = "absolute inset-0 bg-transparent transition-colors duration-300";
+                    if (cardElement) {
+                        cardElement.classList.add('ring-4', 'ring-lime-400', 'scale-102');
+                    }
+                } else {
+                    quadElement.className = "relative cursor-pointer transition-all duration-500 border-4 border-transparent z-0";
+                    maskElement.className = "absolute inset-0 bg-black/65 backdrop-blur-[2px] transition-colors duration-300";
+                    if (cardElement) {
+                        cardElement.classList.remove('ring-4', 'ring-lime-400', 'scale-102');
+                    }
+                }
+            });
+
+            // 更新動態物理面板
+            const physicsPanel = document.getElementById('court-physics-panel');
+            const physicsTitle = document.getElementById('physics-court-name');
+            const physicsSpeed = document.getElementById('physics-speed');
+            const physicsBounce = document.getElementById('physics-bounce');
+
+            if (physicsPanel) {
+                physicsPanel.style.background = cfg.physicsBg;
+                physicsTitle.innerText = cfg.physicsTitle;
+                physicsSpeed.innerText = cfg.physicsSpeed;
+                physicsBounce.innerText = cfg.physicsBounce;
+            }
+        }
+
+        // 3. Service Side Calculator Logic (發球計算器，帶對角線與假想延伸邊界指示)
+        function calculateServeSide() {
+            const serverSelect = document.getElementById('calc-server-pt');
+            const receiverSelect = document.getElementById('calc-receiver-pt');
+            
+            const serverRawVal = parseInt(serverSelect.value);
+            const receiverRawVal = parseInt(receiverSelect.value);
+            
+            const totalPoints = serverRawVal + receiverRawVal;
+            document.getElementById('calc-total-pts').innerText = totalPoints;
+
+            const isEven = totalPoints % 2 === 0;
+            const sideResult = document.getElementById('calc-side-result');
+            const playerMarker = document.getElementById('player-marker');
+            const deuceHighlight = document.getElementById('svg-deuce-zone');
+            const adHighlight = document.getElementById('svg-ad-zone');
+            const limitHint = document.getElementById('calc-limit-hint');
+
+            // 獲取 SVG 的延伸線與安全發光區域元素
+            const ffLineCenter = document.getElementById('ff-line-center');
+            const ffLineBottom = document.getElementById('ff-line-sideline-bottom');
+            const ffLineTop = document.getElementById('ff-line-sideline-top');
+            const ffDangerZone = document.getElementById('ff-danger-zone');
+            const safeZoneDeuce = document.getElementById('safe-zone-deuce');
+            const safeZoneAd = document.getElementById('safe-zone-ad');
+
+            if (isEven) {
+                sideResult.innerText = "右邊 (Deuce Court / 偶數分)";
+                sideResult.className = "text-lime-400 text-2xl font-black";
+                // 偶數分發球員站在底線右側下方 (Y: 39)，完美卡在延伸線中
+                playerMarker.setAttribute('cy', '39');
+                // 對角發球目標在上方發球落球區 (高亮 deuce 區塊)
+                deuceHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0.5)');
+                adHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0)');
+                
+                // 動態高亮對應的安全卡位發光區 (右下)
+                if (safeZoneDeuce) safeZoneDeuce.setAttribute('fill', 'rgba(163, 230, 53, 0.25)');
+                if (safeZoneAd) safeZoneAd.setAttribute('fill', 'rgba(163, 230, 53, 0)');
+                
+                // 動態更新延伸安全邊界文字
+                limitHint.innerHTML = "⚠️ <strong>右發球區界限：</strong>發球員安全<strong>「卡」</strong>在兩條界線正中間。不可踩過<strong>中央紅色虛線</strong>，且不可踩越<strong>下側紅色虛線</strong>！";
+                
+                // 動態高亮對應的警告虛線
+                if(ffLineCenter) ffLineCenter.setAttribute('stroke-width', '2.5');
+                if(ffLineBottom) ffLineBottom.setAttribute('stroke-width', '2.5');
+                if(ffLineTop) ffLineTop.setAttribute('stroke-width', '1.2');
+                if(ffDangerZone) ffDangerZone.setAttribute('fill', 'rgba(239, 68, 68, 0.15)');
+            } else {
+                sideResult.innerText = "左邊 (Ad Court / 奇數分)";
+                sideResult.className = "text-amber-400 text-2xl font-black";
+                // 奇數分發球員站在底線左側上方 (Y: 21)，完美卡在延伸線中
+                playerMarker.setAttribute('cy', '21');
+                // 對角發球目標在下方發球落球區 (高亮 ad 區塊)
+                deuceHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0)');
+                adHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0.5)');
+                
+                // 動態高亮對應的安全卡位發光區 (右上)
+                if (safeZoneDeuce) safeZoneDeuce.setAttribute('fill', 'rgba(163, 230, 53, 0)');
+                if (safeZoneAd) safeZoneAd.setAttribute('fill', 'rgba(163, 230, 53, 0.25)');
+                
+                // 動態更新延伸安全邊界文字
+                limitHint.innerHTML = "⚠️ <strong>左發球區界限：</strong>發球員安全<strong>「卡」</strong>在兩條界線正中間。不可踩過<strong>中央紅色虛線</strong>，且不可踩越<strong>上側紅色虛線</strong>！";
+                
+                // 動態高亮對應的警告虛線
+                if(ffLineCenter) ffLineCenter.setAttribute('stroke-width', '2.5');
+                if(ffLineBottom) ffLineBottom.setAttribute('stroke-width', '1.2');
+                if(ffLineTop) ffLineTop.setAttribute('stroke-width', '2.5');
+                if(ffDangerZone) ffDangerZone.setAttribute('fill', 'rgba(239, 68, 68, 0.15)');
+            }
+        }
+
+        // Court highlight toggling buttons
+        function highlightCourt(side) {
+            const tabDeuce = document.getElementById('court-tab-deuce');
+            const tabAd = document.getElementById('court-tab-ad');
+            const playerMarker = document.getElementById('player-marker');
+            const deuceHighlight = document.getElementById('svg-deuce-zone');
+            const adHighlight = document.getElementById('svg-ad-zone');
+
+            const ffLineCenter = document.getElementById('ff-line-center');
+            const ffLineBottom = document.getElementById('ff-line-sideline-bottom');
+            const ffLineTop = document.getElementById('ff-line-sideline-top');
+            const ffDangerZone = document.getElementById('ff-danger-zone');
+            const safeZoneDeuce = document.getElementById('safe-zone-deuce');
+            const safeZoneAd = document.getElementById('safe-zone-ad');
+
+            if (side === 'deuce') {
+                tabDeuce.className = "px-4 py-2.5 text-sm sm:text-base font-black rounded-lg bg-lime-500 text-slate-950 shadow-md";
+                tabAd.className = "px-4 py-2.5 text-sm sm:text-base font-bold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200";
+                playerMarker.setAttribute('cy', '39');
+                deuceHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0.5)');
+                adHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0)');
+
+                if (safeZoneDeuce) safeZoneDeuce.setAttribute('fill', 'rgba(163, 230, 53, 0.25)');
+                if (safeZoneAd) safeZoneAd.setAttribute('fill', 'rgba(163, 230, 53, 0)');
+
+                if(ffLineCenter) ffLineCenter.setAttribute('stroke-width', '2.5');
+                if(ffLineBottom) ffLineBottom.setAttribute('stroke-width', '2.5');
+                if(ffLineTop) ffLineTop.setAttribute('stroke-width', '1.2');
+                if(ffDangerZone) ffDangerZone.setAttribute('fill', 'rgba(239, 68, 68, 0.15)');
+            } else {
+                tabDeuce.className = "px-4 py-2.5 text-sm sm:text-base font-bold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200";
+                tabAd.className = "px-4 py-2.5 text-sm sm:text-base font-black rounded-lg bg-lime-500 text-slate-950 shadow-md";
+                playerMarker.setAttribute('cy', '21');
+                deuceHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0)');
+                adHighlight.setAttribute('fill', 'rgba(250, 204, 21, 0.5)');
+
+                if (safeZoneDeuce) safeZoneDeuce.setAttribute('fill', 'rgba(163, 230, 53, 0)');
+                if (safeZoneAd) safeZoneAd.setAttribute('fill', 'rgba(163, 230, 53, 0.25)');
+
+                if(ffLineCenter) ffLineCenter.setAttribute('stroke-width', '2.5');
+                if(ffLineBottom) ffLineBottom.setAttribute('stroke-width', '1.2');
+                if(ffLineTop) ffLineTop.setAttribute('stroke-width', '2.5');
+                if(ffDangerZone) ffDangerZone.setAttribute('fill', 'rgba(239, 68, 68, 0.15)');
+            }
+        }
+
+        // 4. Foot Fault Descriptions
+        const footFaultDetails = {
+            1: {
+                title: "① 底線或場區之內",
+                desc: "在發球球拍擊中球之前的發球過程中，發球員絕不能有任何一隻腳踏到底線上，或者踏到底線以內（即網球場內）的任何地面。觸犯即為腳失誤，算一次發球失誤。"
+            },
+            2: {
+                title: "② 邊線假想延伸線的外側",
+                desc: "在發球時，球員站立與揮拍的位置不能超出球網垂直對應的「單打邊線（進行單打比賽時）」或「雙打邊線（進行雙打比賽時）」的外側假想延伸線。在 2D 球場上已用紅色上下兩側超長虛線標記。"
+            },
+            3: {
+                title: "③ 中心標誌假想延伸線",
+                desc: "發球底線正中央有一個中心短標記（中心標誌）。發球員必須在中心標誌與邊線之間的中間區域發球，腳部任何部位不得越過或踩在中心標誌的假想中心延伸線上。在 2D 球場上已用中央紅色超長虛線標記。"
+            }
+        };
+
+        // 腳失誤互動卡片切換函數 (showFootFaultDetail)
+        function showFootFaultDetail(num) {
+            const cardTitle = document.getElementById('ff-desc-title');
+            const cardContent = document.getElementById('ff-desc-content');
+            
+            [1, 2, 3].forEach(id => {
+                const btn = document.getElementById(`ff-btn-${id}`);
+                if (btn) {
+                    if (id === num) {
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-red-200 bg-red-50 text-base sm:text-lg flex items-center justify-between group transition-all font-bold text-red-800 shadow-sm";
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-100 text-base sm:text-lg flex items-center justify-between group transition-all font-medium text-slate-700 hover:bg-slate-50";
+                    }
+                }
+            });
+
+            if (cardTitle && cardContent && footFaultDetails[num]) {
+                cardTitle.innerText = footFaultDetails[num].title;
+                cardContent.innerText = footFaultDetails[num].desc;
+            }
+
+            // 與 2D 球場視覺連動高亮
+            const ffLineCenter = document.getElementById('ff-line-center');
+            const ffLineBottom = document.getElementById('ff-line-sideline-bottom');
+            const ffLineTop = document.getElementById('ff-line-sideline-top');
+            
+            if (num === 2) {
+                if(ffLineBottom) ffLineBottom.setAttribute('stroke-width', '4');
+                if(ffLineTop) ffLineTop.setAttribute('stroke-width', '4');
+                if(ffLineCenter) ffLineCenter.setAttribute('stroke-width', '1');
+            } else if (num === 3) {
+                if(ffLineBottom) ffLineBottom.setAttribute('stroke-width', '1');
+                if(ffLineTop) ffLineTop.setAttribute('stroke-width', '1');
+                if(ffLineCenter) ffLineCenter.setAttribute('stroke-width', '4');
+            } else {
+                calculateServeSide(); // 恢復預設發球高亮狀態
+            }
+        }
+
+        // 5. TENNIS SCOREBOARD SIMULATOR LOGIC
+        let serverPoints = 0;
+        let receiverPoints = 0;
+        let isGameOver = false;
+
+        function addPoint(who) {
+            if (isGameOver) {
+                const announcement = document.getElementById('display-score-announcement');
+                announcement.className = "text-red-400 text-xl sm:text-2xl font-black animate-pulse";
+                setTimeout(() => {
+                    announcement.className = "text-white text-xl sm:text-2xl font-black";
+                }, 1000);
+                return;
+            }
+
+            if (who === 'server') {
+                serverPoints++;
+            } else {
+                receiverPoints++;
+            }
+
+            updateScoreboard();
+        }
+
+        function resetScoreboard() {
+            serverPoints = 0;
+            receiverPoints = 0;
+            isGameOver = false;
+            
+            document.getElementById('btn-add-server').disabled = false;
+            document.getElementById('btn-add-receiver').disabled = false;
+            document.getElementById('btn-add-server').className = "py-4.5 bg-lime-500 hover:bg-lime-400 text-slate-950 font-black text-lg sm:text-xl rounded-2xl transition-all shadow-lg active:scale-95";
+            document.getElementById('btn-add-receiver').className = "py-4.5 bg-slate-800 hover:bg-slate-700 text-white font-black text-lg sm:text-xl rounded-2xl border-2 border-slate-700 transition-all shadow-lg active:scale-95";
+
+            updateScoreboard();
+        }
+
+        function updateScoreboard() {
+            const sDisplay = document.getElementById('display-server-score');
+            const rDisplay = document.getElementById('display-receiver-score');
+            const sRaw = document.getElementById('display-server-raw');
+            const rRaw = document.getElementById('display-receiver-raw');
+            const announce = document.getElementById('display-score-announcement');
+
+            sRaw.innerText = `累計：${serverPoints} 球`;
+            rRaw.innerText = `累計：${receiverPoints} 球`;
+
+            let serverCall = "Love";
+            let receiverCall = "Love";
+            let broadcast = "";
+
+            const tennisScores = { 0: "Love", 1: "15", 2: "30", 3: "40" };
+
+            if (serverPoints >= 3 && receiverPoints >= 3) {
+                if (serverPoints === receiverPoints) {
+                    sDisplay.innerText = "40";
+                    rDisplay.innerText = "40";
+                    broadcast = "Deuce (雙方平分)";
+                } else if (serverPoints === receiverPoints + 1) {
+                    sDisplay.innerText = "Ad";
+                    rDisplay.innerText = "40";
+                    broadcast = "Advantage Server (發球方優勢 / Ad-In)";
+                } else if (receiverPoints === serverPoints + 1) {
+                    sDisplay.innerText = "40";
+                    rDisplay.innerText = "Ad";
+                    broadcast = "Advantage Receiver (接發球方優勢 / Ad-Out)";
+                } else if (serverPoints >= receiverPoints + 2) {
+                    sDisplay.innerText = "Win";
+                    rDisplay.innerText = "L";
+                    broadcast = "Game Server! 發球方贏下本局 🏆";
+                    isGameOver = true;
+                } else if (receiverPoints >= serverPoints + 2) {
+                    sDisplay.innerText = "L";
+                    rDisplay.innerText = "Win";
+                    broadcast = "Game Receiver! 接發球方贏下本局 🏆";
+                    isGameOver = true;
+                }
+            } else {
+                if (serverPoints === 4) {
+                    sDisplay.innerText = "Win";
+                    rDisplay.innerText = "L";
+                    broadcast = "Game Server! 發球方贏下本局 🏆";
+                    isGameOver = true;
+                } else if (receiverPoints === 4) {
+                    sDisplay.innerText = "L";
+                    rDisplay.innerText = "Win";
+                    broadcast = "Game Receiver! 接發球方贏下本局 🏆";
+                    isGameOver = true;
+                } else {
+                    sDisplay.innerText = tennisScores[serverPoints];
+                    rDisplay.innerText = tennisScores[receiverPoints];
+                    
+                    serverCall = tennisScores[serverPoints];
+                    receiverCall = tennisScores[receiverPoints];
+
+                    if (serverPoints === receiverPoints) {
+                        broadcast = `${serverCall} All (${serverCall}平)`;
+                    } else {
+                        broadcast = `${serverCall} - ${receiverCall}`;
+                    }
+                }
+            }
+
+            announce.innerText = `"${broadcast}"`;
+
+            if (isGameOver) {
+                document.getElementById('btn-add-server').disabled = true;
+                document.getElementById('btn-add-receiver').disabled = true;
+                document.getElementById('btn-add-server').className = "py-4.5 bg-slate-800 text-slate-500 font-black text-lg sm:text-xl rounded-2xl cursor-not-allowed opacity-55 shadow-none";
+                document.getElementById('btn-add-receiver').className = "py-4.5 bg-slate-800 text-slate-500 font-black text-lg sm:text-xl rounded-2xl cursor-not-allowed opacity-55 shadow-none";
+            }
+        }
+
+
+        // 6. INTERACTIVE QUIZ SYSTEM (10 題)
+        const quizData = [
+            {
+                id: 1,
+                question: "1. 現代網球是由誰在 1873 年將場地移至室外草地，從而開啟了「草地網球 (Lawn Tennis)」的歷史？",
+                options: [
+                    "A. 溫菲爾德少校 (Walter Clopton Wingfield)",
+                    "B. 法國國王路易十四",
+                    "C. 英國維多利亞女王",
+                    "D. 詹姆斯·溫布頓"
+                ],
+                correct: 0,
+                explanation: "答案是 A。英國退役少校溫菲爾德於 1873 年發明了「Sphairistike」，並將網球由室內大廳移至室外草地進行，奠定了現代草地網球的基礎。"
+            },
+            {
+                id: 2,
+                question: "2. 在一局比賽中，如果雙方的得分加起來是「5 分」（例如發球方得 3 分，接發球方得 2 分），發球員應該站在底線後中央標誌的哪一側發球？",
+                options: [
+                    "A. 中央標誌的右邊 (Deuce Court)",
+                    "B. 中央標誌的左邊 (Ad Court)",
+                    "C. 發球員可以任意選擇一側",
+                    "D. 必須站在正中央線上"
+                ],
+                correct: 1,
+                explanation: "答案是 B。根據發球位置規則，當雙方總得分相加為奇數（1, 3, 5, 7...）時，必須在左半區（Ad Court）向對角發球；偶數或0時則在右半區發球。"
+            },
+            {
+                id: 3,
+                question: "3. 當局數打到 40:40 平分 (Deuce) 時，任何一方需要連續贏幾分，才能奪下這一局比賽的最終勝利？",
+                options: [
+                    "A. 連續奪得 1 分",
+                    "B. 連續奪得 2 分",
+                    "C. 累計拿到 5 分即可",
+                    "D. 比賽直接結束並進入搶7"
+                ],
+                correct: 1,
+                explanation: "答案是 B。當雙方打成 40:40 平分 (Deuce) 時，任何一方必須連續奪得 2 分（先拿第一分取得優勢 Advantage，再拿第二分）才能贏下該局。"
+            },
+            {
+                id: 4,
+                question: "4. 以下關於發球中「腳失誤 (Foot Fault)」的敘述，哪一項屬於違規？",
+                options: [
+                    "A. 在球拍觸球前，發球員的雙腳踏到底線或場區內地面",
+                    "B. 在球拍觸球前，發球員的腳觸及邊線假想延伸線外側",
+                    "C. 在球拍觸球前，發球員的腳觸碰了中央標誌的中心延伸線",
+                    "D. 以上選項全部都屬於腳失誤違規"
+                ],
+                correct: 3,
+                explanation: "答案是 D。在發球的整個過程中，直到球拍觸及球為止，發球員的腳不能碰觸底線內、邊線假想延伸線外側、或中心標誌假想延伸線，否則均判腳失誤。"
+            },
+            {
+                id: 5,
+                question: "5. 四大大滿貫賽事是網球界的殿堂級比賽。其中，唯一在「泥地/紅土 (Clay Court)」上進行的是哪一項賽事？",
+                options: [
+                    "A. 澳洲公開賽",
+                    "B. 溫布頓大賽",
+                    "C. 法國公開賽",
+                    "D. 美國公開賽"
+                ],
+                correct: 2,
+                explanation: "答案 is C。法國公開賽（5-6月）是唯一在泥地/紅土上進行的頂尖大賽，其場地球速慢、彈跳高，對球員的滑步防守與體能是極大考驗。"
+            },
+            {
+                id: 6,
+                question: "6. 網球英文單字 'TENNIS' 據歷史記載是源自 13 世紀法國古法文中的哪一個字彙？",
+                options: [
+                    "A. TENEZ (意指「拿著、注意、比賽」)",
+                    "B. SPHAIRISTIKE (意指「球類活動」)",
+                    "C. TOURNAMENT (意指「巡迴賽」)",
+                    "D. RAQUETTE (意指「球拍」)"
+                ],
+                correct: 0,
+                explanation: "答案是 A。早於 13 世紀的法國類似網球的遊戲中，法文的 'TENEZ' 意為比賽、請注意；後傳入英國演變為英文發音的 'TENNIS'。"
+            },
+            {
+                id: 7,
+                question: "7. 在決勝局制 (Tie-Break / 搶7) 中，計分採用 1, 2, 3... 計算。先奪得幾分且領先對手 2 分以上的球員贏得該盤？",
+                options: [
+                    "A. 先奪得 4 分",
+                    "B. 先奪得 6 分",
+                    "C. 先奪得 7 分",
+                    "D. 先奪得 15 分"
+                ],
+                correct: 2,
+                explanation: "答案是 C。決勝局制 (Tie-Break) 規則中，先取得 7 分且至少領先對手 2 分者贏得該局及該盤（最終該盤比分為 7:6）。"
+            },
+            {
+                id: 8,
+                question: "8. 第一局比賽開始前，擲銀幣 (Toss) 或轉動球拍勝出的一方，可以享有哪些選擇權利？",
+                options: [
+                    "A. 只能選擇首先發球，不能選邊",
+                    "B. 可選「發球/接發球」或選擇「場區邊邊」，亦可要求對方先選",
+                    "C. 只能選擇接發球，不能先選場邊",
+                    "D. 可以同時選擇先發球且同時選擇最好的場地邊區"
+                ],
+                correct: 1,
+                explanation: "答案是 B。擲幣獲勝者只能從「發球/接發球」或「球場邊區」中挑選一項。當他選定一項後，對手則自動挑選剩下的一項權利，保持平衡。"
+            },
+            {
+                id: 9,
+                question: "9. 為了避免拖延比賽，在正規網球比賽中，進行每分球 (Point) 之間的時限最長不得深度超過多少秒？",
+                options: [
+                    "A. 15 秒",
+                    "B. 25 秒",
+                    "C. 40 秒",
+                    "D. 90 秒"
+                ],
+                correct: 1,
+                explanation: "答案是 B。每分球之間規定不得超過 25 秒，而單數局換邊休息則不得超過 90 秒，初犯警告，重犯直接判發球失誤。"
+            },
+            {
+                id: 10,
+                question: "10. 網球比賽中的計分與晉級層級從小到大排序，以下哪一個是正確的順序？",
+                options: [
+                    "A. 局 (Game) ➡️ 分 (Point) ➡️ 盤 (Set) ➡️ 場 (Match)",
+                    "B. 分 (Point) ➡️ 盤 (Set) ➡️ 局 (Game) ➡️ 場 (Match)",
+                    "C. 盤 (Set) ➡️ 分 (Point) ➡️ 局 (Game) ➡️ 場 (Match)",
+                    "D. 分 (Point) ➡️ 局 (Game) ➡️ 盤 (Set) ➡️ 場 (Match)"
+                ],
+                correct: 3,
+                explanation: "答案是 D。網球計分是由最小的回合得分「分 (Point)」，組成贏下一局的「局 (Game)」，再組成贏得數局的「盤 (Set)」，最後決定全場勝負的「場 (Match)。」"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedOptionIndex = null;
+        let quizScore = 0;
+        let isQuestionAnswered = false;
+
+        function loadQuestion() {
+            isQuestionAnswered = false;
+            selectedOptionIndex = null;
+
+            document.getElementById('quiz-progress').innerText = `第 ${currentQuestionIndex + 1} / ${quizData.length} 題`;
+            
+            const qData = quizData[currentQuestionIndex];
+            document.getElementById('quiz-question').innerText = qData.question;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition-all font-bold text-base sm:text-lg text-slate-800 flex items-center justify-between";
+                btn.innerHTML = `<span>${opt}</span>`;
+                btn.onclick = () => selectOption(idx);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').className = "hidden p-6 rounded-2xl mb-8 flex items-start space-x-4 transition-all duration-300";
+            
+            const nextBtn = document.getElementById('btn-next-question');
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = "查看成績結果 🎯";
+            } else {
+                nextBtn.innerText = "下一題 ➡️";
+            }
+        }
+
+        function selectOption(index) {
+            if (isQuestionAnswered) return;
+
+            isQuestionAnswered = true;
+            selectedOptionIndex = index;
+            const qData = quizData[currentQuestionIndex];
+            const optionsContainer = document.getElementById('quiz-options');
+            const btns = optionsContainer.getElementsByTagName('button');
+
+            const feedbackEl = document.getElementById('quiz-feedback');
+            const feedbackIcon = document.getElementById('quiz-feedback-icon');
+            const feedbackTitle = document.getElementById('quiz-feedback-title');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+
+            const isCorrect = (index === qData.correct);
+
+            if (isCorrect) {
+                quizScore++;
+            }
+
+            for (let i = 0; i < btns.length; i++) {
+                if (i === qData.correct) {
+                    btns[i].className = "w-full text-left p-5 rounded-2xl border-4 border-emerald-300 bg-emerald-50 text-emerald-950 font-black text-base sm:text-lg flex items-center justify-between";
+                    btns[i].innerHTML += `<span class="text-emerald-700 text-sm sm:text-base">✔ 答案正確</span>`;
+                } else if (i === index) {
+                    btns[i].className = "w-full text-left p-5 rounded-2xl border-4 border-red-300 bg-red-50 text-red-950 font-black text-base sm:text-lg flex items-center justify-between";
+                    btns[i].innerHTML += `<span class="text-red-700 text-sm sm:text-base">❌ 你的選擇</span>`;
+                } else {
+                    btns[i].className = "w-full text-left p-5 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 text-base sm:text-lg flex items-center justify-between opacity-60";
+                }
+            }
+
+            feedbackEl.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackEl.className = "p-6 rounded-2xl mb-8 flex items-start space-x-4 bg-emerald-50 border-l-8 border-emerald-500 text-emerald-950 transition-all duration-300";
+                feedbackIcon.innerText = "🎉";
+                feedbackTitle.innerText = "答對了！非常完美！";
+            } else {
+                feedbackEl.className = "p-6 rounded-2xl mb-8 flex items-start space-x-4 bg-red-50 border-l-8 border-red-500 text-red-950 transition-all duration-300";
+                feedbackIcon.innerText = "💡";
+                feedbackTitle.innerText = "答錯了，沒關係！";
+            }
+            feedbackText.innerText = qData.explanation;
+        }
+
+        function nextQuestion() {
+            if (!isQuestionAnswered) {
+                const optionsContainer = document.getElementById('quiz-options');
+                optionsContainer.className = "grid grid-cols-1 gap-4 mb-8 animate-pulse border-2 border-amber-500 rounded-2xl p-2";
+                setTimeout(() => {
+                    optionsContainer.className = "grid grid-cols-1 gap-4 mb-8";
+                }, 500);
+                return;
+            }
+
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                document.getElementById('quiz-question-container').classList.add('hidden');
+                
+                const scoreCard = document.getElementById('quiz-score-card');
+                scoreCard.classList.remove('hidden');
+
+                const scoreDisplay = document.getElementById('quiz-score-display');
+                scoreDisplay.innerText = `${quizScore} / ${quizData.length}`;
+
+                const commentEl = document.getElementById('quiz-performance-comment');
+                if (quizScore === 10) {
+                    commentEl.innerText = "神乎其技！你獲得了 10/10 滿分！你對網球的所有規則、歷史字源與複雜計分機制瞭如指掌，是名副其實的網球理論大師！";
+                } else if (quizScore >= 7) {
+                    commentEl.innerText = "做得非常好！你答對了大部分題目（優秀），已經完全理解發球位置、雙發失誤與 Deuce 等核心機制。繼續保持！";
+                } else if (quizScore >= 5) {
+                    commentEl.innerText = "及格了！你掌握了基本的規則，不過在一些節如「擲幣優先權」或「時限規則」上可能還需要稍微加強，多使用我們的模擬計算器複習吧！";
+                } else {
+                    commentEl.innerText = "再接再厲！建議你重新點擊上方的「核心規則」或「計分模擬器」版面，親手點按操作，網球獨特的歷史及計分方式需要多動手幾次才能熟能生巧！";
+                }
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-question-container').classList.remove('hidden');
+            document.getElementById('quiz-score-card').classList.add('hidden');
+            loadQuestion();
+        }
+
+        function restartQuizEntirely() {
+            resetQuiz();
+        }
+
+        // Initialize state on window load
+        window.onload = function() {
+            resetScoreboard();
+            loadQuestion();
+            calculateServeSide();
+            changeTheme('hard');
+        }
+    </script>
+</body>
+</html>

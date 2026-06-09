@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五人籃球線上互動教學網頁</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        court: {
+                            orange: '#F28C38',
+                            dark: '#1E293B',
+                            light: '#FFF7ED',
+                            accent: '#D97706',
+                            green: '#0F766E'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 針對「字體要大」設計的全局字級切換 */
+        .font-normal {
+            font-size: 18px;
+        }
+        .font-large {
+            font-size: 22px;
+        }
+        .font-xlarge {
+            font-size: 26px;
+        }
+
+        /* 標題與按鈕的相對縮放 */
+        .font-normal h1 { font-size: 2.25rem; }
+        .font-normal h2 { font-size: 1.75rem; }
+        .font-normal h3 { font-size: 1.4rem; }
+        
+        .font-large h1 { font-size: 2.75rem; }
+        .font-large h2 { font-size: 2.25rem; }
+        .font-large h3 { font-size: 1.75rem; }
+        
+        .font-xlarge h1 { font-size: 3.25rem; }
+        .font-xlarge h2 { font-size: 2.75rem; }
+        .font-xlarge h3 { font-size: 2.25rem; }
+
+        /* 平滑過渡 */
+        * {
+            transition: font-size 0.2s ease, background-color 0.3s ease;
+        }
+
+        /* 隱藏滾動條 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 3D 翻牌效果樣式 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans font-normal" id="main-body">
+
+    <!-- 頂部導航欄與字型控制器 -->
+    <nav class="sticky top-0 z-50 bg-court-dark text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg class="w-8 h-8 text-court-orange animate-bounce" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+                <span class="font-bold tracking-wider text-xl sm:text-2xl">五人制籃球互動教學網</span>
+            </div>
+            
+            <!-- 字體大小調整控制面板 -->
+            <div class="flex items-center space-x-2 bg-slate-800 rounded-lg p-1.5 border border-slate-700 my-2 sm:my-0">
+                <span class="text-xs sm:text-sm text-slate-400 px-2">字體大小：</span>
+                <button onclick="changeFontSize('normal')" id="btn-font-normal" class="px-3 py-1 text-sm rounded bg-court-orange text-white font-bold">標準</button>
+                <button onclick="changeFontSize('large')" id="btn-font-large" class="px-3 py-1 text-sm rounded hover:bg-slate-700 text-slate-300 font-bold">放大</button>
+                <button onclick="changeFontSize('xlarge')" id="btn-font-xlarge" class="px-3 py-1 text-sm rounded hover:bg-slate-700 text-slate-300 font-bold">特大</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 橫幅 Banner -->
+    <header class="bg-gradient-to-r from-court-dark to-slate-800 text-white py-12 px-4 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#f97316_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-4xl mx-auto relative z-10">
+            <span class="bg-court-orange text-court-dark font-extrabold px-4 py-1.5 rounded-full text-base sm:text-lg uppercase tracking-widest shadow-lg">中學體育科課程</span>
+            <h1 class="font-black mt-4 mb-6 leading-tight tracking-tight text-white drop-shadow-md">
+                🏀 五人制籃球 <span class="text-court-orange">互動學習網</span>
+            </h1>
+            <p class="text-slate-300 max-w-2xl mx-auto leading-relaxed text-lg sm:text-xl">
+                歡迎來到五人制籃球學習平台！請探索下方的各個學習單元。
+            </p>
+        </div>
+    </header>
+
+    <!-- 分頁導航錨點 -->
+    <div id="main-content-start"></div>
+
+    <!-- 分頁切換 Tab Buttons -->
+    <div class="bg-slate-800 text-white sticky top-[64px] z-40 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 flex overflow-x-auto no-scrollbar py-2 space-x-2">
+            <button onclick="switchTab('tab-history')" id="btn-tab-history" class="tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-court-orange text-court-dark transition duration-200">
+                🕰️ 籃球編年史
+            </button>
+            <button onclick="switchTab('tab-court')" id="btn-tab-court" class="tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition duration-200">
+                🗺️ 場地與得分
+            </button>
+            <button onclick="switchTab('tab-violations')" id="btn-tab-violations" class="tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition duration-200">
+                ⚠️ 籃球基本違例
+            </button>
+            <button onclick="switchTab('tab-fouls')" id="btn-tab-fouls" class="tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition duration-200">
+                ❌ 籃球基本犯規
+            </button>
+            <button onclick="switchTab('tab-gestures')" id="btn-tab-gestures" class="tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition duration-200">
+                🤟 裁判重要手勢
+            </button>
+            <button onclick="switchTab('tab-quiz')" id="btn-tab-quiz" class="tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition duration-200">
+                🏆 10題全能挑戰賽
+            </button>
+        </div>
+    </div>
+
+    <!-- 主體內容區 -->
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- ==================== 分頁一：籃球編年史 ==================== -->
+        <div id="tab-history" class="tab-content space-y-12">
+            <!-- 歷史發展 -->
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute -right-16 -top-16 w-36 h-36 bg-orange-100 rounded-full opacity-50 blur-xl pointer-events-none"></div>
+                <div class="absolute top-0 left-12 transform -translate-y-1/2 bg-court-orange text-white px-6 py-2 rounded-2xl shadow-lg font-bold">
+                    單元一：籃球編年史
+                </div>
+                
+                <h2 class="font-extrabold text-slate-900 mb-4 mt-4">
+                    🕰️ 籃球歷史發展與精彩蛻變
+                </h2>
+                <p class="text-slate-600 mb-10 leading-relaxed text-lg">
+                    點擊時間軸上的各個黃金里程碑，探索這項運動是如何從「桃子籃筐」一步一步演變成今天風靡全球的奧運殿堂項目！
+                </p>
+
+                <!-- 互動式垂直時間軸 -->
+                <div class="relative border-l-4 border-orange-200 ml-4 md:ml-32 space-y-12 pb-6">
+                    <!-- 1891里程碑 -->
+                    <div class="relative pl-8 md:pl-12 group">
+                        <!-- 年份標籤 -->
+                        <div class="absolute -left-4 top-1.5 w-7 h-7 bg-court-orange border-4 border-white rounded-full group-hover:scale-125 transition-transform duration-200"></div>
+                        <div class="md:absolute md:-left-36 md:top-1 font-black text-2xl md:text-3xl text-court-orange text-right w-24">
+                            1891 年
+                        </div>
+                        <button onclick="revealHistoryDetail('history-1891')" class="text-left w-full bg-orange-50/40 hover:bg-orange-50 border border-orange-100 rounded-2xl p-6 transition shadow-sm hover:shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-black text-slate-800 text-xl md:text-2xl">💡 籃球的誕生與桃桃筐</h3>
+                                <span class="text-court-orange font-bold text-sm">💡 點擊解鎖故事</span>
+                            </div>
+                            <p class="text-slate-600 mt-2 leading-relaxed">
+                                美國春田大學的體育老師 <span class="font-bold text-slate-900">納史密夫 (James Naismith)</span> 博士，為了讓學生在寒冬室內保持體力，發明了把球投進懸掛筐子的遊戲。
+                            </p>
+                            <!-- 深度揭秘內容 -->
+                            <div id="history-1891" class="hidden mt-4 pt-4 border-t border-orange-200/60 text-slate-700 space-y-2 animate-fade-in bg-white p-4 rounded-xl shadow-inner">
+                                <p><strong>🏀 誕生幕後秘辛：</strong></p>
+                                <p>當時學校的校工找不到合適的箱子，最後只拿來了兩個<strong>「裝桃子的竹木筐」</strong>，釘在體育館約 3.05 米（10 英尺）高的看台欄杆上。這也成為了今天標準籃球框高度 3.05 米的由來！</p>
+                                <p>那時每投進一球，比賽就必須暫停，因為校工得搬梯子上去把球從桃筐裡拿出來！</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- 1892里程碑 -->
+                    <div class="relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-4 top-1.5 w-7 h-7 bg-amber-500 border-4 border-white rounded-full group-hover:scale-125 transition-transform duration-200"></div>
+                        <div class="md:absolute md:-left-36 md:top-1 font-black text-2xl md:text-3xl text-amber-500 text-right w-24">
+                            1892 年
+                        </div>
+                        <button onclick="revealHistoryDetail('history-1892')" class="text-left w-full bg-amber-50/20 hover:bg-amber-50/50 border border-amber-100 rounded-2xl p-6 transition shadow-sm hover:shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-black text-slate-800 text-xl md:text-2xl">📜 第一場比賽與原始 13 條規則</h3>
+                                <span class="text-amber-600 font-bold text-sm">💡 點擊解鎖故事</span>
+                            </div>
+                            <p class="text-slate-600 mt-2 leading-relaxed">
+                                歷史上第一場有正式規則的籃球賽於 1892 年 1 月 20 日舉行，納史密夫親自制定了最初的十三條基本規則。
+                            </p>
+                            <div id="history-1892" class="hidden mt-4 pt-4 border-t border-amber-200/60 text-slate-700 space-y-2 bg-white p-4 rounded-xl shadow-inner">
+                                <p><strong>🏀 驚人的原始球例：</strong></p>
+                                <p>在最初的規則中，<strong>「不允許球員運球（Dribble）」</strong>！球員拿到球後必須停在原地，只能用傳球的方式前進。</p>
+                                <p>另外，那時候只要把球投進，或是防守方連續犯規三次，進攻隊就能得一分。第一場正式比賽的最終比分是極具歷史意義的 <strong>1：0</strong>！</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- 1932里程碑 -->
+                    <div class="relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-4 top-1.5 w-7 h-7 bg-slate-600 border-4 border-white rounded-full group-hover:scale-125 transition-transform duration-200"></div>
+                        <div class="md:absolute md:-left-36 md:top-1 font-black text-2xl md:text-3xl text-slate-600 text-right w-24">
+                            1932 年
+                        </div>
+                        <button onclick="revealHistoryDetail('history-1932')" class="text-left w-full bg-slate-100 hover:bg-slate-200/60 border border-slate-200 rounded-2xl p-6 transition shadow-sm hover:shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-black text-slate-800 text-xl md:text-2xl">🌍 國際籃總 FIBA 成立</h3>
+                                <span class="text-slate-600 font-bold text-sm">💡 點擊解鎖故事</span>
+                            </div>
+                            <p class="text-slate-600 mt-2 leading-relaxed">
+                                國際業餘籃球聯合會（FIBA，現稱國際籃球聯合會）在瑞士日內瓦創立，籃球規則自此走向全球標準化。
+                            </p>
+                            <div id="history-1932" class="hidden mt-4 pt-4 border-t border-slate-300 text-slate-700 space-y-2 bg-white p-4 rounded-xl shadow-inner">
+                                <p><strong>🏀 走向世界的推手：</strong></p>
+                                <p>創創會員國包括阿根廷、希臘、義大利、拉脫維亞、葡萄牙、羅馬尼亞、瑞典和捷克斯洛伐克。FIBA 的成立為籃球能夠順利進入奧林匹克運動會打下了最堅固的基石。</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- 1936里程碑 -->
+                    <div class="relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-4 top-1.5 w-7 h-7 bg-court-orange border-4 border-white rounded-full group-hover:scale-125 transition-transform duration-200"></div>
+                        <div class="md:absolute md:-left-36 md:top-1 font-black text-2xl md:text-3xl text-court-orange text-right w-24">
+                            1936 年
+                        </div>
+                        <button onclick="revealHistoryDetail('history-1936')" class="text-left w-full bg-orange-50/40 hover:bg-orange-50 border border-orange-100 rounded-2xl p-6 transition shadow-sm hover:shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-black text-slate-800 text-xl md:text-2xl">🏅 男子籃球首次被列入奧運項目</h3>
+                                <span class="text-court-orange font-bold text-sm">💡 點擊解鎖故事</span>
+                            </div>
+                            <p class="text-slate-600 mt-2 leading-relaxed">
+                                在第十一屆柏林奧運會中，男子籃球項目首次踏上奧運最高殿堂，由籃球發明者納史密夫博士親自拋球開球。
+                            </p>
+                            <div id="history-1936" class="hidden mt-4 pt-4 border-t border-orange-200/60 text-slate-700 space-y-2 bg-white p-4 rounded-xl shadow-inner">
+                                <p><strong>🏀 奧運決賽的「泥濘大戰」：</strong></p>
+                                <p>你絕對想不到，歷史上第一場奧運籃球決賽是在<strong>「室外露天紅土網球場」</strong>舉行的！更不幸的是，決賽當天柏林下起了傾盆大雨，場地變成了泥濘不堪的「水窪地」，球員根本無法順利運球，鎖定傳球的方式前進。</p>
+                                <p>最終，美國隊以 <strong>19：8</strong> 擊敗加拿大隊奪得史上首面奧運金牌，如此低的比分正是因為場地全是爛泥巴造成的！</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- 1976里程碑 -->
+                    <div class="relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-4 top-1.5 w-7 h-7 bg-amber-500 border-4 border-white rounded-full group-hover:scale-125 transition-transform duration-200"></div>
+                        <div class="md:absolute md:-left-36 md:top-1 font-black text-2xl md:text-3xl text-amber-500 text-right w-24">
+                            1976 年
+                        </div>
+                        <button onclick="revealHistoryDetail('history-1976')" class="text-left w-full bg-amber-50/20 hover:bg-amber-50/50 border border-amber-100 rounded-2xl p-6 transition shadow-sm hover:shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-black text-slate-800 text-xl md:text-2xl">🏅 女子籃球首次躍進奧運</h3>
+                                <span class="text-amber-600 font-bold text-sm">💡 點擊解鎖故事</span>
+                            </div>
+                            <p class="text-slate-600 mt-2 leading-relaxed">
+                                在加拿大蒙特利爾奧運會中，女子五人制籃球也首次被列入奧林匹克運動會的正式比賽項目。
+                            </p>
+                            <div id="history-1976" class="hidden mt-4 pt-4 border-t border-amber-200/60 text-slate-700 space-y-2 bg-white p-4 rounded-xl shadow-inner">
+                                <p><strong>🏀 女籃平權的關鍵一步：</strong></p>
+                                <p>這項突破徹底改寫了現代籃球的發展格局。首屆奧運女籃僅有 6 支球隊參賽，慢最終由實力強勁的蘇聯女籃奪得首枚奧運女籃金牌，美國女籃收穫銀牌。</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 🏀 籃球歷史趣味翻牌遊戲 -->
+                <div class="mt-12 bg-slate-900 rounded-2xl p-6 sm:p-8 text-white relative">
+                    <h3 class="font-black text-2xl text-court-orange mb-6 text-center">🧠 籃球歷史 cold 知識：趣味翻牌挑戰</h3>
+                    <p class="text-slate-400 text-center mb-8">點擊下方卡片，即可像魔術一樣翻轉卡片，解鎖你不知道的籃球冷知識！</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 翻牌 1 -->
+                        <div onclick="flipCard('flip-1')" class="perspective-1000 h-52 cursor-pointer">
+                            <div id="flip-1" class="relative w-full h-full duration-500 preserve-3d">
+                                <!-- 正面 -->
+                                <div class="absolute inset-0 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-6 flex flex-col justify-center items-center text-center backface-hidden shadow-md">
+                                    <div class="text-4xl mb-3">⚽🏀</div>
+                                    <div class="font-extrabold text-lg text-amber-400">第一代籃球，居然不是籃球？</div>
+                                    <div class="text-xs text-slate-400 mt-3">👉 點擊卡片翻面解密</div>
+                                </div>
+                                <!-- 反面 -->
+                                <div class="absolute inset-0 bg-court-orange text-court-dark rounded-xl p-6 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180 shadow-md">
+                                    <div class="font-black text-xl mb-2">正確答案是：足球！</div>
+                                    <p class="text-sm leading-relaxed font-bold">
+                                        開展當初根本還沒發明橘色的標準籃球，納史密夫博士只能借來一個「英式足球 (Association Football)」進行首場比賽！
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 翻牌 2 -->
+                        <div onclick="flipCard('flip-2')" class="perspective-1000 h-52 cursor-pointer">
+                            <div id="flip-2" class="relative w-full h-full duration-500 preserve-3d">
+                                <!-- 正面 -->
+                                <div class="absolute inset-0 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-6 flex flex-col justify-center items-center text-center backface-hidden shadow-md">
+                                    <div class="text-4xl mb-3">🛑🚫</div>
+                                    <div class="font-extrabold text-lg text-amber-400">早期規則，居然禁止「運球」？</div>
+                                    <div class="text-xs text-slate-400 mt-3">👉 點擊卡片翻面解密</div>
+                                </div>
+                                <!-- 反面 -->
+                                <div class="absolute inset-0 bg-court-orange text-court-dark rounded-xl p-6 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180 shadow-md">
+                                    <div class="font-black text-xl mb-2">是真的！最初不能運球</div>
+                                    <p class="text-sm leading-relaxed font-bold">
+                                        最初球員接到傳球後必須「原地站立」，只准傳球 and 投籃。後來的球員發揮創意，用「自拋自接」的方式移動，才慢慢演變成今天的運球規則！
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 翻牌 3 -->
+                        <div onclick="flipCard('flip-3')" class="perspective-1000 h-52 cursor-pointer">
+                            <div id="flip-3" class="relative w-full h-full duration-500 preserve-3d">
+                                <!-- 正面 -->
+                                <div class="absolute inset-0 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-6 flex flex-col justify-center items-center text-center backface-hidden shadow-md">
+                                    <div class="text-4xl mb-3">🟠🧺</div>
+                                    <div class="font-extrabold text-lg text-amber-400">現在籃球為什麼是橘色的？</div>
+                                    <div class="text-xs text-slate-400 mt-3">👉 點擊卡片翻面解密</div>
+                                </div>
+                                <!-- 反面 -->
+                                <div class="absolute inset-0 bg-court-orange text-court-dark rounded-xl p-6 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180 shadow-md">
+                                    <div class="font-black text-xl mb-2">答案是：為了「顯眼」！</div>
+                                    <p class="text-sm leading-relaxed font-bold">
+                                        早期的籃球是皮革原色（棕色），在黃色木地板背景下極不顯眼。1957 年教練保羅·欣克爾提出使用「橘色」以大幅提升球員與觀眾的視線對比度！
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== 分頁二：場地與得分 ==================== -->
+        <div id="tab-court" class="tab-content space-y-12 hidden">
+            <!-- 得分與場地規則 -->
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative">
+                <div class="absolute top-0 left-12 transform -translate-y-1/2 bg-court-orange text-white px-6 py-2 rounded-2xl shadow-lg font-bold">
+                    單元二：場地與得分
+                </div>
+                <h2 class="font-extrabold text-slate-900 mb-4 mt-4">
+                    📋 五人籃球得分機制與場地規則
+                </h2>
+                <p class="text-slate-600 mb-8 leading-relaxed text-lg">
+                    請查看基本編制與時間規則，然後在下方的<strong>「互動籃球場」</strong>點擊探索不同的場地區域、得分規定及相關限制！
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="flex items-start space-x-4 bg-orange-50/40 p-5 rounded-2xl border border-orange-100">
+                        <div class="bg-court-orange text-white p-3 rounded-xl mt-1 shrink-0">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">球隊人數與常規時間</h3>
+                            <p class="text-slate-600 leading-relaxed text-base sm:text-lg">
+                                • 每一隊總人數為 <span class="font-extrabold text-court-orange">12人</span> (5位出場及7位替補)。
+                                <br>• 比賽共分 <span class="font-bold">四節</span>，每節 <span class="font-bold text-court-orange">10 分鐘</span> (NBA為12分鐘)。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 bg-slate-50 p-5 rounded-2xl border border-slate-200/60">
+                        <div class="bg-slate-700 text-white p-3 rounded-xl mt-1 shrink-0">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">暫停規定與每次限時</h3>
+                            <p class="text-slate-600 leading-relaxed text-base sm:text-lg">
+                                • 每次暫停為 <span class="font-bold text-slate-800">1 分鐘</span>。
+                                <br>• <span class="font-bold">上半場</span> 2 次暫停；<span class="font-bold">下半場</span> 3 次暫停；<span class="font-bold">加時賽</span> 各 1 次。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🏀 互動版面：2D 籃球場探索區 -->
+                <div class="bg-slate-950 rounded-3xl p-6 sm:p-8 text-white border border-slate-800">
+                    <h3 class="font-black text-2xl text-court-orange mb-6 flex items-center space-x-2">
+                        <span>🗺️ 互動籃球場：得分與區域規則探索</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <!-- 左側：SVG 互動球場 (佔 7 格) -->
+                        <div class="lg:col-span-7 flex flex-col items-center">
+                            <p class="text-xs sm:text-sm text-slate-400 mb-4 text-center">
+                                👇 點擊球場上的區域（彩色框線內），即時探索規則與得分！
+                            </p>
+                            
+                            <!-- 2D SVG 半場籃球場 -->
+                            <div class="w-full max-w-lg bg-slate-900 rounded-2xl border border-slate-700 p-4 relative shadow-inner">
+                                <svg id="interactive-court" viewBox="0 0 400 350" class="w-full h-auto select-none">
+                                    <!-- 籃球木地板線條與底色 -->
+                                    <rect width="400" height="350" rx="10" fill="#1e1b18" />
+                                    
+                                    <!-- 邊線、底線與半場線 -->
+                                    <rect x="10" y="10" width="380" height="330" fill="none" stroke="#64748b" stroke-width="3" />
+                                    
+                                    <!-- 半場中圈 (右側中線) -->
+                                    <path d="M 390 125 A 50 50 0 0 0 390 225" fill="none" stroke="#64748b" stroke-width="3" />
+                                    
+                                    <!-- ================= 點擊探測熱區與高亮區域 ================= -->
+                                    
+                                    <!-- 區域 1: 三分線外 -->
+                                    <!-- 繪製一個代表三分線外的遮罩路徑 -->
+                                    <path id="court-area-3pt" d="M 10 10 L 390 10 L 390 340 L 10 340 L 10 310 L 50 310 A 165 165 0 0 0 50 40 L 10 40 Z" 
+                                          class="cursor-pointer transition duration-300 fill-transparent hover:fill-orange-500/10 stroke-none" 
+                                          onclick="selectCourtZone('3pt')">
+                                    </path>
+                                    <!-- 三分實線 -->
+                                    <path d="M 10 40 L 50 40 A 165 165 0 0 1 50 310 L 10 310" fill="none" stroke="#f97316" stroke-width="4" class="pointer-events-none" />
+
+                                    <!-- 區域 2: 兩分射程區 -->
+                                    <path id="court-area-2pt" d="M 10 40 L 50 40 A 165 165 0 0 1 50 310 L 10 310 L 10 235 L 120 235 L 120 115 L 10 115 Z" 
+                                          class="cursor-pointer transition duration-300 fill-transparent hover:fill-teal-500/10 stroke-none" 
+                                          onclick="selectCourtZone('2pt')">
+                                    </path>
+
+                                    <!-- 區域 3: 限制區 (禁區) -->
+                                    <rect id="court-area-key" x="10" y="115" width="110" height="120" 
+                                          class="cursor-pointer transition duration-300 fill-transparent hover:fill-red-500/20 stroke-2 stroke-slate-400" 
+                                          onclick="selectCourtZone('key')" />
+                                    
+                                    <!-- 罰球線半圓 -->
+                                    <path d="M 120 115 A 60 60 0 0 1 120 235 Z" fill="none" stroke="#64748b" stroke-width="3" class="pointer-events-none" />
+                                    <path d="M 120 115 A 60 60 0 0 0 120 235" fill="none" stroke="#64748b" stroke-dasharray="6,6" stroke-width="3" class="pointer-events-none" />
+
+                                    <!-- 區域 4: 罰球線 (探測條) -->
+                                    <rect id="court-area-freethrow" x="110" y="115" width="20" height="120" 
+                                          class="cursor-pointer transition duration-300 fill-transparent hover:fill-yellow-500/30 stroke-none" 
+                                          onclick="selectCourtZone('freethrow')">
+                                    </rect>
+                                    <line x1="120" y1="115" x2="120" y2="235" stroke="#facc15" stroke-width="5" class="pointer-events-none" />
+
+                                    <!-- 區域 5: 半場中線 (8秒過半場防線) -->
+                                    <rect id="court-area-midcourt" x="375" y="10" width="15" height="330" 
+                                          class="cursor-pointer transition duration-300 fill-transparent hover:fill-blue-500/30 stroke-none" 
+                                          onclick="selectCourtZone('midcourt')">
+                                    </rect>
+                                    <line x1="390" y1="10" x2="390" y2="340" stroke="#3b82f6" stroke-width="5" class="pointer-events-none" />
+
+                                    <!-- 籃圈與籃板裝飾 (不可點擊) -->
+                                    <line x1="25" y1="145" x2="25" y2="205" stroke="#ffffff" stroke-width="3" class="pointer-events-none" />
+                                    <line x1="25" y1="175" x2="35" y2="175" stroke="#ffffff" stroke-width="2" class="pointer-events-none" />
+                                    <circle cx="40" cy="175" r="10" fill="none" stroke="#ef4444" stroke-width="3" class="pointer-events-none" />
+                                </svg>
+                            </div>
+
+                            <!-- 備用文字區域點擊按鈕 (防誤觸、方便平板/手機操作) -->
+                            <div class="flex flex-wrap gap-2 justify-center mt-6">
+                                <button onclick="selectCourtZone('3pt')" id="btn-zone-3pt" class="px-4 py-2 text-sm font-bold rounded-xl border border-slate-700 hover:bg-slate-800 transition">🟠 三分區外</button>
+                                <button onclick="selectCourtZone('2pt')" id="btn-zone-2pt" class="px-4 py-2 text-sm font-bold rounded-xl border border-slate-700 hover:bg-slate-800 transition">🟢 兩分投籃區</button>
+                                <button onclick="selectCourtZone('key')" id="btn-zone-key" class="px-4 py-2 text-sm font-bold rounded-xl border border-slate-700 hover:bg-slate-800 transition">🔴 禁區限制區</button>
+                                <button onclick="selectCourtZone('freethrow')" id="btn-zone-freethrow" class="px-4 py-2 text-sm font-bold rounded-xl border border-slate-700 hover:bg-slate-800 transition">🟡 罰球線</button>
+                                <button onclick="selectCourtZone('midcourt')" id="btn-zone-midcourt" class="px-4 py-2 text-sm font-bold rounded-xl border border-slate-700 hover:bg-slate-800 transition">🔵 半場中線</button>
+                            </div>
+                        </div>
+
+                        <!-- 右側：資訊與解說面板 (佔 5 格) -->
+                        <div class="lg:col-span-5 flex flex-col justify-between">
+                            <div id="court-info-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl h-full flex flex-col justify-between">
+                                <!-- 動態更新內容 -->
+                                <div class="space-y-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span id="zone-badge" class="px-3 py-1 text-xs font-black uppercase rounded-lg bg-orange-500 text-slate-950">
+                                            三分線外
+                                        </span>
+                                        <h4 id="zone-title" class="text-2xl font-black text-white">三分投籃區域</h4>
+                                    </div>
+                                    <div class="h-px bg-slate-800"></div>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <span class="text-slate-400 font-bold text-sm block">🎯 得分機制：</span>
+                                            <p id="zone-score" class="text-2xl font-black text-court-orange">中籃得 3 分！</p>
+                                        </div>
+                                        <div>
+                                            <span class="text-slate-400 font-bold text-sm block">📖 規則與判罰詳解：</span>
+                                            <p id="zone-desc" class="text-slate-300 leading-relaxed text-base sm:text-lg">
+                                                在三分線圓弧以外（雙腳完全沒有踩到或越過三分線）投球中籃，即可獲得高價值的 3 分。若出手時踩到三分線，則判定為一般兩分投籃。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 mt-6 text-sm text-slate-400">
+                                    💡 <strong class="text-slate-200">提示：</strong>隨意點選左邊球場的彩色線條，可以直接解鎖場地的祕密球例喔！
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🎬 延伸影音教材 -->
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute -right-16 -top-16 w-36 h-36 bg-orange-100 rounded-full opacity-50 blur-xl pointer-events-none"></div>
+                <h3 class="font-extrabold text-slate-900 mb-6 flex items-center space-x-2">
+                    <span>🎬 籃球場地與得分影音延伸教材</span>
+                </h3>
+                <p class="text-slate-600 mb-6 leading-relaxed">
+                    觀看官方介紹短片，加深對籃球場地、得分機制、球員角色與基礎五人制籃球概念的認識：
+                </p>
+                <div class="bg-orange-50/50 rounded-2xl p-6 border border-orange-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+                    <div>
+                        <h4 class="font-black text-slate-800 text-lg sm:text-xl">【運動教室 101】第四集：籃球</h4>
+                        <p class="text-slate-500 text-sm mt-1">Learning Sports 101: Episode 4 - Basketball</p>
+                    </div>
+                    <a href="https://youtu.be/xR_bq_MBVaw?si=gePFEhXFqADlWb6g" target="_blank" class="shrink-0 inline-flex items-center space-x-2 bg-court-orange hover:bg-court-accent text-court-dark font-black px-6 py-3 rounded-xl shadow-md transition duration-200">
+                        <span>📺 立即前往觀看</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== 分頁三：籃球基本違例 ==================== -->
+        <div id="tab-violations" class="tab-content space-y-12 hidden">
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative">
+                <div class="absolute top-0 left-12 transform -translate-y-1/2 bg-red-600 text-white px-6 py-2 rounded-2xl shadow-lg font-bold">
+                    單元三：違例
+                </div>
+                <h2 class="font-extrabold text-slate-900 mb-4 mt-4">
+                    ⚠️ 違例 (Violation) 的定義與處罰
+                </h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    違例是指<span class="font-bold text-red-600">違反比賽規則（通常不涉及非法身體接觸，不會被記個人犯規）</span>。
+                    <br><strong class="text-slate-800">【基本處罰】：</strong>違例球隊會<strong>失去控球權</strong>，由對手在最靠近違規發生地點的邊線或底線發界外球（籃板正後方除外）。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 走步與運球違例 -->
+                    <div class="bg-red-50/20 border border-red-100 p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-red-900 border-b border-red-100 pb-2">🏃‍♂️ 移動與運球違例</h3>
+                        <ul class="space-y-3 text-slate-700">
+                            <li>
+                                <strong class="text-red-700">走步 (Traveling)：</strong>
+                                持球移動時，未依規定運球便走動超過規定的步數（或非法移動軸心腳）。
+                            </li>
+                            <li>
+                                <strong class="text-red-700">兩次運球 (Double Dribble)：</strong>
+                                運球停止並雙手接球後，再次進行運球；或者在運球時雙手同時觸球。
+                            </li>
+                            <li>
+                                <strong class="text-red-700">翻腕 (Carrying)：</strong>
+                                運球時手掌翻轉到球的下方停頓，或將手置於球的下方運球，使球有短暫停留的感覺。
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 場地與球體违例 -->
+                    <div class="bg-red-50/20 border border-red-100 p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-red-900 border-b border-red-100 pb-2">📍 場地與觸球違例</h3>
+                        <ul class="space-y-3 text-slate-700">
+                            <li>
+                                <strong class="text-red-700">出界 (Out of Bounds)：</strong>
+                                活球或持球者的身體，碰觸到界線（線也算出界）或界線外的地板與任何物體。
+                            </li>
+                            <li>
+                                <strong class="text-red-700">腳踢球 (Kicking)：</strong>
+                                故意用腳或腿部的任何部位碰觸、阻擋或控制球。如果是無意碰撞則不予判罰。
+                            </li>
+                            <li>
+                                <strong class="text-red-700">球回後場：</strong>
+                                進攻隊已將球帶入前場後，不得再將球傳回或帶回後場，否則會喪失球權。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 時間違例卡片 -->
+                <div class="mt-8 bg-slate-900 text-white p-6 sm:p-8 rounded-2xl border border-slate-800">
+                    <h3 class="font-bold text-court-orange mb-4 text-xl">⏳ 核心時間違例一覽表</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <span class="text-xs text-red-400 font-extrabold uppercase">3秒限制</span>
+                            <div class="text-lg font-bold mt-1">3秒違例</div>
+                            <p class="text-sm text-slate-400 mt-2">進攻方隊員在對方限制區(禁區)內持續停留超過 3 秒。</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <span class="text-xs text-red-400 font-extrabold uppercase">5秒限制</span>
+                            <div class="text-lg font-bold mt-1">5秒違例</div>
+                            <p class="text-sm text-slate-400 mt-2">被緊迫防守時，持球者必須在 5 秒內作出傳球、投籃或運球。</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <span class="text-xs text-red-400 font-extrabold uppercase">8秒限制</span>
+                            <div class="text-lg font-bold mt-1">8秒違例</div>
+                            <p class="text-sm text-slate-400 mt-2">控球隊必須在 8 秒之內，使球從後場推進並進入前場。</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <span class="text-xs text-red-400 font-extrabold uppercase">24秒限制</span>
+                            <div class="text-lg font-bold mt-1">24秒違例</div>
+                            <p class="text-sm text-slate-400 mt-2">控球隊必須在 24 秒內完成投籃出手，且球必須觸及籃圈。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== 分頁四：籃球基本犯規 ==================== -->
+        <div id="tab-fouls" class="tab-content space-y-12 hidden">
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative">
+                <div class="absolute top-0 left-12 transform -translate-y-1/2 bg-amber-600 text-white px-6 py-2 rounded-2xl shadow-lg font-bold">
+                    單元四：犯規
+                </div>
+                <h2 class="font-extrabold text-slate-900 mb-4 mt-4">
+                    ❌ 犯規 (Foul) 的定義與處罰
+                </h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    犯規涉及<span class="font-bold text-amber-600">非法與對手發生身體接觸，或違反運動道德的行為</span>。
+                    <br>不當接觸會被記錄在個人犯規次數中，一旦團隊犯規次數達標，將直接執行罰球。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- 個人犯規與限犯機制 -->
+                    <div class="bg-amber-50/20 border border-amber-100 p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-amber-900 border-b border-amber-100 pb-2">🚨 個人犯規限制（5犯離場）</h3>
+                        <p class="text-slate-700">
+                            在國際籃聯 (FIBA) 的五人制規則中，一名球員在單場比賽中若累計達到 <span class="font-extrabold text-red-600 text-xl">5 次犯規</span>（包括侵人犯規與技術犯規），將會被<span class="font-bold text-red-600">判罰出場，強制離場</span>（NBA 為 6 次）。
+                        </p>
+                        <div class="bg-white p-4 rounded-xl border border-amber-100/50">
+                            <span class="font-bold text-slate-800">打手犯規 (Hacking)：</span>
+                            <p class="text-sm text-slate-600 mt-1">
+                                防攻隊員在防守時，非法碰觸或打到正在投籃或運球的進攻球員手部。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 阻擋與帶球撞人 -->
+                    <div class="bg-amber-50/20 border border-amber-100 p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-amber-900 border-b border-amber-100 pb-2">⚖️ 防守阻擋 vs 帶球撞人</h3>
+                        <div class="space-y-4 text-slate-700 text-sm sm:text-base">
+                            <div class="bg-white p-4 rounded-xl border border-amber-100/50">
+                                <span class="font-bold text-slate-800">阻擋犯規 (Blocking)：</span>
+                                <p class="text-sm text-slate-600 mt-1">
+                                    防守球員沒有及時且合法地佔據防守位置，或是用身體、肩膀、臀部非法阻礙、發生碰撞來干擾進攻球員前進。
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-amber-100/50">
+                                <span class="font-bold text-slate-800">帶球撞人 (Charging)：</span>
+                                <p class="text-sm text-slate-600 mt-1">
+                                    進攻球員在持球移動或投籃過程中，直接、用力衝撞已經提前站定合法防守位置（身體面對進攻者、雙腳著地、處於靜止狀態）的防守球員。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 隊犯滿罰則狀態 -->
+                <div class="mt-8 bg-amber-500/10 border-2 border-amber-400/30 p-6 sm:p-8 rounded-2xl">
+                    <h3 class="font-extrabold text-amber-950 flex items-center space-x-2 text-xl">
+                        <span>🚨 「球隊犯規：罰則」狀態（隊犯滿了）</span>
+                    </h3>
+                    <p class="text-slate-700 mt-3 text-base sm:text-lg leading-relaxed">
+                        在五人制籃球中，每隊於<span class="font-bold">每一節</span>累積的犯規總數<span class="font-extrabold text-amber-800">達到 4 次之後</span>：
+                        <br>隨後在同一節中，若該隊球員對<span class="font-bold">非投籃動作</span>的球員進行犯規，對手將直接獲得 <span class="font-black text-amber-800 text-xl">2 球罰球</span>，不需發界外球。
+                        <br><span class="text-xs text-slate-500">（※ 註：若是進攻隊球員犯規，即控制球隊犯規，不執行罰球，仍是由防守隊發界外球。）</span>
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== 分頁五：裁判重要手勢 ==================== -->
+        <div id="tab-gestures" class="tab-content space-y-12 hidden">
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative">
+                <div class="absolute top-0 left-12 transform -translate-y-1/2 bg-court-orange text-white px-6 py-2 rounded-2xl shadow-lg font-bold">
+                    單元五：裁判手勢
+                </div>
+                <h2 class="font-extrabold text-slate-900 mb-4 mt-4">
+                    🤟 裁判重要手勢與身體動作
+                </h2>
+                <p class="text-slate-500 mb-8">請點選下方手勢卡片，即可一目了然對照裁判手勢動作細節！</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 手勢 1 -->
+                    <button onclick="toggleGesture('g1')" class="text-left w-full p-5 bg-orange-50/30 hover:bg-orange-50 rounded-2xl border border-slate-100 hover:border-court-orange transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-black px-2.5 py-1 rounded">犯規手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">🚫 阻擋犯規</div>
+                        <div id="g1" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-court-orange">裁判動作：</strong>雙手插腰
+                        </div>
+                    </button>
+
+                    <!-- 手勢 2 -->
+                    <button onclick="toggleGesture('g2')" class="text-left w-full p-5 bg-orange-50/30 hover:bg-orange-50 rounded-2xl border border-slate-100 hover:border-court-orange transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-black px-2.5 py-1 rounded">犯規手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">💪 用肘犯規</div>
+                        <div id="g2" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-court-orange">裁判動作：</strong>肘部向後振動
+                        </div>
+                    </button>
+
+                    <!-- 手勢 3 -->
+                    <button onclick="toggleGesture('g3')" class="text-left w-full p-5 bg-orange-50/30 hover:bg-orange-50 rounded-2xl border border-slate-100 hover:border-court-orange transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-black px-2.5 py-1 rounded">犯規手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">🤝 拉人犯規</div>
+                        <div id="g3" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-court-orange">裁判動作：</strong>一手握住另一手的手腕
+                        </div>
+                    </button>
+
+                    <!-- 手勢 4 -->
+                    <button onclick="toggleGesture('g4')" class="text-left w-full p-5 bg-red-50/20 hover:bg-red-50/50 rounded-2xl border border-slate-100 hover:border-red-400 transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded">違例手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">👣 走步違例</div>
+                        <div id="g4" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-red-600">裁判動作：</strong>雙拳在胸前輪流轉動
+                        </div>
+                    </button>
+
+                    <!-- 手勢 5 -->
+                    <button onclick="toggleGesture('g5')" class="text-left w-full p-5 bg-red-50/20 hover:bg-red-50/50 rounded-2xl border border-slate-100 hover:border-red-400 transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded">違例手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">🏀 兩次運球 / 不合法運球</div>
+                        <div id="g5" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-red-600">裁判動作：</strong>雙手在身體前方輪流做拍球動作
+                        </div>
+                    </button>
+
+                    <!-- 手勢 6 -->
+                    <button onclick="toggleGesture('g6')" class="text-left w-full p-5 bg-red-50/20 hover:bg-red-50/50 rounded-2xl border border-slate-100 hover:border-red-400 transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded">違例手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">⌛ 三秒違例</div>
+                        <div id="g6" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-red-600">裁判動作：</strong>前臂向前伸展，並伸出三隻手指
+                        </div>
+                    </button>
+
+                    <!-- 手勢 7 -->
+                    <button onclick="toggleGesture('g7')" class="text-left w-full p-5 bg-red-50/20 hover:bg-red-50/50 rounded-2xl border border-slate-100 hover:border-red-400 transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded">違例手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">⌛ 五秒違例</div>
+                        <div id="g7" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-red-600">裁判動作：</strong>在身側高舉一隻手並伸出五隻手指
+                        </div>
+                    </button>
+
+                    <!-- 手勢 8 -->
+                    <button onclick="toggleGesture('g8')" class="text-left w-full p-5 bg-red-50/20 hover:bg-red-50/50 rounded-2xl border border-slate-100 hover:border-red-400 transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded">違例手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">⌛ 八秒違例</div>
+                        <div id="g8" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-red-600">裁判動作：</strong>高舉雙手，一手伸五指、另一手伸三指（合計八指）
+                        </div>
+                    </button>
+
+                    <!-- 手勢 9 -->
+                    <button onclick="toggleGesture('g9')" class="text-left w-full p-5 bg-red-50/20 hover:bg-red-50/50 rounded-2xl border border-slate-100 hover:border-red-400 transition duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-red-100 text-red-800 text-xs font-black px-2.5 py-1 rounded">違例手勢</span>
+                            <span class="text-slate-400 text-sm">▼ 展開</span>
+                        </div>
+                        <div class="font-bold text-slate-900 text-lg sm:text-xl">⌛ 二十四秒違例</div>
+                        <div id="g9" class="hidden mt-3 text-slate-600 border-t border-slate-200/60 pt-3">
+                            <strong class="text-red-600">裁判動作：</strong>單手手指觸碰同側肩膀
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 🎬 延伸影音教材：裁判手號 -->
+            <section class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute -right-16 -top-16 w-36 h-36 bg-orange-100 rounded-full opacity-50 blur-xl pointer-events-none"></div>
+                <h3 class="font-extrabold text-slate-900 mb-6 flex items-center space-x-2">
+                    <span>🎬 裁判手勢與手號影音延伸教材</span>
+                </h3>
+                <p class="text-slate-600 mb-6 leading-relaxed">
+                    觀看裁判手號介紹短片，學習在真實比賽中裁判是如何使用手號和肢體語言來與記錄台及球員進行有效溝通：
+                </p>
+                <div class="bg-orange-50/50 rounded-2xl p-6 border border-orange-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+                    <div>
+                        <h4 class="font-black text-slate-800 text-lg sm:text-xl">【運動教室 101】第五集：籃球手號</h4>
+                        <p class="text-slate-500 text-sm mt-1">Learning Sports 101: Episode 5 - Basketball Hand Signals</p>
+                    </div>
+                    <a href="https://youtu.be/JtOdUmkq3KM?si=DzxbpgPonDLnK0Xs" target="_blank" class="shrink-0 inline-flex items-center space-x-2 bg-court-orange hover:bg-court-accent text-court-dark font-black px-6 py-3 rounded-xl shadow-md transition duration-200">
+                        <span>📺 立即前往觀看</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== 分頁六：10題全能挑戰賽 ==================== -->
+        <div id="tab-quiz" class="tab-content hidden">
+            <section class="bg-gradient-to-br from-court-dark to-slate-900 rounded-3xl p-8 sm:p-12 shadow-2xl text-white relative">
+                <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-court-orange opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-3xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-court-orange text-court-dark font-black px-4 py-1.5 rounded-full text-sm uppercase tracking-widest">驗收挑戰賽</span>
+                        <h2 class="font-black text-white mt-3 text-3xl sm:text-4xl">🏆 10 題五人制籃球大賽</h2>
+                        <p class="text-slate-400 mt-2 text-lg sm:text-xl">包含最新得分、時間違例與基本犯規規定！</p>
+                    </div>
+
+                    <!-- 答題進行中面板 -->
+                    <div id="quiz-active-box" class="bg-slate-800/80 rounded-2xl p-6 sm:p-8 border border-slate-700 shadow-inner">
+                        <div class="flex justify-between items-center mb-4 text-sm sm:text-base font-bold text-slate-400">
+                            <span id="quiz-progress-text">第 1 題 / 共 10 題</span>
+                            <span id="quiz-score-text">得分: 0 分</span>
+                        </div>
+                        <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-8">
+                            <div id="quiz-progress-bar" class="bg-court-orange h-full transition-all duration-300" style="width: 10%"></div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div id="quiz-question" class="text-xl sm:text-2xl font-extrabold text-white leading-snug">
+                                加載中...
+                            </div>
+
+                            <div>
+                                <button id="hint-btn" onclick="toggleHint()" class="text-sm bg-slate-700/60 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-600 transition flex items-center space-x-1">
+                                    <span>💡 查看題目提示</span>
+                                </button>
+                                <div id="hint-text" class="hidden mt-2 p-3 bg-amber-500/15 border border-amber-500/30 text-amber-300 rounded-lg text-base leading-relaxed">
+                                    提示內容。
+                                </div>
+                            </div>
+
+                            <div id="quiz-options" class="space-y-4 pt-2">
+                                <!-- 動態載入選項 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 測驗結果結算面板 -->
+                    <div id="quiz-result-box" class="hidden bg-slate-800/90 rounded-2xl p-8 sm:p-12 border border-slate-700 text-center space-y-6">
+                        <div class="text-6xl sm:text-7xl">🏆</div>
+                        <h3 class="font-black text-3xl sm:text-4xl text-court-orange">測驗完成！</h3>
+                        
+                        <div class="bg-slate-900/60 py-6 px-8 rounded-2xl border border-slate-700 inline-block">
+                            <div class="text-slate-400 font-bold text-lg mb-1">最終成績</div>
+                            <div class="text-4xl sm:text-5xl font-black text-white" id="final-score">0 分</div>
+                            <div class="text-slate-400 mt-2 font-bold" id="final-stats">答對 0 題 / 答錯 0 題</div>
+                        </div>
+
+                        <p id="final-evaluation" class="text-slate-300 max-w-md mx-auto text-lg sm:text-xl leading-relaxed">
+                            評分中...
+                        </p>
+
+                        <div class="pt-6">
+                            <button onclick="resetQuiz()" class="bg-court-orange hover:bg-court-accent text-court-dark font-black text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-orange-500/20 transform hover:-translate-y-0.5 transition duration-200">
+                                🔄 重新挑戰一次
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-court-dark text-white py-12 text-center border-t border-slate-800">
+        <div class="max-w-4xl mx-auto px-4 space-y-4">
+            <p class="font-extrabold text-lg sm:text-xl tracking-wider text-court-orange">聖公會李炳中學</p>
+            <p class="text-slate-400 font-bold text-base sm:text-lg">中學體育科課程輔助教材 - 五人制籃球基本規則版</p>
+            <div class="h-px bg-slate-800 w-1/3 mx-auto my-6"></div>
+            <p class="text-xs text-slate-500">本網頁符合學科體育理論教學標準。不含任何三人籃球規格，保障學習重點不混淆。</p>
+        </div>
+    </footer>
+
+    <!-- 自訂答題回饋 Modal -->
+    <div id="feedback-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+        <div class="bg-slate-800 text-white rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-700 shadow-2xl transform scale-95 transition-transform duration-300 space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                <span id="modal-icon" class="text-3xl">🎉</span>
+                <h4 id="modal-title" class="font-black text-2xl">答案正確！</h4>
+            </div>
+            
+            <div id="modal-rationale" class="text-lg leading-relaxed text-slate-300 bg-slate-900/40 p-4 rounded-xl border border-slate-700">
+                這是答案的詳盡解釋。
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeModal()" id="modal-btn-next" class="bg-court-orange hover:bg-court-accent text-court-dark font-black px-6 py-3 rounded-xl shadow-lg transition w-full sm:w-auto text-lg">
+                    繼續下一題 ➔
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 題庫與邏輯處理 -->
+    <script>
+        // 10 題五人制籃球挑戰賽題庫 (整合全新規則內容)
+        const quizData = [
+            {
+                question: "1. 根據男子籃球的奧運歷史，它是在哪一年首次被列入為奧林匹克運動會的正式比賽項目？",
+                hint: "請查閱「歷史與發展」單元，注意男子與女子項目入奧的年份差異。",
+                options: [
+                    { text: "1891 年", correct: false, rationale: "1891年是納史密夫(James Naismith)發明籃球的年份，並非男子籃球入奧的年份。" },
+                    { text: "1936 年", correct: true, rationale: "正確！在1936年，男子籃球首次在第十一屆柏林奧運會中被列入為正式比賽項目。" },
+                    { text: "1976 年", correct: false, rationale: "1976年是女子籃球首次被列入奧林匹克運動會正式比賽項目的年份。" },
+                    { text: "2021 年", correct: false, rationale: "2021年為東京奧運會，並非男子五人制籃球首次入奧年份。" }
+                ]
+            },
+            {
+                question: "2. 在五人制籃球得分機制中，踩著三分線（或在三分線以內）出手投進籃框，可獲得幾分？",
+                hint: "注意基本得分規則：三分線以內（包含踩線）投進均計為一般投籃得分。",
+                options: [
+                    { text: "1 分", correct: false, rationale: "1分通常是罰球投進的分數。" },
+                    { text: "2 分", correct: true, rationale: "正確！踩著三分線或在三分線以內投進可獲得 2 分。" },
+                    { text: "3 分", correct: false, rationale: "必須在三分線外（雙腳完全沒有踩到三分線）出手投進才得 3 分。" },
+                    { text: "2.5 分", correct: false, rationale: "籃球計分規則中沒有半非整數的分值。" }
+                ]
+            },
+            {
+                question: "3. 關於五人籃球的時間限制，進攻球隊獲得控球權後，必須在多少秒內將球帶過中線（進入前場）？",
+                hint: "這是防止進攻方刻意在後場拖延時間的規則，通常與球隊過半場的秒數規定有關。",
+                options: [
+                    { text: "3 秒鐘", correct: false, rationale: "3秒是進攻球員在對方禁區內停留的時間限制。" },
+                    { text: "5 秒鐘", correct: false, rationale: "5秒是持球被緊迫防守時傳、投、運球的限制。" },
+                    { text: "8 秒鐘", correct: true, rationale: "正確！進攻方必須在 8 秒之內使球進入前場，否則會被判「8秒違例」。" },
+                    { text: "24 秒鐘", correct: false, rationale: "24秒是整隊每次進攻投籃出手的總時限。" }
+                ]
+            },
+            {
+                question: "4. 運球停止並雙手接球後再次起步運球，或在運球時手掌翻轉到球的下方將球停頓。這分別違反了什麼违例？",
+                hint: "這包含了「兩次運球」以及「翻腕」的運球違例行為。",
+                options: [
+                    { text: "走步 與 帶球撞人", correct: false, rationale: "帶球撞人屬於犯規，並不是運球違例。" },
+                    { text: "兩次運球 與 翻腕", correct: true, rationale: "正確！前者為「兩次運球」，後者手掌置於球下方運球停頓為「翻腕」違例。" },
+                    { text: "阻擋 與 出界", correct: false, rationale: "阻擋屬於侵人犯規，不屬於運球違例。" },
+                    { text: "走步 與 腳踢球", correct: false, rationale: "腳踢球是用下肢觸球違例，與雙手接球或翻手掌運球無關。" }
+                ]
+            },
+            {
+                question: "5. 在國際五人制籃球 (FIBA) 的規則中，一名球員單場累計達到幾次犯規，就會被強制判罰出場（5犯離場）？",
+                hint: "請查看基本犯規規定。當犯規次數滿額後，該球員將無法繼續在該場比賽中上場。",
+                options: [
+                    { text: "4 次", correct: false, rationale: "4次是單節球隊累計犯規滿罰則的次數，並非球員個人5犯離場的個人次數。" },
+                    { text: "5 次", correct: true, rationale: "正確！根據 FIBA 國際籃球規則，球員單場累計達到 5 次犯規（包括侵人犯規與技術犯規），將被判罰出場。" },
+                    { text: "6 次", correct: false, rationale: "6次是 NBA 聯賽的離場犯規次數限制，FIBA 基本規則是 5 次。" },
+                    { text: "不設限制", correct: false, rationale: "籃球賽設有裝嚴格的犯規限制，不可能無限制犯規。" }
+                ]
+            },
+            {
+                question: "6. 當球隊發生「違例」(Violation) 時，對手可以獲得什麼基本的處罰與補償？",
+                hint: "違例並非犯規，其處罰最主要是控制球權的轉移。",
+                options: [
+                    { text: "獲得 1 或 2 次罰球", correct: false, rationale: "罰球是身體接觸或違反道德的「犯規」罰則，一般違例不處以罰球。" },
+                    { text: "違例隊伍失去控球權，由對手在最近界外發界外球", correct: true, rationale: "正確！違例的罰則是失去控球權，由對手在最靠近違規發生地點的最近界外發界外球。" },
+                    { text: "直接判給對手 2 分", correct: false, rationale: "常規違例不會直接判給對手分數。" },
+                    { text: "登記該隊員個人犯規 1 次", correct: false, rationale: "只有「犯規」才會登記在個人犯規中，違例不會登記個人犯規。" }
+                ]
+            },
+            {
+                question: "7. 防守球員沒有及時合法站穩防守位置，用身體非法移動去阻礙進攻球員行進。這屬於以下哪一種犯規？",
+                hint: "阻礙進攻行進的身體接觸屬於阻擋犯規。",
+                options: [
+                    { text: "帶球撞人犯規", correct: false, rationale: "帶球撞人是進攻方衝撞已經站定合法位置的防守球員。" },
+                    { text: "打手犯規", correct: false, rationale: "打手犯規是指非法觸碰或擊打投籃/運球者的手部。" },
+                    { text: "阻擋犯規", correct: true, rationale: "正確！防守球員非法移動身體，碰撞阻礙進攻球員前進，屬於「阻擋犯規」。" },
+                    { text: "走步違例", correct: false, rationale: "走步不涉及身體接觸，屬於違例而非犯規。" }
+                ]
+            },
+            {
+                question: "8. 進攻球員在移動中，直接、用力衝裝「已經站定合法防守位置」且保持靜止狀態的防守球員，裁判會吹判？",
+                hint: "這屬於進攻球員非法身體接觸防守球員的犯規行為。",
+                options: [
+                    { text: "打手犯規", correct: false, rationale: "打手通常發生在防守球員打到進攻球員的手。" },
+                    { text: "帶球撞人犯規", correct: true, rationale: "正確！進攻者衝撞已經站定好防守位置的防守者，會被判「帶球撞人」犯規（進攻犯規）。" },
+                    { text: "阻擋犯規", correct: false, rationale: "阻擋是防守球員沒有站好位置而產生的阻礙防守碰撞。" },
+                    { text: "兩次運球違例", correct: false, rationale: "這是犯規，不是運球違例。" }
+                ]
+            },
+            {
+                question: "9. 每隊於「每一節」累積犯規總數達到 4 次之後，隨後對「非投籃動作」的球員犯規，對隊將會？",
+                hint: "這是俗稱的「隊犯滿了」，球隊將面臨最嚴厲的直接判罰罰球機制。",
+                options: [
+                    { text: "獲得在最近界外發球權", correct: false, rationale: "在4次犯規之前才是發界外球，4次之後罰則將會升級。" },
+                    { text: "直接獲得 2 球罰球機會", correct: true, rationale: "正確！每隊每節犯規達 4 次之後即進入罰則狀態，其後的非投籃犯規將直接判給對手 2 球罰球。" },
+                    { text: "直接獲得 3 球罰球機會", correct: false, rationale: "只有三分投籃犯規且沒進才會給 3 球罰球，一般的隊犯罰則狀態是給 2 球罰球。" },
+                    { text: "直接獲得 1 分", correct: false, rationale: "不會直接加分，必須通過罰球投進才能得分。" }
+                ]
+            },
+            {
+                question: "10. 當裁判在球場上做出「雙拳在胸前輪流轉動」的身體手勢，這代表宣告了哪一項判罰？",
+                hint: "這是一個非常經典的违例手勢，通常代表球員持球時多走了兩步以上。",
+                options: [
+                    { text: "🚫 阻擋犯規", correct: false, rationale: "阻擋犯規手勢是「雙手插腰」。" },
+                    { text: "👣 走步違例", correct: true, rationale: "正確！「雙拳輪轉」在裁判手勢中代表「走步違例」。" },
+                    { text: "⌛ 三秒違例", correct: false, rationale: "三秒違例手勢是「伸展前臂並出三指」。" },
+                    { text: "🏀 兩次運球違例", correct: false, rationale: "兩次運球的手勢是「雙手在胸前上下交替拍球」。" }
+                ]
+            }
+        ];
+
+        // 互動籃球場區域資料庫
+        const courtZones = {
+            '3pt': {
+                title: '三分投籃區域',
+                badge: '三分區外',
+                score: '中籃得 3 分！',
+                badgeClass: 'bg-orange-500 text-slate-950',
+                desc: '在三分線圓弧以外（雙腳完全沒有踩到或越過三分線）投球中籃，即可獲得高價值的 3 分。防守球員在此區域對投籃隊員犯規且球沒進，投籃隊員將獲得 3 次罰球機會。',
+                svgId: 'court-area-3pt',
+                highlightColor: 'rgba(242, 140, 56, 0.3)'
+            },
+            '2pt': {
+                title: '兩分投籃區域',
+                badge: '三分區內',
+                score: '中籃得 2 分！',
+                badgeClass: 'bg-teal-500 text-white',
+                desc: '在三分線圓弧以內（包括出手時踩到三分線）的任何常規投球中籃，均可獲得 2 分。防守球員在此區域對正在投籃的隊員犯規且球沒進，投籃隊員將獲得 2 次罰球機會。',
+                svgId: 'court-area-2pt',
+                highlightColor: 'rgba(15, 118, 110, 0.3)'
+            },
+            'key': {
+                title: '禁區限制區域 (三秒區)',
+                badge: '時間限制區',
+                score: '常規中籃得 2 分',
+                badgeClass: 'bg-red-500 text-white',
+                desc: '球隊在前場控制活球時，該隊隊員不得在對方的限制區（禁區）內持續停留超過 <span class="text-red-400 font-extrabold">3 秒鐘</span>，否則將被宣判「3秒違例」並失去控球權。此規則是為了防止身材高大的球員長期滯留籃下造成不公平競爭。',
+                svgId: 'court-area-key',
+                highlightColor: 'rgba(239, 68, 68, 0.4)'
+            },
+            'freethrow': {
+                title: '罰球線與罰球半圓',
+                badge: '判罰執行區',
+                score: '每罰進一球得 1 分！',
+                badgeClass: 'bg-yellow-500 text-slate-950',
+                desc: '當球員在投籃動作中被犯規，或者對手團隊犯規滿 4 次後再次犯規時，被侵犯的球員將站在罰球線後進行無干擾罰球。每一球罰進得 1 分。罰球時，其他球員必須站在兩側罰球佔位格中。',
+                svgId: 'court-area-freethrow',
+                highlightColor: 'rgba(234, 179, 8, 0.4)'
+            },
+            'midcourt': {
+                title: '半場中線',
+                badge: '8秒過半場防線',
+                score: '不直接得分 (球權限制)',
+                badgeClass: 'bg-blue-500 text-white',
+                desc: '當進攻隊在「後場」獲得控球權時，必須在 <span class="text-blue-400 font-extrabold">8 秒之內</span> 將球推進並完全越過這條半場中線（使球進入前場），否則會被判「8秒違例」並將控球權直接判給對手。',
+                svgId: 'court-area-midcourt',
+                highlightColor: 'rgba(59, 130, 246, 0.4)'
+            }
+        };
+
+        // 測驗狀態與初始化變數
+        let activeZoneId = '3pt';
+
+        // 載入互動籃球場預設值
+        document.addEventListener("DOMContentLoaded", function() {
+            selectCourtZone('3pt');
+        });
+
+        // 互動籃球場區域選擇與即時更新
+        function selectCourtZone(zoneId) {
+            // 恢復所有 SVG 熱區的預設背景
+            Object.keys(courtZones).forEach(key => {
+                const zone = courtZones[key];
+                const svgEl = document.getElementById(zone.svgId);
+                if (svgEl) {
+                    // 清空行內填充，還原成 CSS hover 樣式
+                    svgEl.style.fill = 'transparent';
+                }
+                // 恢復備用按鈕樣式
+                const btn = document.getElementById(`btn-zone-${key}`);
+                if (btn) {
+                    btn.className = "px-4 py-2 text-sm font-bold rounded-xl border border-slate-700 hover:bg-slate-800 transition";
+                }
+            });
+
+            // 獲取當前選擇 of 區域資料
+            const selectedZone = courtZones[zoneId];
+            if (!selectedZone) return;
+
+            // 1. 高亮 SVG 對應區域
+            const activeSvgEl = document.getElementById(selectedZone.svgId);
+            if (activeSvgEl) {
+                activeSvgEl.style.fill = selectedZone.highlightColor;
+            }
+
+            // 2. 高亮備用按鈕
+            const activeBtn = document.getElementById(`btn-zone-${zoneId}`);
+            if (activeBtn) {
+                activeBtn.className = "px-4 py-2 text-sm font-bold rounded-xl bg-court-orange text-slate-950 transition";
+            }
+
+            // 3. 更新右側資訊卡片內容 (套用流暢大字型自適應)
+            const cardBadge = document.getElementById('zone-badge');
+            const cardTitle = document.getElementById('zone-title');
+            const cardScore = document.getElementById('zone-score');
+            const cardDesc = document.getElementById('zone-desc');
+
+            cardBadge.innerText = selectedZone.badge;
+            cardBadge.className = `px-3 py-1 text-xs font-black uppercase rounded-lg ${selectedZone.badgeClass}`;
+            
+            cardTitle.innerText = selectedZone.title;
+            cardScore.innerText = selectedZone.score;
+            cardDesc.innerHTML = selectedZone.desc;
+
+            activeZoneId = zoneId;
+        }
+
+        // 深度歷史解鎖展示
+        function revealHistoryDetail(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // 冷知識翻牌邏輯
+        function flipCard(id) {
+            const card = document.getElementById(id);
+            if (card.classList.contains('rotate-y-180')) {
+                card.classList.remove('rotate-y-180');
+            } else {
+                card.classList.add('rotate-y-180');
+            }
+        }
+
+        // 分頁切換邏輯
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition duration-200";
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn shrink-0 px-5 py-3 rounded-xl font-bold bg-court-orange text-court-dark transition duration-200";
+            }
+
+            document.getElementById('main-content-start').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 修改字體大小邏輯
+        function changeFontSize(size) {
+            const body = document.getElementById('main-body');
+            body.classList.remove('font-normal', 'font-large', 'font-xlarge');
+            
+            const buttons = ['normal', 'large', 'xlarge'];
+            buttons.forEach(btn => {
+                const el = document.getElementById(`btn-font-${btn}`);
+                el.className = "px-3 py-1 text-sm rounded text-slate-300 hover:bg-slate-700 font-bold";
+            });
+
+            if (size === 'normal') {
+                body.classList.add('font-normal');
+                document.getElementById('btn-font-normal').className = "px-3 py-1 text-sm rounded bg-court-orange text-white font-bold";
+                currentFontSize = 'normal';
+            } else if (size === 'large') {
+                body.classList.add('font-large');
+                document.getElementById('btn-font-large').className = "px-3 py-1 text-sm rounded bg-court-orange text-white font-bold";
+                currentFontSize = 'large';
+            } else if (size === 'xlarge') {
+                body.classList.add('font-xlarge');
+                document.getElementById('btn-font-xlarge').className = "px-3 py-1 text-sm rounded bg-court-orange text-white font-bold";
+                currentFontSize = 'xlarge';
+            }
+            
+            // 重新選取當前區域以自適應更新字體比例
+            selectCourtZone(activeZoneId);
+        }
+
+        // 手勢展開/縮回邏輯
+        function toggleGesture(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // 載入題目
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            
+            document.getElementById('hint-text').classList.add('hidden');
+            document.getElementById('hint-text').innerText = currentQuestion.hint;
+
+            document.getElementById('quiz-question').innerText = currentQuestion.question;
+            document.getElementById('quiz-progress-text').innerText = `第 ${currentQuestionIndex + 1} 題 / 共 10 題`;
+            document.getElementById('quiz-score-text').innerText = `目前得分: ${score} 分`;
+            
+            const percentage = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${percentage}%`;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            currentQuestion.options.forEach((opt, idx) => {
+                const button = document.createElement('button');
+                button.className = "w-full text-left p-5 rounded-2xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600 hover:border-court-orange transition duration-150 flex justify-between items-center text-lg sm:text-xl";
+                button.innerHTML = `
+                    <span class="font-bold text-white">${opt.text}</span>
+                    <span class="text-slate-400 font-bold">➔</span>
+                `;
+                button.onclick = () => selectOption(opt);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // 切換提示顯示狀態
+        function toggleHint() {
+            const hintBox = document.getElementById('hint-text');
+            if (hintBox.classList.contains('hidden')) {
+                hintBox.classList.remove('hidden');
+            } else {
+                hintBox.classList.add('hidden');
+            }
+        }
+
+        // 選擇選項後彈出 custom modal 回饋
+        function selectOption(opt) {
+            const modal = document.getElementById('feedback-modal');
+            const title = document.getElementById('modal-title');
+            const icon = document.getElementById('modal-icon');
+            const rationale = document.getElementById('modal-rationale');
+            const nextBtn = document.getElementById('modal-btn-next');
+
+            if (opt.correct) {
+                score += 10;
+                correctAnswersCount++;
+                title.innerText = "答對了！恭喜得分";
+                title.className = "font-black text-2xl text-emerald-400";
+                icon.innerText = "🎉";
+                rationale.innerText = opt.rationale;
+            } else {
+                wrongAnswersCount++;
+                title.innerText = "答錯囉！再接再厲";
+                title.className = "font-black text-2xl text-red-400";
+                icon.innerText = "💡";
+                rationale.innerText = opt.rationale;
+            }
+
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = "查看挑戰賽結算報告 ➔";
+            } else {
+                nextBtn.innerText = "繼續下一題 ➔";
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // 關閉 Modal 並進入下一階段
+        function closeModal() {
+            document.getElementById('feedback-modal').classList.add('hidden');
+            
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // 顯示結算報告
+        function showResult() {
+            document.getElementById('quiz-active-box').classList.add('hidden');
+            
+            const resultBox = document.getElementById('quiz-result-box');
+            resultBox.classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = `${score} 分`;
+            document.getElementById('final-stats').innerText = `答對 ${correctAnswersCount} 題 / 答錯 ${wrongAnswersCount} 題`;
+
+            const evalText = document.getElementById('final-evaluation');
+            if (score === 100) {
+                evalText.innerText = "太完美了！你獲得了滿分 100 分！你對五人籃球的歷史、時間規則、違例與犯規判罰、裁判手勢有著極為優秀的理解。課堂理論筆試絕對難不倒你！";
+            } else if (score >= 80) {
+                evalText.innerText = "非常出色！你答對了大部分的難關，對五人制籃球最新規則與手勢有相當深厚的認識。只需稍微複習一下答錯的題目解析，就能衝擊滿分囉！";
+            } else if (score >= 60) {
+                evalText.innerText = "及格了！你有基本概念，但在一些細節（如運球违例細分、阻擋與撞人差異、隊犯罰則機制）上需要再次對照上方單元的筆記加強記憶喔。";
+            } else {
+                evalText.innerText = "需要再加把勁！建議你滑上去將網頁字體調大，重新仔細閱讀一遍「違例與犯規」單元，特別區分清楚「違例失去控球權」與「個人犯規、5犯離場與罰球」的差異，然後重新挑戰！";
+            }
+        }
+
+        // 重新開始挑戰
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswersCount = 0;
+            wrongAnswersCount = 0;
+
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('quiz-active-box').classList.remove('hidden');
+
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>

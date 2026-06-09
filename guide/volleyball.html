@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖公會李炳中學 - 排球電子學習網</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons for visual enhancements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        /* 全面放大基礎字體與優化排版 */
+        body {
+            font-size: 1.125rem; /* 基礎字體放大為 18px */
+            line-height: 1.75;
+        }
+        .court-bg {
+            background-color: #0c7489;
+        }
+        .orange-court {
+            background-color: #f39237;
+        }
+        .text-primary-color {
+            color: #0b3c5d;
+        }
+        .bg-primary-color {
+            background-color: #0b3c5d;
+        }
+        /* Card Flip effect for referee gestures */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner, .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+        }
+        .flip-card-front {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .flip-card-back {
+            background-color: #0b3c5d;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        /* Tab transitions */
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SVG interactive zone highlights */
+        .interactive-zone {
+            transition: all 0.3s ease;
+            fill: transparent;
+        }
+        .interactive-zone:hover, .interactive-zone.active {
+            fill: rgba(255, 255, 255, 0.25);
+            stroke: #ffffff;
+            stroke-width: 3px;
+        }
+        .interactive-line {
+            transition: all 0.3s ease;
+        }
+        .interactive-line:hover, .interactive-line.active {
+            stroke: #ffff00 !important;
+            stroke-width: 6px !important;
+            filter: drop-shadow(0px 0px 4px rgba(255, 255, 0, 0.8));
+        }
+
+        /* Sprite cropping classes for the 2x3 grid image_a293a1.jpg */
+        .sprite-container {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .sprite-img {
+            position: absolute;
+            width: 300%;
+            height: 200%;
+            max-width: none !important;
+        }
+        /* Row 1 Sprite positions */
+        .sprite-球队发球 { top: 0%; left: 0%; }
+        .sprite-延誤發球 { top: 0%; left: -100%; }
+        .sprite-交換場地 { top: 0%; left: -200%; }
+        /* Row 2 Sprite positions */
+        .sprite-觸網犯規 { top: -100%; left: 0%; }
+        .sprite-过網擊球 { top: -100%; left: -100%; }
+        .sprite-持球犯規 { top: -100%; left: -200%; }
+
+        /* Accordion transition for Fun Facts */
+        .fun-fact-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .fun-fact-card.active .fun-fact-content {
+            max-height: 200px;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-850 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <div>
+        <!-- Top Navigation Bar -->
+        <nav class="sticky top-0 z-50 bg-white shadow-md border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-20">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 bg-blue-600 rounded-lg text-white">
+                            <i class="fas fa-volleyball-ball text-2xl animate-spin-slow"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xl md:text-2xl text-gray-900 block leading-tight">聖公會李炳中學</span>
+                            <span class="text-sm text-gray-500 block font-medium">體育科 - 排球電子學習網</span>
+                        </div>
+                    </div>
+                    <!-- Desktop Nav (Page Tab switchers) -->
+                    <div class="hidden md:flex items-center space-x-3">
+                        <button onclick="switchPage(1)" class="nav-tab-btn px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-bold text-base transition duration-150" data-page="1">歷史與起源</button>
+                        <button onclick="switchPage(2)" class="nav-tab-btn px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-bold text-base transition duration-150" data-page="2">場地與設施</button>
+                        <button onclick="switchPage(3)" class="nav-tab-btn px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-bold text-base transition duration-150" data-page="3">比賽規則</button>
+                        <button onclick="switchPage(4)" class="nav-tab-btn px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-bold text-base transition duration-150" data-page="4">裁判手勢</button>
+                        <button onclick="switchPage(5)" class="nav-tab-btn ml-3 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-base font-extrabold shadow-sm transition duration-150" data-page="5">自我挑戰站</button>
+                    </div>
+                    <!-- Mobile Nav Button -->
+                    <div class="flex items-center md:hidden">
+                        <button id="mobile-menu-btn" class="text-gray-600 hover:text-gray-900 focus:outline-none p-2">
+                            <i class="fas fa-bars text-3xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 px-4 pt-2 pb-4 space-y-1">
+                <button onclick="switchPage(1); toggleMobileMenu();" class="block w-full text-left px-3 py-3 rounded-md text-lg font-bold text-gray-700 hover:bg-gray-100">歷史與起源</button>
+                <button onclick="switchPage(2); toggleMobileMenu();" class="block w-full text-left px-3 py-3 rounded-md text-lg font-bold text-gray-700 hover:bg-gray-100">場地與設施</button>
+                <button onclick="switchPage(3); toggleMobileMenu();" class="block w-full text-left px-3 py-3 rounded-md text-lg font-bold text-gray-700 hover:bg-gray-100">比賽規則</button>
+                <button onclick="switchPage(4); toggleMobileMenu();" class="block w-full text-left px-3 py-3 rounded-md text-lg font-bold text-gray-700 hover:bg-gray-100">裁判手勢</button>
+                <button onclick="switchPage(5); toggleMobileMenu();" class="block w-full text-center bg-blue-600 text-white px-3 py-3 rounded-md text-lg font-extrabold hover:bg-blue-700">自我挑戰站</button>
+            </div>
+        </nav>
+
+        <!-- Dynamic Learning Progress bar -->
+        <div class="bg-gray-200 h-2.5 w-full sticky top-20 z-40">
+            <div id="progress-indicator" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-full w-1/5 transition-all duration-500"></div>
+        </div>
+
+        <!-- Hero Mini Banner (Shows current module title dynamicly) -->
+        <header class="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white py-12 px-6 shadow-sm">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <span class="bg-amber-500 text-slate-900 font-extrabold px-4 py-1.5 rounded-full text-xs md:text-sm uppercase tracking-wider inline-block shadow-sm mb-3">
+                        LPSS體育科 - 排球專題
+                    </span>
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tight" id="module-hero-title">
+                        排球（Volleyball）基礎與規則
+                    </h1>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 px-5 py-3 rounded-xl text-sm md:text-base text-blue-200 font-bold inline-flex items-center gap-2 self-start md:self-auto">
+                    <i class="fas fa-book-open text-amber-400"></i>
+                    <span id="module-page-indicator" class="tracking-wide">學習進度：第 1 / 5 頁</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Subpage Tabs Switch Bar for Easy Access -->
+        <div class="bg-white border-b border-gray-200 py-4 overflow-x-auto">
+            <div class="max-w-7xl mx-auto px-4 flex space-x-3 md:space-x-5 min-w-[650px]">
+                <button onclick="switchPage(1)" class="sub-tab-btn flex-1 py-3 px-5 rounded-xl text-base font-black border transition duration-150 flex items-center justify-center gap-2 shadow-sm" data-page="1">
+                    <i class="fas fa-history text-lg"></i> 1. 歷史起源
+                </button>
+                <button onclick="switchPage(2)" class="sub-tab-btn flex-1 py-3 px-5 rounded-xl text-base font-black border transition duration-150 flex items-center justify-center gap-2 shadow-sm" data-page="2">
+                    <i class="fas fa-ruler-combined text-lg"></i> 2. 場地與走位
+                </button>
+                <button onclick="switchPage(3)" class="sub-tab-btn flex-1 py-3 px-5 rounded-xl text-base font-black border transition duration-150 flex items-center justify-center gap-2 shadow-sm" data-page="3">
+                    <i class="fas fa-clipboard-list text-lg"></i> 3. 比賽規則
+                </button>
+                <button onclick="switchPage(4)" class="sub-tab-btn flex-1 py-3 px-5 rounded-xl text-base font-black border transition duration-150 flex items-center justify-center gap-2 shadow-sm" data-page="4">
+                    <i class="fas fa-gavel text-lg"></i> 4. 裁判手勢
+                </button>
+                <button onclick="switchPage(5)" class="sub-tab-btn flex-1 py-3 px-5 rounded-xl text-base font-black border transition duration-150 flex items-center justify-center gap-2 shadow-sm" data-page="5">
+                    <i class="fas fa-trophy text-lg"></i> 5. 自我挑戰
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Paginated Content Container -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+            <!-- PAGE 1: 歷史與發展 (全新活潑形式) -->
+            <div id="page-1" class="page-content active">
+                <div class="max-w-5xl mx-auto space-y-12">
+                    
+                    <!-- Title & Header Segment -->
+                    <div class="text-center">
+                        <span class="text-blue-600 font-extrabold text-base tracking-widest block uppercase">MODULE 01</span>
+                        <h2 class="text-3xl md:text-4xl font-black text-gray-900 mt-2">排球起源與發展歷史</h2>
+                        <p class="text-gray-500 text-lg mt-2">啟動時光機！用最有趣的故事與冷知識探索排球的演變過程。</p>
+                        <div class="h-1.5 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+                    </div>
+
+                    <!-- YouTube Video Embedding Zone -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-4 flex items-center gap-3">
+                            <i class="fab fa-youtube text-red-600 text-3xl"></i> 影音學習：【運動教室 101】第七集：排球
+                        </h3>
+                        <div class="aspect-video rounded-xl overflow-hidden shadow-md border border-gray-200 bg-black">
+                            <iframe 
+                                class="w-full h-full"
+                                src="https://www.youtube.com/embed/c8Qx3KUaX7s" 
+                                title="【運動教室 101】第七集：排球【Learning Sports 101】Episode 7 - Volleyball" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <p class="text-sm md:text-base text-gray-600 mt-4 leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100">
+                            <span class="font-extrabold text-blue-700"><i class="fas fa-info-circle mr-1"></i> 影音簡介：</span>
+                            由康樂及文化事務署製作的排球教學影片，系統化演示排球的比賽方法、場地劃分、發球與接球、球員走位及常見犯規手勢，強烈推薦在研讀下方歷史和規則前仔細觀看！
+                        </p>
+                    </div>
+
+                    <!-- NEW: Active Visual Time-Machine Cards (Grid Layout instead of simple line) -->
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-black text-gray-900 flex items-center gap-2 border-b pb-3">
+                            <i class="fas fa-history text-blue-600"></i> 1. 排球時光大冒險
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            
+                            <!-- Card 1 -->
+                            <div class="bg-gradient-to-br from-white to-blue-50/20 p-6 rounded-2xl shadow-sm border border-blue-100/50 hover:shadow-md hover:border-blue-300 transition duration-300 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="bg-blue-600 text-white font-extrabold text-sm px-3 py-1 rounded-full shadow-sm">1895 年</span>
+                                        <span class="text-3xl">💡</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">排球的誕生：Mintonette</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                        美國麻省青年會（YMCA）的體育幹事<strong class="text-gray-955 font-bold">威廉摩根先生</strong>發明了一種隔網擊球的室內運動，起初名為「Mintonette」，混合了網球與籃球的元素，旨在減少激烈肢體碰撞。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="bg-gradient-to-br from-white to-blue-50/20 p-6 rounded-2xl shadow-sm border border-blue-100/50 hover:shadow-md hover:border-blue-300 transition duration-300 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="bg-blue-600 text-white font-extrabold text-sm px-3 py-1 rounded-full shadow-sm">1896 年</span>
+                                        <span class="text-3xl">💥</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">正式更名 Volleyball</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                        哈爾斯特德教授觀察到球員不斷將球在空中往返托擊，提議更名為「Volleyball」（排球）。同年，歷史上首場<strong class="text-gray-955 font-bold">「五人」</strong>制排球公開賽正式登場。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="bg-gradient-to-br from-white to-blue-50/20 p-6 rounded-2xl shadow-sm border border-blue-100/50 hover:shadow-md hover:border-blue-300 transition duration-300 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="bg-blue-600 text-white font-extrabold text-sm px-3 py-1 rounded-full shadow-sm">1916-1920 年</span>
+                                        <span class="text-3xl">⚔️</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">戰術革命與核心體系</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                        菲律賓發明了高空傳起、隊友猛力扣殺的「托球與扣球（Set & Spike）」進攻戰術。隨後規則確立了關鍵的<strong class="text-gray-955 font-bold">「6人制」</strong>與<strong class="text-gray-955 font-bold">「最多擊球3次」</strong>限制。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Card 4 -->
+                            <div class="bg-gradient-to-br from-white to-blue-50/20 p-6 rounded-2xl shadow-sm border border-blue-100/50 hover:shadow-md hover:border-blue-300 transition duration-300 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="bg-blue-600 text-white font-extrabold text-sm px-3 py-1 rounded-full shadow-sm">1947 & 1951 年</span>
+                                        <span class="text-3xl">🌐</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">國際與本地聯會成立</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                        <strong class="text-gray-955 font-bold">1947年：</strong>國際排聯（FIVB）於巴黎成立，制定世界標準規則。<br>
+                                        <strong class="text-gray-955 font-bold">1951年：</strong>香港排球聯會正式成立，開始於本港大力推廣排球運動與學界交流。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Card 5 -->
+                            <div class="bg-gradient-to-br from-white to-blue-50/20 p-6 rounded-2xl shadow-sm border border-blue-100/50 hover:shadow-md hover:border-blue-300 transition duration-300 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="bg-blue-600 text-white font-extrabold text-sm px-3 py-1 rounded-full shadow-sm">1964 & 1996 年</span>
+                                        <span class="text-3xl">🏅</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">奧運殿堂與沙排興起</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                        <strong class="text-gray-955 font-bold">1964年：</strong>排球在東京奧運會正式列為競賽項目。<br>
+                                        <strong class="text-gray-955 font-bold">1996年：</strong>極具陽光活力的「雙人沙灘排球」也正式被批准成為奧運競賽項目。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Card 6 -->
+                            <div class="bg-gradient-to-br from-white to-blue-50/20 p-6 rounded-2xl shadow-sm border border-blue-100/50 hover:shadow-md hover:border-blue-300 transition duration-300 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="bg-emerald-600 text-white font-extrabold text-sm px-3 py-1 rounded-full shadow-sm">1998 年</span>
+                                        <span class="text-3xl">🛡️</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">自由防守專家誕生</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                        國際排聯（FIVB）正式引入了身穿不同顏色球衣的「自由球員」（Libero）制度。自由球員專注於後排防守接球，大幅增長了比賽的攻防來回球時間！
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- NEW: Interactive Fun Facts Section (Accordions) -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+                        <h3 class="text-2xl font-black text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-amber-500"></i> 2. 排球歷史冷知識 (點擊揭曉答案)
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Fact 1 -->
+                            <div class="fun-fact-card border border-gray-100 rounded-xl p-4 bg-gray-50/50 transition cursor-pointer" onclick="toggleFunFact(this)">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900 flex items-center gap-2 text-base md:text-lg">
+                                        <span class="text-amber-500">Q1.</span> 歷史上第一顆排球是用什麼做出來的？
+                                    </span>
+                                    <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                </div>
+                                <div class="fun-fact-content text-sm md:text-base text-gray-600 leading-relaxed border-t border-gray-100 mt-2">
+                                    答案是：<strong class="text-blue-700 font-extrabold">「籃球的內膽」！</strong> 摩根先生最初嘗試用籃球打，但籃球太重且容易砸傷手；於是他拔掉籃球的外皮，嘗試只用裏面的橡膠膽，但又太輕飄、容易漏氣。直到後來，他委託斯伯丁（Spalding）公司為他特別縫製了由皮革製成的標準排球。
+                                </div>
+                            </div>
+
+                            <!-- Fact 2 -->
+                            <div class="fun-fact-card border border-gray-100 rounded-xl p-4 bg-gray-50/50 transition cursor-pointer" onclick="toggleFunFact(this)">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900 flex items-center gap-2 text-base md:text-lg">
+                                        <span class="text-amber-500">Q2.</span> 為什麼這項運動叫 Volleyball 呢？
+                                    </span>
+                                    <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                </div>
+                                <div class="fun-fact-content text-sm md:text-base text-gray-600 leading-relaxed border-t border-gray-100 mt-2">
+                                    在英語中，<strong class="text-blue-700 font-extrabold">"Volley"</strong> 的意思是「球在著地前即被擊回、托擊或凌空擊球」。排球這項運動的核心正是設法在球落地之前將球打回對方場區，因此正式起名為 "Volleyball"（凌空擊球運動）。
+                                </div>
+                            </div>
+
+                            <!-- Fact 3 -->
+                            <div class="fun-fact-card border border-gray-100 rounded-xl p-4 bg-gray-50/50 transition cursor-pointer" onclick="toggleFunFact(this)">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900 flex items-center gap-2 text-base md:text-lg">
+                                        <span class="text-amber-500">Q3.</span> 自由球員（Libero）在拉丁語中是什麼意思？
+                                    </span>
+                                    <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                </div>
+                                <div class="fun-fact-content text-sm md:text-base text-gray-600 leading-relaxed border-t border-gray-100 mt-2">
+                                    "Libero" 在拉丁語及意大利語中正是<strong class="text-blue-700 font-extrabold">「自由（Free）」</strong>的意思。正如其名，自由球員可以隨時替補後排任何一個隊員，而不計入普通替補的 6 次次數限制，非常自由！但缺點是不能發球或在前場區完成高於網頂的扣球。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 2: 場地與設施 (互動球場與輪轉) -->
+            <div id="page-2" class="page-content">
+                <div class="text-center mb-10">
+                    <span class="text-blue-600 font-extrabold text-base tracking-widest block uppercase">MODULE 02</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 mt-2">標準排球場與輪轉走位</h2>
+                    <p class="text-gray-500 text-lg mt-2">點擊球場上的不同區域或右側選單，探索極致互動的場地構造與規則吧！</p>
+                    <div class="h-1.5 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Left: Interactive SVG Court -->
+                    <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-project-diagram text-amber-500 text-2xl"></i> 排球場動態輪轉與區域感應模型
+                            </h3>
+                            <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-1 rounded-full animate-pulse">支援觸控與點擊</span>
+                        </div>
+                        
+                        <!-- SVG Court Renderer -->
+                        <div class="w-full overflow-hidden bg-slate-50 p-4 rounded-xl border border-gray-200">
+                            <svg id="volleyball-court-svg" viewBox="0 0 700 420" class="w-full h-auto max-w-full drop-shadow-md">
+                                <!-- Out-of-bounds / Free Zone (Blue) -->
+                                <rect width="700" height="420" rx="10" fill="#0c7489"/>
+                                <text x="350" y="32" fill="#ffffff" font-size="16" font-weight="bold" text-anchor="middle" opacity="0.8">記 錄 台 (Score Table)</text>
+                                
+                                <!-- Actual playing court (Orange) -->
+                                <rect x="80" y="75" width="540" height="270" fill="#f39237" stroke="#ffffff" stroke-width="4"/>
+                                
+                                <!-- INTERACTIVE AREA OVERLAYS (Invisible/Translucent until Hovered/Clicked) -->
+                                <!-- Back Zone Left (5, 6, 1 area) -->
+                                <rect id="svg-back-zone" x="80" y="75" width="180" height="270" class="interactive-zone cursor-pointer" onclick="selectCourtZone('back-zone')"/>
+                                
+                                <!-- Front Zone Left (4, 3, 2 area) -->
+                                <rect id="svg-front-zone" x="260" y="75" width="90" height="270" class="interactive-zone cursor-pointer" onclick="selectCourtZone('front-zone')"/>
+                                
+                                <!-- Service Zone Back (Behind the end line, left side) -->
+                                <rect id="svg-service-zone" x="10" y="75" width="70" height="270" class="interactive-zone cursor-pointer" onclick="selectCourtZone('service-zone')"/>
+
+                                <!-- Center Line & Net overlay -->
+                                <line id="svg-center-line" x1="350" y1="75" x2="350" y2="345" stroke="#ffffff" stroke-width="5" class="interactive-line cursor-pointer" onclick="selectCourtZone('center-line')"/>
+                                
+                                <!-- Attack Line / 3m Line overlay -->
+                                <line id="svg-attack-line" x1="260" y1="75" x2="260" y2="345" stroke="#ffffff" stroke-width="3" stroke-dasharray="2,2" class="interactive-line cursor-pointer" onclick="selectCourtZone('attack-line')"/>
+                                <line x1="440" y1="75" x2="440" y2="345" stroke="#ffffff" stroke-width="3" stroke-dasharray="2,2"/>
+                                
+                                <!-- Text Labels on Court Layout -->
+                                <text x="170" y="215" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" fill-opacity="0.9" pointer-events="none">後場區 (Back Zone)</text>
+                                <text x="305" y="215" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" fill-opacity="0.9" pointer-events="none">前場區</text>
+                                <text x="245" y="105" fill="#ffffff" font-size="13" text-anchor="middle" font-weight="bold" fill-opacity="0.9" pointer-events="none">3米線</text>
+                                <text x="455" y="105" fill="#ffffff" font-size="13" text-anchor="middle" font-weight="bold" fill-opacity="0.9" pointer-events="none">3米線</text>
+                                
+                                <!-- Dimension Measurements indicators -->
+                                <line x1="80" y1="375" x2="620" y2="375" stroke="#ffffff" stroke-width="2"/>
+                                <text x="350" y="398" fill="#ffffff" font-size="16" font-weight="bold" text-anchor="middle">全場長度：18 公尺</text>
+                                <line x1="645" y1="75" x2="645" y2="345" stroke="#ffffff" stroke-width="2"/>
+                                <text x="662" y="215" fill="#ffffff" font-size="15" font-weight="bold" writing-mode="tb" text-anchor="middle">寬：9 米</text>
+
+                                <!-- PLAYER ROTATION RENDERING NODES -->
+                                <g id="players-team-a" pointer-events="none">
+                                    <!-- POS 4 - Front Left -->
+                                    <circle id="p-a-4" cx="210" cy="120" r="18" fill="#0b3c5d" stroke="#ffffff" stroke-width="2" class="transition-all duration-700 ease-in-out"/>
+                                    <text id="t-a-4" x="210" y="125" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" class="transition-all duration-700 ease-in-out">4</text>
+                                    
+                                    <!-- POS 3 - Front Center -->
+                                    <circle id="p-a-3" cx="300" cy="210" r="18" fill="#0b3c5d" stroke="#ffffff" stroke-width="2" class="transition-all duration-700 ease-in-out"/>
+                                    <text id="t-a-3" x="300" y="215" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" class="transition-all duration-700 ease-in-out">3</text>
+                                    
+                                    <!-- POS 2 - Front Right -->
+                                    <circle id="p-a-2" cx="210" cy="300" r="18" fill="#0b3c5d" stroke="#ffffff" stroke-width="2" class="transition-all duration-700 ease-in-out"/>
+                                    <text id="t-a-2" x="210" y="305" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" class="transition-all duration-700 ease-in-out">2</text>
+                                    
+                                    <!-- POS 5 - Back Left -->
+                                    <circle id="p-a-5" cx="130" cy="120" r="18" fill="#1f2937" stroke="#ffffff" stroke-width="2" class="transition-all duration-700 ease-in-out"/>
+                                    <text id="t-a-5" x="130" y="125" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" class="transition-all duration-700 ease-in-out">5</text>
+                                    
+                                    <!-- POS 6 - Back Center -->
+                                    <circle id="p-a-6" cx="130" cy="210" r="18" fill="#1f2937" stroke="#ffffff" stroke-width="2" class="transition-all duration-700 ease-in-out"/>
+                                    <text id="t-a-6" x="130" y="215" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" class="transition-all duration-700 ease-in-out">6</text>
+                                    
+                                    <!-- POS 1 - Back Right (Server) -->
+                                    <circle id="p-a-1" cx="130" cy="300" r="18" fill="#ea580c" stroke="#ffffff" stroke-width="3" class="transition-all duration-700 ease-in-out"/>
+                                    <text id="t-a-1" x="130" y="305" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" class="transition-all duration-700 ease-in-out">1</text>
+                                </g>
+                                
+                                <!-- Team B (Inactive side representation) -->
+                                <g id="players-team-b" opacity="0.5" pointer-events="none">
+                                    <circle cx="490" cy="120" r="15" fill="#991b1b" stroke="#ffffff"/>
+                                    <text x="490" y="125" fill="#ffffff" font-size="12" text-anchor="middle">2</text>
+                                    <circle cx="400" cy="210" r="15" fill="#991b1b" stroke="#ffffff"/>
+                                    <text x="400" y="215" fill="#ffffff" font-size="12" text-anchor="middle">3</text>
+                                    <circle cx="490" cy="300" r="15" fill="#991b1b" stroke="#ffffff"/>
+                                    <text x="490" y="305" fill="#ffffff" font-size="12" text-anchor="middle">4</text>
+                                    <circle cx="570" cy="120" r="15" fill="#991b1b" stroke="#ffffff"/>
+                                    <text x="570" y="125" fill="#ffffff" font-size="12" text-anchor="middle">1</text>
+                                    <circle cx="570" cy="210" r="15" fill="#991b1b" stroke="#ffffff"/>
+                                    <text x="570" y="215" fill="#ffffff" font-size="12" text-anchor="middle">6</text>
+                                    <circle cx="570" cy="300" r="15" fill="#991b1b" stroke="#ffffff"/>
+                                    <text x="570" y="305" fill="#ffffff" font-size="12" text-anchor="middle">5</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="mt-6 flex flex-wrap gap-4 items-center justify-between">
+                            <div>
+                                <span class="text-base font-bold text-gray-700">輪轉互動：</span>
+                                <button id="btn-rotate" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold px-5 py-3 rounded-xl text-base transition shadow-md">
+                                    <i class="fas fa-sync-alt mr-2 animate-spin-slow"></i> 順時針輪轉位置
+                                </button>
+                            </div>
+                            <button id="btn-reset-pos" class="text-gray-600 hover:text-gray-900 border border-gray-300 font-bold px-4 py-3 rounded-xl text-base transition bg-white shadow-sm">
+                                重設隊員原位
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Specs Info + Interactive Hotspot Info Card -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <!-- Dynamic Hotspot Info Card -->
+                        <div class="bg-gradient-to-br from-blue-900 to-indigo-950 text-white p-6 rounded-2xl shadow-lg border border-indigo-500/20" id="court-detail-card">
+                            <div class="flex items-center gap-3 border-b border-indigo-800 pb-3 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-xl" id="detail-icon-bg">
+                                    <i class="fas fa-info" id="detail-icon"></i>
+                                </div>
+                                <h4 class="text-xl font-black text-amber-400" id="detail-title">請點擊左方球場區域</h4>
+                            </div>
+                            <p class="text-base text-blue-100 leading-relaxed mb-4" id="detail-description">
+                                點擊左邊排球場的橘色區域、白色界線或後端藍色發球感應區，可即時高亮顯示該區塊並解鎖中學體育學科必考知識！
+                            </p>
+                            <div class="bg-white/10 p-4 rounded-xl text-sm" id="detail-notes-box">
+                                <span class="font-bold text-amber-300"><i class="fas fa-lightbulb mr-1.5"></i> 課後筆記：</span>
+                                <span id="detail-notes" class="text-slate-200 block mt-1">排球場地長 18 米，寬 9 米。這份筆記包含體育科術科與學科測驗高頻出題點。</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Menu buttons to trigger same SVG highlights -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h4 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                <i class="fas fa-list-ul text-blue-600"></i> 場地區域快速選單
+                            </h4>
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <button onclick="selectCourtZone('front-zone')" class="court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:border-blue-400 transition text-left flex items-center gap-2" data-zone="front-zone">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500"></span> 前場區
+                                </button>
+                                <button onclick="selectCourtZone('back-zone')" class="court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:border-blue-400 transition text-left flex items-center gap-2" data-zone="back-zone">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500"></span> 後場區
+                                </button>
+                                <button onclick="selectCourtZone('attack-line')" class="court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:border-blue-400 transition text-left flex items-center gap-2" data-zone="attack-line">
+                                    <span class="w-3 h-3 rounded-full bg-yellow-400"></span> 3米線(攻擊線)
+                                </button>
+                                <button onclick="selectCourtZone('center-line')" class="court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:border-blue-400 transition text-left flex items-center gap-2" data-zone="center-line">
+                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span> 中線與球網
+                                </button>
+                                <button onclick="selectCourtZone('service-zone')" class="court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:border-blue-400 transition text-left flex items-center gap-2 col-span-2" data-zone="service-zone">
+                                    <span class="w-3 h-3 rounded-full bg-orange-500"></span> 發球區 (底線後方)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: 比賽規則簡介 -->
+            <div id="page-3" class="page-content">
+                <div class="text-center mb-10">
+                    <span class="text-blue-600 font-extrabold text-base tracking-widest block uppercase">MODULE 03</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 mt-2">比賽核心規則導讀</h2>
+                    <div class="h-1.5 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Rule 1 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-5 text-2xl">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">上場人數與擊球限制</h3>
+                        <p class="text-base text-gray-600 leading-relaxed">
+                            雙方各派 <strong class="text-blue-600 font-bold">6 名</strong> 隊員上場。每次進攻必須在 <strong class="text-blue-600 font-bold">3 次擊球以內</strong> (攔網觸球除外) 將球送回對方場區，同一球員絕對不能連續擊球兩次。
+                        </p>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-5 text-2xl">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">計分與勝負判定</h3>
+                        <p class="text-base text-gray-600 leading-relaxed">
+                            採 <strong class="text-amber-600 font-bold">五局三勝制</strong> 與每球直接得分制。第 1 至 4 局採用 25 分制，第 5 局採用 15 分制。局末平分 (Deuce) 時，任一方必須<strong class="text-amber-600 font-bold">領先對手 2 分</strong>才能獲勝（例如 26:24）。球落線上均算界內得分。
+                        </p>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-5 text-2xl">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">暫停與替補名額</h3>
+                        <p class="text-base text-gray-600 leading-relaxed">
+                            每局每隊最多可請求 <strong class="text-indigo-600 font-bold">2 次普通暫停</strong>（每次30秒）。每隊每局最多可替補六人次。替補球員一局只能上場一次，且下場後如果要再進場，必須回到原被替補者之位置。
+                        </p>
+                    </div>
+
+                    <!-- Rule 4 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <div class="w-14 h-14 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-5 text-2xl">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">發球規範與限制</h3>
+                        <p class="text-base text-gray-600 leading-relaxed">
+                            發球員必須在裁判鳴笛後 <strong class="text-orange-600 font-bold">8 秒內</strong> 於後發球區內把球發出。在發球的瞬間，所有球員必須在場內成兩排就位，發球擊出後球員方可跑位進行戰術配合。
+                        </p>
+                    </div>
+
+                    <!-- Rule 5 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <div class="w-14 h-14 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-5 text-2xl">
+                            <i class="fas fa-hand-rock"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">合法觸球與持球犯規</h3>
+                        <p class="text-base text-gray-600 leading-relaxed">
+                            球員可以用身體的 <strong class="text-red-600 font-bold">任何部分（包括足部與腿部）</strong> 觸球。但擊球必須是爽朗明快的一擊，不能有球停留在球員手或身體上的「撈球」、「持球」或「捧球」動作，否則判為持球犯規。
+                        </p>
+                    </div>
+
+                    <!-- Rule 6 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <div class="w-14 h-14 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-5 text-2xl">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">後排隊員進攻限制</h3>
+                        <p class="text-base text-gray-600 leading-relaxed">
+                            後排球員可以在後場區任意將球擊回對隊場區。但如果後排球員是在 <strong class="text-purple-600 font-bold">3 米前場區</strong> 內跳起扣球，在觸球的一瞬間<strong class="text-purple-600 font-bold">球的任何部分都必須低於球網頂端的高度</strong>。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: 裁判法定手勢圖解 -->
+            <div id="page-4" class="page-content">
+                <div class="text-center mb-10">
+                    <span class="text-blue-600 font-extrabold text-base tracking-widest block uppercase">MODULE 04</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 mt-2">裁判手勢與影音教學</h2>
+                    <p class="text-gray-500 text-lg mt-3">請觀看教學影片及手勢插圖，並將滑鼠移到下方卡片（或在手機點擊）來查看動作要領與規則，考試必備！</p>
+                    <div class="h-1.5 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <!-- Volleyball Referee Gestures Instruction YouTube Video Embedding Zone -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-12 max-w-4xl mx-auto">
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-4 flex items-center gap-3">
+                        <i class="fab fa-youtube text-red-600 text-3xl"></i> 影音學習：排球裁判手勢介紹
+                    </h3>
+                    <div class="aspect-video rounded-xl overflow-hidden shadow-md border border-gray-200 bg-black">
+                        <iframe 
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/mluQkId7NwA" 
+                            title="排球裁判手勢介紹" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="text-sm md:text-base text-gray-600 mt-4 leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <span class="font-extrabold text-blue-700"><i class="fas fa-info-circle mr-1"></i> 影音簡介：</span>
+                        本片深入淺出地介紹了排球比賽中常用的法定裁判手勢。配合觀看影片中的手勢動作與判罰情境演示，將能幫助你更快速地記牢下方各項考點！
+                    </p>
+                </div>
+
+                <!-- New Feature: Official Hand Illustration Poster Wall -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-12 max-w-4xl mx-auto text-center">
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-4 flex items-center justify-center gap-3">
+                        <i class="fas fa-images text-blue-600 text-2xl"></i> 核心裁判手勢插圖對照表
+                    </h3>
+                    <div class="border border-gray-200 rounded-xl overflow-hidden bg-slate-100 p-2 inline-block max-w-full">
+                        <img src="image_a293a1.jpg" alt="排球常用裁判手勢圖解" class="mx-auto rounded-lg shadow-sm hover:scale-[1.01] transition-transform duration-300 max-h-[500px]" onerror="this.outerHTML='<div class=\'p-8 text-slate-500\'></div>'">
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3 font-semibold">
+                        <i class="fas fa-search-plus mr-1"></i> 以上對照圖包含六大核心判罰：球隊發球、延誤發球、交換場地、觸網犯規、過網擊球與持球犯規。
+                    </p>
+                </div>
+
+                <!-- Hand Gesture Grid with Dynamic Cutout Illustrations on fronts -->
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+                    
+                    <!-- Gesture 1 (球隊發球 - Row 1, Col 1) -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-between items-center p-4">
+                                <div class="sprite-container">
+                                    <img src="image_a293a1.jpg" class="sprite-img sprite-球队发球" alt="球隊發球" onerror="this.outerHTML='<div class=\'h-full flex items-center justify-center text-blue-600 text-4xl\'><i class=\'fas fa-hand-point-right\'></i></div>'">
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-[10px] text-blue-500 font-bold tracking-wider block">手勢 1</span>
+                                    <h4 class="text-base font-black text-gray-900">球隊發球</h4>
+                                </div>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">指示發球權。裁判會將手臂朝向獲得發球權的一方伸出。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 2 (交換場地 - Row 1, Col 3) -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-between items-center p-4">
+                                <div class="sprite-container">
+                                    <img src="image_a293a1.jpg" class="sprite-img sprite-交換場地" alt="交換場地" onerror="this.outerHTML='<div class=\'h-full flex items-center justify-center text-blue-600 text-4xl\'><i class=\'fas fa-sync-alt\'></i></div>'">
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-[10px] text-blue-500 font-bold tracking-wider block">手勢 2</span>
+                                    <h4 class="text-base font-black text-gray-900">交換場地</h4>
+                                </div>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">一局結束或決勝局到8分時，兩臂繞身體前後一圈交換位置。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 3 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-pause-circle"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 3</span>
+                                <h4 class="text-lg font-black text-gray-900">暫停</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">一隻手平放呈「T」字，另一手手指垂直指向其下方掌心。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 4 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-people-arrows"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 4</span>
+                                <h4 class="text-lg font-black text-gray-900">替補換人</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">兩隻前臂在胸前作互相繞圈旋轉動作。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 5 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-times"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 5</span>
+                                <h4 class="text-lg font-black text-gray-900">一局結束</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">兩前臂在胸前交叉. 代表本局或全場比賽得分結束。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 6 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-arrow-down"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 6</span>
+                                <h4 class="text-lg font-black text-gray-900">界內球</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">手臂向下斜伸、手指直接指向落球的場地內側地面。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 7 (持球犯規 - Row 2, Col 3) -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-between items-center p-4">
+                                <div class="sprite-container">
+                                    <img src="image_a293a1.jpg" class="sprite-img sprite-持球犯規" alt="持球犯規" onerror="this.outerHTML='<div class=\'h-full flex items-center justify-center text-blue-600 text-4xl\'><i class=\'fas fa-hand-holding\'></i></div>'">
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-[10px] text-blue-500 font-bold tracking-wider block">手勢 7</span>
+                                    <h4 class="text-base font-black text-gray-900">持球</h4>
+                                </div>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">一隻手臂伸直，手掌向上做向上平緩抬起動作。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 8 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-3xl font-black text-blue-600 mb-3">4</div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 8</span>
+                                <h4 class="text-lg font-black text-gray-900">四擊</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">在胸前舉起並張開四隻手指，指示擊球次數超過三次。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 9 (延誤發球 - Row 1, Col 2) -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-between items-center p-4">
+                                <div class="sprite-container">
+                                    <img src="image_a293a1.jpg" class="sprite-img sprite-延誤發球" alt="延誤發球" onerror="this.outerHTML='<div class=\'h-full flex items-center justify-center text-blue-600 text-4xl\'><i class=\'fas fa-clock\'></i></div>'">
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-[10px] text-blue-500 font-bold tracking-wider block">手勢 9</span>
+                                    <h4 class="text-base font-black text-gray-900">延誤發球</h4>
+                                </div>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">舉起手掌，表示發球員在笛聲後未能在規定的 8 秒內發球。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 10 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-times-circle"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 10</span>
+                                <h4 class="text-lg font-black text-gray-900">界外球</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">前臂垂直伸直、雙手掌面朝自己，向上雙肩平舉。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 11 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-handshake-slash"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 11</span>
+                                <h4 class="text-lg font-black text-gray-900">觸球</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">一手掌心擦過另一隻高舉之手指指尖。表示球出界前先碰了防守隊員。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 12 (觸網 - Row 2, Col 1) -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-between items-center p-4">
+                                <div class="sprite-container">
+                                    <img src="image_a293a1.jpg" class="sprite-img sprite-觸網犯規" alt="觸網" onerror="this.outerHTML='<div class=\'h-full flex items-center justify-center text-blue-600 text-4xl\'><i class=\'fas fa-border-none\'></i></div>'">
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-[10px] text-blue-500 font-bold tracking-wider block">手勢 12</span>
+                                    <h4 class="text-base font-black text-gray-900">觸網</h4>
+                                </div>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">手指向發生觸網犯規的球網邊線或特定球網區域。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 13 (過網擊球 - Row 2, Col 2) -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-between items-center p-4">
+                                <div class="sprite-container">
+                                    <img src="image_a293a1.jpg" class="sprite-img sprite-过網擊球" alt="過網擊球" onerror="this.outerHTML='<div class=\'h-full flex items-center justify-center text-blue-600 text-4xl\'><i class=\'fas fa-long-arrow-alt-right\'></i></div>'">
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-[10px] text-blue-500 font-bold tracking-wider block">手勢 13</span>
+                                    <h4 class="text-base font-black text-gray-900">過網擊球</h4>
+                                </div>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">一手手掌平放球網上方、手掌朝下掠過。示意隊員過早越網觸球犯規。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 14 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-shoe-prints"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 14</span>
+                                <h4 class="text-lg font-black text-gray-900">越中線</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">食指直接指向中線。代表球員過界或腳掌完全踩越對方場區。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 15 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-3xl font-black text-blue-600 mb-3">2</div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 15</span>
+                                <h4 class="text-lg font-black text-gray-900">連擊</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">在身前伸出並舉起兩隻手指。表示同一個隊員連續碰球兩次。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 16 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-hand-holding-usd"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 16</span>
+                                <h4 class="text-lg font-black text-gray-900">球未離手</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">手掌向上平攤，指明發球時未將球拋起就擊球。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 17 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-undo-alt"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 17</span>
+                                <h4 class="text-lg font-black text-gray-900">位置/輪轉錯誤</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">食指在身體前方朝下畫圈，指示發球擊球瞬間有球員站位不對。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gesture 18 -->
+                    <div class="flip-card h-56 cursor-pointer group" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner shadow-sm border border-gray-100">
+                            <div class="flip-card-front flex flex-col justify-center items-center p-5">
+                                <div class="text-4xl text-blue-600 mb-3"><i class="fas fa-people-carry"></i></div>
+                                <span class="text-xs text-blue-500 font-bold tracking-wider mb-1">手勢 18</span>
+                                <h4 class="text-lg font-black text-gray-900">掩護犯規</h4>
+                            </div>
+                            <div class="flip-card-back flex flex-col justify-center items-center p-4 bg-blue-950">
+                                <h4 class="text-sm font-extrabold text-amber-400 mb-2">動作說明</h4>
+                                <p class="text-sm text-gray-200 leading-relaxed">雙手垂直高舉、掌心朝前。指進攻球員故意阻擋對手視線。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 5: 自我挑戰站 (小測驗) -->
+            <div id="page-5" class="page-content">
+                <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 opacity-10 transform translate-x-12 -translate-y-12">
+                        <i class="fas fa-volleyball-ball text-[200px] text-white"></i>
+                    </div>
+                    
+                    <div class="relative z-10 max-w-3xl mx-auto">
+                        <div class="text-center mb-8">
+                            <span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-4 py-1.5 rounded-full text-sm font-bold tracking-wider mb-3 inline-block">測驗進行中</span>
+                            <h2 class="text-3xl md:text-4xl font-black">5. 排球知識自我挑戰站</h2>
+                            <p class="text-indigo-200 text-base mt-2">點擊即時答題、自動判分，測試你是否已熟讀所有排球筆記！</p>
+                        </div>
+
+                        <!-- Quiz Area Container -->
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg" id="quiz-wrapper">
+                            
+                            <!-- Question Progress -->
+                            <div class="flex justify-between items-center mb-6 text-sm text-indigo-200 uppercase tracking-widest font-bold font-sans border-b border-white/10 pb-4">
+                                <span id="quiz-progress-text">問題 1 之 10</span>
+                                <span id="quiz-score-indicator">得分: 0 分</span>
+                            </div>
+
+                            <!-- Main Question Text -->
+                            <h3 class="text-xl md:text-2xl font-black mb-6 text-white leading-relaxed font-sans" id="quiz-question-text">
+                                問題加載中...
+                            </h3>
+
+                            <!-- Option Buttons Stack -->
+                            <div class="space-y-4" id="quiz-options-container">
+                                <!-- Injected dynamically by JS -->
+                            </div>
+
+                            <!-- Feedback Message Panel -->
+                            <div id="quiz-feedback" class="mt-8 p-5 rounded-xl hidden text-base font-medium transition duration-200">
+                                <div class="flex items-start gap-4">
+                                    <span class="text-2xl" id="feedback-icon"><i class="fas fa-info-circle"></i></span>
+                                    <div>
+                                        <strong class="block text-lg mb-2" id="feedback-title">解析說明</strong>
+                                        <p id="feedback-desc" class="text-sm md:text-base leading-relaxed opacity-95 font-sans"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Next & Reset Buttons Action Row -->
+                            <div class="mt-8 flex justify-end">
+                                <button id="quiz-next-btn" class="hidden bg-amber-500 hover:bg-amber-600 text-slate-955 px-7 py-3 rounded-xl text-base transition shadow-md">
+                                    下一題 <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- Final Score Board Layout -->
+                        <div class="hidden bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/10 text-center animate-fadeIn" id="quiz-result-board">
+                            <div class="w-20 h-20 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg">
+                                <i class="fas fa-trophy animate-bounce"></i>
+                            </div>
+                            <h3 class="text-2xl font-black mb-3 text-white">挑戰完成！</h3>
+                            <p class="text-indigo-200 text-lg mb-6 max-w-xl mx-auto leading-relaxed animate-pulse" id="quiz-result-msg">
+                                你答對了 0 題。
+                            </p>
+                            <div class="text-6xl font-black text-amber-400 mb-8" id="quiz-percentage">
+                                0%
+                            </div>
+                            <button id="quiz-restart-btn" class="bg-white hover:bg-indigo-50 text-indigo-950 font-black px-8 py-3.5 rounded-xl text-base transition shadow-md inline-flex items-center gap-2">
+                                <i class="fas fa-redo"></i> 重新挑戰
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination Actions Bar (Bottom Prev / Next Buttons) -->
+            <div class="mt-12 pt-6 border-t border-gray-200 flex items-center justify-between">
+                <button id="prev-page-btn" onclick="goToPrevPage()" class="flex items-center gap-2 text-gray-500 hover:text-blue-600 font-extrabold text-base py-3 px-5 rounded-xl border border-gray-200 hover:border-blue-300 transition bg-white shadow-sm">
+                    <i class="fas fa-arrow-left"></i> 上一頁
+                </button>
+                <div class="hidden sm:block text-sm font-semibold text-gray-400" id="bottom-page-dots">
+                    <!-- Dots showing current page -->
+                </div>
+                <button id="next-page-btn" onclick="goToNextPage()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base py-3 px-6 rounded-xl transition shadow-md">
+                    下一頁 <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Interactive Footer Section -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 py-10 mt-16 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <i class="fas fa-volleyball-ball text-blue-500 text-xl"></i>
+                <span class="text-white font-bold text-base">聖公會李炳中學體育組</span>
+            </div>
+            <p class="mb-2 text-gray-400 text-base">體育科排球專題 - 互動學堂分頁電子學習網頁</p>
+            <div class="text-slate-600 mt-4 text-xs">
+                &copy; 2026 Li Ping Secondary School (LPSS). All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE STATE CONTROLLERS -->
+    <script>
+        // 1. Pagination System Logic (Expanded to 5 pages)
+        let currentPage = 1;
+        const totalPages = 5;
+        
+        const pageTitles = {
+            1: "排球歷史與起源發展",
+            2: "標準排球場與輪轉模擬模型",
+            3: "比賽基本與核心判罰規則",
+            4: "常用裁判手勢",
+            5: "排球知識互動自我挑戰站"
+        };
+
+        function switchPage(pageNumber) {
+            if(pageNumber < 1 || pageNumber > totalPages) return;
+            
+            currentPage = pageNumber;
+
+            // Hide/Show Pages
+            for (let i = 1; i <= totalPages; i++) {
+                const pageEl = document.getElementById(`page-${i}`);
+                if (pageEl) {
+                    if (i === pageNumber) {
+                        pageEl.classList.add('active');
+                    } else {
+                        pageEl.classList.remove('active');
+                    }
+                }
+            }
+
+            // Scroll smoothly back to top of main content
+            window.scrollTo({ top: 180, behavior: 'smooth' });
+
+            // Update Progress Bar (1/5 is 20%, 5/5 is 100%)
+            const progressIndicator = document.getElementById('progress-indicator');
+            progressIndicator.style.width = `${(currentPage / totalPages) * 100}%`;
+
+            // Update Headers & Indicators
+            document.getElementById('module-hero-title').innerText = pageTitles[currentPage];
+            document.getElementById('module-page-indicator').innerText = `學習進度：第 ${currentPage} / ${totalPages} 頁`;
+
+            // Update Active Tab Button Styles
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                const pageNum = parseInt(btn.getAttribute('data-page'));
+                if (pageNum === currentPage) {
+                    btn.className = "nav-tab-btn px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-extrabold text-base transition duration-150";
+                } else {
+                    btn.className = "nav-tab-btn px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-bold text-base transition duration-150";
+                }
+            });
+
+            // Special handling for the Challenge button inside navbar (Page 5 is now the quiz)
+            const challengeBtn = document.querySelector('.nav-tab-btn[data-page="5"]');
+            if (challengeBtn) {
+                if (currentPage === 5) {
+                    challengeBtn.className = "nav-tab-btn ml-3 bg-amber-500 hover:bg-amber-600 text-slate-955 px-5 py-2.5 rounded-full text-base font-black shadow-sm transition duration-150";
+                } else {
+                    challengeBtn.className = "nav-tab-btn ml-3 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-base font-extrabold shadow-sm transition duration-150";
+                }
+            }
+
+            // Update Sub-Tab Buttons active styles
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                const pageNum = parseInt(btn.getAttribute('data-page'));
+                if (pageNum === currentPage) {
+                    btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                    btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+                } else {
+                    btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                    btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                }
+            });
+
+            // Update Footer Buttons Visibility & Text
+            const prevBtn = document.getElementById('prev-page-btn');
+            const nextBtn = document.getElementById('next-page-btn');
+            
+            if (currentPage === 1) {
+                prevBtn.classList.add('opacity-40', 'pointer-events-none');
+            } else {
+                prevBtn.classList.remove('opacity-40', 'pointer-events-none');
+            }
+
+            if (currentPage === totalPages) {
+                nextBtn.innerHTML = `重溫第一單元 <i class="fas fa-undo ml-1"></i>`;
+                nextBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                nextBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+            } else {
+                nextBtn.innerHTML = `下一頁 <i class="fas fa-arrow-right ml-1"></i>`;
+                nextBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                nextBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
+
+            // Redraw bottom progress dots
+            renderBottomDots();
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                switchPage(currentPage - 1);
+            }
+        }
+
+        function goToNextPage() {
+            if (currentPage < totalPages) {
+                switchPage(currentPage + 1);
+            } else {
+                // If on final page, loop back to page 1
+                switchPage(1);
+            }
+        }
+
+        function renderBottomDots() {
+            const dotsContainer = document.getElementById('bottom-page-dots');
+            dotsContainer.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const dot = document.createElement('span');
+                dot.className = `inline-block w-3 h-3 rounded-full mx-2 transition-all duration-300 ${i === currentPage ? 'bg-blue-600 w-6' : 'bg-gray-300'}`;
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Mobile Menu controller toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Interactive Fun Facts Toggler
+        function toggleFunFact(element) {
+            const isActive = element.classList.contains('active');
+            
+            // Close all first
+            document.querySelectorAll('.fun-fact-card').forEach(card => {
+                card.classList.remove('active');
+                card.querySelector('i').style.transform = 'rotate(0deg)';
+            });
+
+            // Toggle selected
+            if (!isActive) {
+                element.classList.add('active');
+                element.querySelector('i').style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // 2. SVG Court Rotation Engine
+        const playerCoordinates = {
+            1: { cx: 130, cy: 300, isBack: true },
+            6: { cx: 130, cy: 210, isBack: true },
+            5: { cx: 130, cy: 120, isBack: true },
+            4: { cx: 210, cy: 120, isBack: false },
+            3: { cx: 300, cy: 210, isBack: false },
+            2: { cx: 210, cy: 300, isBack: false }
+        };
+
+        let playerLogicalPositions = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 };
+
+        function updateSvgPlayers() {
+            for (let originalPos = 1; originalPos <= 6; originalPos++) {
+                const currentLogicalPos = playerLogicalPositions[originalPos];
+                const coords = playerCoordinates[currentLogicalPos];
+                
+                const circleElement = document.getElementById(`p-a-${originalPos}`);
+                const textElement = document.getElementById(`t-a-${originalPos}`);
+                
+                if (circleElement && textElement) {
+                    circleElement.setAttribute('cx', coords.cx);
+                    circleElement.setAttribute('cy', coords.cy);
+                    textElement.setAttribute('x', coords.cx);
+                    textElement.setAttribute('y', coords.cy + 5); // offset down slightly to center vertically
+                    
+                    if (currentLogicalPos === 1) {
+                        circleElement.setAttribute('fill', '#ea580c'); // Orange highlight for server
+                        circleElement.setAttribute('stroke-width', '3');
+                    } else if (coords.isBack) {
+                        circleElement.setAttribute('fill', '#1f2937'); // Black for back-row players
+                        circleElement.setAttribute('stroke-width', '2');
+                    } else {
+                        circleElement.setAttribute('fill', '#0b3c5d'); // Blue for front-row players
+                        circleElement.setAttribute('stroke-width', '2');
+                    }
+                }
+            }
+        }
+
+        function rotateClockwise() {
+            const nextPositions = {};
+            for (let p = 1; p <= 6; p++) {
+                const current = playerLogicalPositions[p];
+                let next;
+                if (current === 1) next = 6;
+                else if (current === 6) next = 5;
+                else if (current === 5) next = 4;
+                else if (current === 4) next = 3;
+                else if (current === 3) next = 2;
+                else if (current === 2) next = 1;
+                nextPositions[p] = next;
+            }
+            playerLogicalPositions = nextPositions;
+            updateSvgPlayers();
+        }
+
+        document.getElementById('btn-rotate').addEventListener('click', rotateClockwise);
+        document.getElementById('btn-reset-pos').addEventListener('click', () => {
+            playerLogicalPositions = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 };
+            updateSvgPlayers();
+        });
+
+        // Interactive Court Zone Specs DB
+        const courtZoneSpecs = {
+            'front-zone': {
+                title: "前場區 (Front Zone)",
+                icon: "fa-shield-halved",
+                description: "前場區是指中線與 3 米線（攻擊線）之間的區域。這主要是雙方進行攔網、二傳手組織攻勢以及前排隊員進行扣球的主攻區域。",
+                notes: "位置編號：發球瞬間的前排隊員由左至右分別站在 4 號、3 號與 2 號位。這裏的攻防節奏極快，必須特別注意觸網與越網進攻犯規！"
+            },
+            'back-zone': {
+                title: "後場區 (Back Zone)",
+                icon: "fa-users-viewfinder",
+                description: "後場區由 3 米線延伸至球場底發球線之間。後場區主要承擔接發球防守、一傳與防守起球的任務。後排隊員可在這裏起跳進行發動進攻。",
+                notes: "位置編號：後排隊員在發球瞬間站在 5 號、6 號與 1 號位。請記住，後排隊員在前場區起跳擊球時，觸球瞬間球體任何部分都必須低於球網網頂！"
+            },
+            'attack-line': {
+                title: "攻擊線 / 3米線",
+                icon: "fa-bolt",
+                description: "這是排球場最重要的限制界線！位於中線軸線後方 3 公尺處。它最主要的目的是區分前後場，並限制後排隊員的起跳扣球範圍。",
+                notes: "考試必背：若後排隊員想在 3 米線內進行前場進攻，在接觸球的那一刻，整個排球的任何一部分都不能高於網頂高度，否則即屬後排攻擊犯規！"
+            },
+            'center-line': {
+                title: "中線與球網高度",
+                icon: "fa-network-wired",
+                description: "中線把 18 米長的球場均分為兩個 9x9 米的半場。上方懸掛標準球網。男子競賽網高為離地 2.43 米，女子則為 2.24 米。",
+                notes: "裁判關鍵：腳掌完全越過中線踩入對隊場區，或隊員在擊球過程中碰觸球網任何部分均屬犯規。兩側垂直邊線上的紅白標誌竿為界外判罰基準。"
+            },
+            'service-zone': {
+                title: "發球區 (Service Zone)",
+                icon: "fa-paper-plane",
+                description: "發球區位於每邊底線後方（由底線與兩側邊線延長線夾成的 9 米寬區域）。這是每回合比賽開始的起點，由處於 1 號位的隊員在此發球。",
+                notes: "時間限制：裁判鳴笛後，發球員必須在 8 秒之內將球擊出（發球球體必須拋起離手，不得試圖發球）。發球時腳掌不得觸及底線或踩出側線範圍。"
+            }
+        };
+
+        function selectCourtZone(zoneId) {
+            // Remove active states from all SVG overlay elements
+            document.querySelectorAll('.interactive-zone, .interactive-line').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Add active styles to clicked SVG elements
+            const svgTarget = document.getElementById(`svg-${zoneId}`);
+            if (svgTarget) {
+                svgTarget.classList.add('active');
+            }
+
+            // Update details on card
+            const data = courtZoneSpecs[zoneId];
+            if (data) {
+                document.getElementById('detail-title').innerText = data.title;
+                document.getElementById('detail-description').innerText = data.description;
+                document.getElementById('detail-notes').innerText = data.notes;
+                document.getElementById('detail-icon').className = `fas ${data.icon}`;
+                
+                // Add minor glow transition effect
+                const card = document.getElementById('court-detail-card');
+                card.classList.remove('border-indigo-500/20');
+                card.classList.add('border-amber-400');
+                setTimeout(() => {
+                    card.classList.remove('border-amber-400');
+                    card.classList.add('border-indigo-500/20');
+                }, 500);
+            }
+
+            // Sync menu buttons styling
+            document.querySelectorAll('.court-menu-btn').forEach(btn => {
+                const target = btn.getAttribute('data-zone');
+                if (target === zoneId) {
+                    btn.className = "court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-blue-800 bg-blue-50 border-blue-400 transition text-left flex items-center gap-2";
+                } else {
+                    btn.className = "court-menu-btn py-2.5 px-3 rounded-xl border text-sm font-bold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:border-blue-400 transition text-left flex items-center gap-2";
+                }
+            });
+        }
+
+
+        // 3. Quiz Engine Core (Expanded to 10 comprehensive questions)
+        const quizData = [
+            {
+                question: "男子競賽與女子競賽的標準球網高度分別是多少米？",
+                options: [
+                    "男子 2.43 米，女子 2.24 米",
+                    "男子 2.34 米，女子 2.15 米",
+                    "男子 2.44 米，女子 2.22 米",
+                    "男子 2.40 米，女子 2.20 米"
+                ],
+                correct: 0,
+                explanation: "根據排球課堂筆記：男子球網高度為 2.43 米，女子球網高度為 2.24 米。這是最基本的場地考點，請牢記！"
+            },
+            {
+                question: "當發球方得分並「重新取得發球權」時，全隊球員應該向哪個方向輪轉？",
+                options: [
+                    "逆時針方向輪轉一個位置",
+                    "順時針方向輪轉一個位置",
+                    "前排球員向左，後排球員向右移動",
+                    "保持位置不變，不需要進行任何輪轉"
+                ],
+                correct: 1,
+                explanation: "當球隊獲得發球權時，全隊球員必須依『順時針方向』輪轉一個位置。這時原 2 號位隊員將轉到 1 號位進行發球。"
+            },
+            {
+                question: "後排球員若在「前場區（即 3 米線前方區域）」內起跳進攻，有什麼裝備或規則限制？",
+                options: [
+                    "可以用雙手將球直接抱過球網",
+                    "觸球的瞬間球的任何部分都必須低於網頂的高度",
+                    "可以自由起跳擊球，完全沒有任何高度或方式限制",
+                    "不准在前場區接觸球或進行任何傳接球"
+                ],
+                correct: 1,
+                explanation: "後排球員若在 3 米線的前場區內起跳攻擊，必須滿足：『在觸球瞬間，球的任何部分都低於網頂』。否則即屬犯規。"
+            },
+            {
+                question: "在國際排球比賽的局末平分（Deuce）階段，以下哪一個比數意味著比賽還在進行、未分出勝負？",
+                options: [
+                    "25 : 23",
+                    "26 : 24",
+                    "28 : 27",
+                    "15 : 13（第五局）"
+                ],
+                correct: 2,
+                explanation: "排球採用直接得分制，如果比數到 24:24（或第五局 14:14）平分後，任何一方必須贏對隊 2 分才能獲勝（例如 29:27）。如果是 28:27 只有 1 分之差，則比賽繼續。"
+            },
+            {
+                question: "在不計算攔網觸球的情況下，一隊最多可在排球過網前連續擊球多少次？",
+                options: [
+                    "1 次",
+                    "2 次",
+                    "3 次",
+                    "4 次"
+                ],
+                correct: 2,
+                explanation: "一隊最多可在球回打到對手場區前連續擊球 3 次。注意，前排隊員進行防守性攔網時，觸及球體的次數並不計入這 3 次擊球內。"
+            },
+            {
+                question: "每隊在每一局比賽中，最多允許進行多少人次的球員替補？",
+                options: [
+                    "3 次",
+                    "4 次",
+                    "5 次",
+                    "6 次"
+                ],
+                correct: 3,
+                explanation: "排球規則規定，每隊每局最多可替補 6 人次。起始球員退場後只能在同一局中再重新上場一次，且必須回到其原來的出場位置。"
+            },
+            {
+                question: "排球比賽中，各隊同時上場比賽的隊員人數是多少？",
+                options: [
+                    "5 人",
+                    "6 人",
+                    "7 人",
+                    "11 人"
+                ],
+                correct: 1,
+                explanation: "標準室內排球比賽規定每隊均有 6 名隊員在場上對抗。分為前排 3 人及後排 3 人。"
+            },
+            {
+                question: "標準排球比賽場地，其長度和寬度分別是多少米？",
+                options: [
+                    "長 18 公尺、寬 9 公尺",
+                    "長 20 公尺、寬 10 公尺",
+                    "長 15 公尺、寬 8 公尺",
+                    "長 28 公尺、寬 15 公尺"
+                ],
+                correct: 0,
+                explanation: "標準室內排球比賽球場面積為：長 18 公尺、寬 9 公尺的長方形，且球場外圍至少要有 3 公尺寬的無障礙區域。"
+            },
+            {
+                question: "第一裁判鳴笛指示發球後，發球員必須在多少秒內將排球發出？",
+                options: [
+                    "5 秒內",
+                    "8 秒內",
+                    "10 秒內",
+                    "12 秒內"
+                ],
+                correct: 1,
+                explanation: "在第一裁判鳴笛後，發球員必須在 8 秒內於底線後的發球區將球發出。若超時，將會被判為「延誤發球」而失分且交出發球權。"
+            },
+            {
+                question: "在比賽中，同一名球員（攔網除外）連續擊球兩次，會被判犯了什麼規？",
+                options: [
+                    "四擊犯規",
+                    "持球犯規",
+                    "連擊犯規",
+                    "越網犯規"
+                ],
+                correct: 2,
+                explanation: "除攔網隊員在攔網瞬間可連續觸球外，任何隊員均不能連續擊球兩次，否則即會被判定為「連擊（Double Contact）」犯規。"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userHasAnswered = false;
+
+        const quizProgressText = document.getElementById('quiz-progress-text');
+        const quizScoreIndicator = document.getElementById('quiz-score-indicator');
+        const quizQuestionText = document.getElementById('quiz-question-text');
+        const quizOptionsContainer = document.getElementById('quiz-options-container');
+        const quizFeedback = document.getElementById('quiz-feedback');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackDesc = document.getElementById('feedback-desc');
+        const quizNextBtn = document.getElementById('quiz-next-btn');
+        const quizWrapper = document.getElementById('quiz-wrapper');
+        const quizResultBoard = document.getElementById('quiz-result-board');
+        const quizResultMsg = document.getElementById('quiz-result-msg');
+        const quizPercentage = document.getElementById('quiz-percentage');
+        const quizRestartBtn = document.getElementById('quiz-restart-btn');
+
+        function loadQuestion() {
+            userHasAnswered = false;
+            quizNextBtn.classList.add('hidden');
+            quizFeedback.classList.add('hidden');
+            
+            const currentQuestion = quizData[currentQuestionIndex];
+            quizProgressText.innerText = `問題 ${currentQuestionIndex + 1} 之 ${quizData.length}`;
+            quizScoreIndicator.innerText = `得分: ${score} / ${quizData.length}`;
+            quizQuestionText.innerText = currentQuestion.question;
+
+            quizOptionsContainer.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-white/5 hover:bg-white/10 border border-white/15 rounded-xl p-5 text-base md:text-lg transition font-bold flex justify-between items-center group/opt";
+                btn.innerHTML = `
+                    <span>${option}</span>
+                    <span class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-sm group-hover/opt:border-white/40 transition flex-shrink-0 ml-2">
+                        ${String.fromCharCode(65 + index)}
+                    </span>
+                `;
+                btn.addEventListener('click', () => handleOptionClick(index, btn));
+                quizOptionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleOptionClick(selectedIndex, clickedBtn) {
+            if (userHasAnswered) return;
+            userHasAnswered = true;
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            const allOptionButtons = quizOptionsContainer.querySelectorAll('button');
+
+            allOptionButtons.forEach((btn, index) => {
+                btn.classList.remove('hover:bg-white/10');
+                btn.classList.add('cursor-default');
+                
+                const letterIcon = btn.querySelector('span:last-child');
+                if (index === currentQuestion.correct) {
+                    btn.classList.add('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-300');
+                    letterIcon.innerHTML = `<i class="fas fa-check text-emerald-400"></i>`;
+                } else if (index === selectedIndex) {
+                    btn.classList.add('bg-red-500/20', 'border-red-500', 'text-red-300');
+                    letterIcon.innerHTML = `<i class="fas fa-times text-red-400"></i>`;
+                }
+            });
+
+            if (selectedIndex === currentQuestion.correct) {
+                score++;
+                quizScoreIndicator.innerText = `得分: ${score} / ${quizData.length}`;
+                
+                quizFeedback.className = "mt-6 p-5 rounded-xl text-base font-bold bg-emerald-500/15 border border-emerald-500/20 text-emerald-200 block animate-fadeIn";
+                feedbackIcon.innerHTML = `<i class="fas fa-check-circle text-emerald-400 text-xl"></i>`;
+                feedbackTitle.innerText = "答對了！非常優秀！";
+            } else {
+                quizFeedback.className = "mt-6 p-5 rounded-xl text-base font-bold bg-red-500/15 border border-red-500/20 text-red-200 block animate-fadeIn";
+                feedbackIcon.innerHTML = `<i class="fas fa-times-circle text-red-400 text-xl"></i>`;
+                feedbackTitle.innerText = "答錯了！沒關係，吸收解析再試一次！";
+            }
+
+            feedbackDesc.innerText = currentQuestion.explanation;
+            quizNextBtn.classList.remove('hidden');
+        }
+
+        quizNextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            quizWrapper.classList.add('hidden');
+            quizResultBoard.classList.remove('hidden');
+
+            let customPraise = "再接再厲！相信重新複習筆記可以取得滿分！";
+            if (score === 10) {
+                customPraise = "極致完美！你已經成為一個頂尖的排球大師，筆記知識完全掌握！";
+            } else if (score >= 7) {
+                customPraise = "表現極佳！你已經熟記了大部分的排球比賽規則與設施規格！";
+            } else if (score >= 5) {
+                customPraise = "及格通過！建議多利用本網頁的互動球場和裁判手勢卡片進行深度溫習！";
+            }
+
+            quizResultMsg.innerText = `你已順利答完所有的排球核心考題！你在 10 題中一共答對了 ${score} 題。 ${customPraise}`;
+            const percentValue = Math.round((score / quizData.length) * 105); // scaling visually to fit 100 max
+            const actualPercent = Math.round((score / quizData.length) * 100);
+            quizPercentage.innerText = `${actualPercent}%`;
+        }
+
+        quizResultBoard.querySelector('#quiz-restart-btn').addEventListener('click', () => {
+            score = 0;
+            currentQuestionIndex = 0;
+            quizResultBoard.classList.add('hidden');
+            quizWrapper.classList.remove('hidden');
+            loadQuestion();
+        });
+
+        // Initialize state on first load
+        window.addEventListener('load', () => {
+            switchPage(1);
+            updateSvgPlayers();
+            loadQuestion();
+            // Default select front zone to trigger first display
+            selectCourtZone('front-zone');
+        });
+    </script>
+</body>
+</html>

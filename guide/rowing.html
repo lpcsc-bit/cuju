@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖公會李炳中學 - 體育科：室內賽艇互動學習平台</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans TC & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            scroll-behavior: smooth;
+            font-size: 1.25rem; /* 全局基礎字體放大至 20px (text-xl) */
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gradient-blue {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        /* 自定義隱藏滾動條 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* 賽艇模擬動畫 */
+        @keyframes sail {
+            0% { left: 0%; }
+            100% { left: calc(100% - 60px); }
+        }
+        .boat-sailing {
+            animation: sail var(--sail-duration, 4s) linear forwards;
+        }
+        /* LCD 螢幕字體風格 */
+        .font-lcd {
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- 客製化通知 Toast 容器 -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] bg-slate-900/95 text-white text-lg font-bold px-8 py-4 rounded-xl shadow-2xl border border-slate-700/50 flex items-center space-x-3 pointer-events-none opacity-0 transform -translate-y-4 transition-all duration-300">
+        <span class="text-sky-400 text-xl">💡</span>
+        <span id="toast-msg">提示訊息</span>
+    </div>
+
+    <!-- 頂部吸頂式常駐導航欄 (版面選項置於上面) -->
+    <header class="sticky top-0 z-50 bg-slate-900 text-white shadow-xl shrink-0">
+        <!-- 學校與平台標題 -->
+        <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between border-b border-slate-800/80">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <svg class="w-12 h-12 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <div>
+                    <h1 class="font-black text-white tracking-wide text-2xl md:text-3xl">聖公會李炳中學</h1>
+                    <span class="text-sm md:text-base text-sky-400 font-extrabold block mt-0.5">體育科 · 線上互動學堂</span>
+                </div>
+            </div>
+            <span class="bg-sky-500/15 text-sky-400 text-sm md:text-base font-black px-4 py-2 rounded-full border border-sky-500/20">
+                室內賽艇與體能評估單元
+            </span>
+        </div>
+
+        <!-- 導航選項列 (橫向滑動) -->
+        <div class="bg-slate-950 shadow-inner">
+            <div class="max-w-7xl mx-auto px-4 overflow-x-auto no-scrollbar">
+                <nav class="flex space-x-3 py-3 min-w-max text-base md:text-lg">
+                    <button onclick="switchTab('tab-history')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 bg-sky-500 text-slate-950" data-tab="tab-history">
+                        <span>📜 起源與發展</span>
+                    </button>
+                    <button onclick="switchTab('tab-boats')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white" data-tab="tab-boats">
+                        <span>🚣 賽艇規格與項目</span>
+                    </button>
+                    <button onclick="switchTab('tab-technique')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white" data-tab="tab-technique">
+                        <span>⚡ 正確技術與呼吸</span>
+                    </button>
+                    <button onclick="switchTab('tab-oneminute')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white" data-tab="tab-oneminute">
+                        <span>⏱️ 一分鐘賽艇測試</span>
+                    </button>
+                    <button onclick="switchTab('tab-concept2')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white" data-tab="tab-concept2">
+                        <span>📟 PM5 顯示器</span>
+                    </button>
+                    <button onclick="switchTab('tab-calculator')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white" data-tab="tab-calculator">
+                        <span>🧮 段速智能計算機</span>
+                    </button>
+                    <button onclick="switchTab('tab-quiz')" class="tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white" data-tab="tab-quiz">
+                        <span>✍️ 知識挑戰站</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 右側主要內容展板區域 -->
+    <main class="flex-grow overflow-y-auto p-6 sm:p-12 lg:p-16 max-w-7xl mx-auto w-full">
+
+        <!-- ==================== 版面：起源與發展 ==================== -->
+        <section id="tab-history" class="tab-content scroll-mt-24 space-y-12">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-black text-base uppercase tracking-wider">UNIT 01</span>
+                <h2 class="text-4xl sm:text-5xl font-black mt-2 text-slate-900 leading-tight">起源與歷史發展</h2>
+                <p class="text-slate-500 text-xl mt-3 leading-relaxed font-medium">賽艇是一項歷史悠久、結合力量與智慧的運動。從泰晤士河的渡船競爭，到奧運與陸上的賽艇傳奇。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <!-- 左側：歷史故事卡片 -->
+                <div class="space-y-8">
+                    <!-- 第一階段 -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-150 shadow-sm relative pl-16">
+                        <div class="absolute left-5 top-8 w-9 h-9 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center font-black text-base">1</div>
+                        <h3 class="font-black text-2xl text-slate-900 mb-3">遠古到渡河之戰</h3>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-4 font-medium">
+                            賽艇最早可追溯至**遠古埃及的奴隸船**及**中國的龍舟競渡**。真正接近現代正式賽艇的活動，則始於 1700 年代英國倫敦泰晤士河的渡河艇手，他們常以船艇比較速度並漸成正式的比賽。
+                        </p>
+                        <!-- SVG 插圖：遠古奴隸船/龍舟意象 -->
+                        <div class="w-full h-32 bg-sky-50/50 rounded-xl flex items-center justify-center overflow-hidden border border-sky-100/50">
+                            <svg class="w-full h-28 text-sky-600" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="160" cy="25" r="8" fill="#f59e0b" opacity="0.8"/>
+                                <path d="M10,55 L35,35 L60,55 M50,55 L80,30 L110,55" stroke="#bae6fd" stroke-width="1.5" fill="none"/>
+                                <path d="M 0,60 Q 25,55 50,60 T 100,60 T 150,60 T 200,60" fill="none" stroke="#0284c7" stroke-width="2" />
+                                <path d="M 0,65 Q 25,62 50,65 T 100,65 T 150,65 T 200,65" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.6"/>
+                                <path d="M40,55 Q100,62 160,55 Q170,45 175,35 Q165,50 155,54 Q100,48 45,54 Z" fill="#b45309" stroke="#78350f" stroke-width="1"/>
+                                <path d="M175,35 Q180,25 183,28 Q180,35 175,35" fill="#f59e0b"/>
+                                <line x1="60" y1="52" x2="52" y2="68" stroke="#78350f" stroke-width="1.5"/>
+                                <line x1="80" y1="52" x2="72" y2="68" stroke="#78350f" stroke-width="1.5"/>
+                                <line x1="100" y1="52" x2="92" y2="68" stroke="#78350f" stroke-width="1.5"/>
+                                <line x1="120" y1="52" x2="112" y2="68" stroke="#78350f" stroke-width="1.5"/>
+                                <line x1="140" y1="52" x2="132" y2="68" stroke="#78350f" stroke-width="1.5"/>
+                                <circle cx="60" cy="48" r="3" fill="#78350f"/>
+                                <circle cx="80" cy="48" r="3" fill="#78350f"/>
+                                <circle cx="100" cy="48" r="3" fill="#78350f"/>
+                                <circle cx="120" cy="48" r="3" fill="#78350f"/>
+                                <circle cx="140" cy="48" r="3" fill="#78350f"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 第二階段 -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-150 shadow-sm relative pl-16">
+                        <div class="absolute left-5 top-8 w-9 h-9 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center font-black text-base">2</div>
+                        <h3 class="font-black text-2xl text-slate-900 mb-3">大學百年宿敵對決 (1829年)</h3>
+                        <p class="text-slate-600 text-base leading-relaxed mb-4 font-medium">
+                            **1829 年，劍橋與牛津大學**在泰晤士河進行了第一屆兩大名校賽艇對抗賽。這項著名的校際大賽流傳至今，奠定了現代水上賽艇的競賽制度。
+                        </p>
+                        <!-- SVG 插圖：牛津（深藍）與劍橋（淺藍）對決 -->
+                        <div class="w-full h-32 bg-sky-50/50 rounded-xl flex items-center justify-center overflow-hidden border border-sky-100/50">
+                            <svg class="w-full h-28" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10,45 H190 V50 H10 Z M30,45 Q40,30 50,45 M80,45 Q90,30 100,45 M130,45 Q140,30 150,45" fill="none" stroke="#cbd5e1" stroke-width="1.5"/>
+                                <path d="M0,60 Q30,56 60,60 T120,60 T180,60 T200,60" fill="none" stroke="#0ea5e9" stroke-width="1.5"/>
+                                <path d="M0,66 Q30,63 60,66 T120,66 T180,66 T200,66" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.5"/>
+                                <path d="M15,58 L115,55 L15,53 Z" fill="#7dd3fc" stroke="#0369a1" stroke-width="1"/>
+                                <circle cx="35" cy="51" r="2.5" fill="#0369a1"/>
+                                <circle cx="50" cy="51" r="2.5" fill="#0369a1"/>
+                                <circle cx="65" cy="51" r="2.5" fill="#0369a1"/>
+                                <circle cx="80" cy="51" r="2.5" fill="#0369a1"/>
+                                <line x1="35" y1="53" x2="25" y2="63" stroke="#0284c7" stroke-width="1"/>
+                                <line x1="50" y1="53" x2="40" y2="63" stroke="#0284c7" stroke-width="1"/>
+                                <line x1="65" y1="53" x2="55" y2="63" stroke="#0284c7" stroke-width="1"/>
+                                <line x1="80" y1="53" x2="70" y2="63" stroke="#0284c7" stroke-width="1"/>
+                                <path d="M35,66 L135,63 L35,61 Z" fill="#1e3a8a" stroke="#1e293b" stroke-width="1"/>
+                                <circle cx="55" cy="59" r="2.5" fill="#1e293b"/>
+                                <circle cx="70" cy="59" r="2.5" fill="#1e293b"/>
+                                <circle cx="85" cy="59" r="2.5" fill="#1e293b"/>
+                                <circle cx="100" cy="59" r="2.5" fill="#1e293b"/>
+                                <line x1="55" y1="61" x2="45" y2="71" stroke="#0f172a" stroke-width="1"/>
+                                <line x1="70" y1="61" x2="60" y2="71" stroke="#0f172a" stroke-width="1"/>
+                                <line x1="85" y1="61" x2="75" y2="71" stroke="#0f172a" stroke-width="1"/>
+                                <line x1="100" y1="61" x2="90" y2="71" stroke="#0f172a" stroke-width="1"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 第三階段 -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-150 shadow-sm relative pl-16">
+                        <div class="absolute left-5 top-8 w-9 h-9 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center font-black text-base">3</div>
+                        <h3 class="font-black text-2xl text-slate-900 mb-3">冬日湖水結冰與「室內賽艇」的誕生</h3>
+                        <p class="text-slate-600 text-base leading-relaxed mb-4 font-medium">
+                            由於冬季時外國湖面結冰無法進行水上訓練，教練與選手便發明了**室內賽艇機**。近年，室內賽艇已演變為獨立而熱門的體育項目，香港更曾舉辦多次「亞洲室內賽艇錦標賽」及世界賽亞洲區資格賽！
+                        </p>
+                        <!-- SVG 插圖：室內賽艇機 -->
+                        <div class="w-full h-32 bg-sky-50/50 rounded-xl flex items-center justify-center overflow-hidden border border-sky-100/50">
+                            <svg class="w-full h-28 text-slate-700" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="10" y1="65" x2="190" y2="65" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="40" y1="58" x2="160" y2="58" stroke="#64748b" stroke-width="4"/>
+                                <line x1="40" y1="58" x2="30" y2="65" stroke="#475569" stroke-width="3"/>
+                                <line x1="160" y1="58" x2="165" y2="65" stroke="#475569" stroke-width="3"/>
+                                <circle cx="35" cy="40" r="14" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+                                <circle cx="35" cy="40" r="8" fill="#64748b"/>
+                                <path d="M26,30 L23,25" stroke="#0284c7" stroke-width="2"/>
+                                <rect x="42" y="16" width="12" height="10" rx="2" fill="#1e293b"/>
+                                <line x1="38" y1="28" x2="45" y2="23" stroke="#475569" stroke-width="2"/>
+                                <rect x="110" y="50" width="14" height="6" rx="2" fill="#0284c7"/>
+                                <circle cx="113" cy="57" r="1.5" fill="#0f172a"/>
+                                <circle cx="121" cy="57" r="1.5" fill="#0f172a"/>
+                                <line x1="35" y1="40" x2="90" y2="40" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1.5"/>
+                                <rect x="88" y="36" width="3" height="10" rx="1" fill="#0f172a"/>
+                                <rect x="65" y="44" width="8" height="14" transform="rotate(15 65 44)" fill="#1e293b" rx="1"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：生理學優勢卡片 & YouTube 精選影音嵌入 -->
+                <div class="space-y-8 lg:sticky lg:top-48">
+                    
+                    <!-- 推薦學習影片區塊 -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-150 shadow-md">
+                        <span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1.5 rounded-full border border-red-200 uppercase tracking-wider">
+                            🎬 推薦學習影片
+                        </span>
+                        <h3 class="font-black text-2xl text-slate-900 mt-4 mb-2">[運動教室101]第十八集:賽艇</h3>
+                        <p class="text-slate-500 text-base mb-4 leading-relaxed font-medium">
+                            透過專業體育教學影片，深入淺出地學習賽艇運動的基本知識、競賽規則與正確的划行技術，幫助大家建立扎實的賽艇運動基礎！
+                        </p>
+                        <!-- 響應式 YouTube 播放器 -->
+                        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner border border-slate-200">
+                            <iframe 
+                                class="absolute top-0 left-0 w-full h-full" 
+                                src="https://www.youtube.com/embed/Zbw1-Df4grk" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <span class="text-xs text-slate-400 block mt-2 text-center">
+                            若無法載入，您也可以直接存取：<a href="https://youtu.be/Zbw1-Df4grk" target="_blank" class="text-sky-600 underline font-medium hover:text-sky-700">YouTube 影片連結</a>
+                        </span>
+                    </div>
+
+                    <!-- 生理學優勢卡片 -->
+                    <div class="bg-sky-900 text-white rounded-3xl p-8 relative overflow-hidden shadow-xl min-h-[360px] flex flex-col justify-between">
+                        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-sky-800 rounded-full opacity-30"></div>
+                        <div>
+                            <span class="bg-sky-500/20 text-sky-300 text-sm font-bold px-4 py-1.5 rounded-full border border-sky-400/20 uppercase">
+                                帶氧黃金運動
+                            </span>
+                            <h3 class="text-3xl font-black mt-6 mb-6">室內賽艇的生理學優勢</h3>
+                            <ul class="space-y-4 text-slate-200 text-base font-medium">
+                                <li class="flex items-start">
+                                    <span class="text-sky-400 mr-3 text-lg">✓</span>
+                                    <div><strong>高耗氧量 (VO₂ max)：</strong> 鍛煉極佳的心肺與血管輸送氧氣系統。</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-sky-400 mr-3 text-lg">✓</span>
+                                    <div><strong>零重力負荷：</strong> 身體坐在特設滑座上，不會產生過度的膝、踝關節體重負荷，是優異的陸上交叉訓練 (Cross Training)。</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-sky-400 mr-3 text-lg">✓</span>
+                                    <div><strong>全身肌肉協調：</strong> 運用全身主要肌肉群（包括大腿、核心肌群及背肌），具高協調性特點。</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-8 border-t border-sky-800 pt-6">
+                            <div class="flex items-center justify-between text-sm text-sky-300 font-semibold">
+                                <div>奧運常駐項目：自 1900 年(男)起</div>
+                                <div>女子項目加入：自 1976 年起</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 版面：水上賽艇規格與插圖 ==================== -->
+        <section id="tab-boats" class="tab-content scroll-mt-24 space-y-12 hidden">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-black text-base uppercase tracking-wider">UNIT 02</span>
+                <h2 class="text-4xl sm:text-5xl font-black mt-2 text-slate-900 leading-tight">賽艇規格與項目設定</h2>
+                <p class="text-slate-500 text-xl mt-2 leading-relaxed font-medium">真正的比賽艇長度與寬度是如何的？單槳與雙槳又有些什麼分別？</p>
+            </div>
+
+            <!-- 兩大核心水上比賽艇的精細插圖 (SVG手繪) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 圖卡 1：單人雙槳艇 1X -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-150 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <h4 class="font-black text-xl text-slate-900">單人雙槳艇 (Single Scull - 1X)</h4>
+                        <span class="bg-sky-100 text-sky-700 text-xs font-bold px-3 py-1 rounded-full border border-sky-200">
+                            長度: 8 米 | 寬度: 27 厘米
+                        </span>
+                    </div>
+                    <div class="bg-sky-50/40 rounded-2xl p-4 flex flex-col items-center justify-center border border-sky-100/50">
+                        <svg class="w-full max-w-lg h-40" viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="10" y1="60" x2="490" y2="60" stroke="#bae6fd" stroke-width="1" stroke-dasharray="4 4"/>
+                            <line x1="250" y1="10" x2="250" y2="110" stroke="#bae6fd" stroke-width="1" stroke-dasharray="4 4"/>
+                            <path d="M 0,65 Q 125,60 250,65 T 500,65" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+                            <path d="M 0,72 Q 125,74 250,71 T 500,72" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.2"/>
+                            <path d="M 30,60 Q 250,65 470,60 Q 250,55 30,60 Z" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+                            <rect x="220" y="58" width="50" height="4" rx="1" fill="#475569"/>
+                            <rect x="238" y="55" width="14" height="10" rx="2" fill="#0f172a"/>
+                            <line x1="245" y1="55" x2="245" y2="25" stroke="#334155" stroke-width="1.5"/>
+                            <line x1="245" y1="65" x2="245" y2="95" stroke="#334155" stroke-width="1.5"/>
+                            <circle cx="245" cy="25" r="2.5" fill="#f59e0b"/>
+                            <circle cx="245" cy="95" r="2.5" fill="#f59e0b"/>
+                            <line x1="245" y1="25" x2="220" y2="10" stroke="#f59e0b" stroke-width="2"/>
+                            <line x1="245" y1="95" x2="220" y2="110" stroke="#f59e0b" stroke-width="2"/>
+                            <path d="M 220,10 L 210,5 L 212,12 Z" fill="#0284c7"/>
+                            <path d="M 220,110 L 210,115 L 212,108 Z" fill="#0284c7"/>
+                            <line x1="440" y1="60" x2="445" y2="70" stroke="#ef4444" stroke-width="1.5"/>
+                            <text x="250" y="105" text-anchor="middle" class="text-[11px] font-black fill-slate-500">對稱槳架 (Symmetrical Riggers) 每個選手操控兩副槳</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed font-medium">
+                        <strong>雙槳設計特色：</strong> 雙槳艇（簡稱附帶「X」）在划行時，運動員左右兩側拉力完全對稱，平衡度與靈活度相對高。單人艇（1X）是水上最具代表性的個人心肺爆發力項目。
+                    </p>
+                </div>
+
+                <!-- 圖卡 2：八人單槳有舵手艇 8+ -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-150 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <h4 class="font-black text-xl text-slate-900">八人單槳有舵手艇 (Eight - 8+)</h4>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200">
+                            長度: 19.9 米 | 寬度: 55 厘米
+                        </span>
+                    </div>
+                    <div class="bg-sky-50/40 rounded-2xl p-4 flex flex-col items-center justify-center border border-sky-100/50">
+                        <svg class="w-full max-w-lg h-40" viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="10" y1="60" x2="490" y2="60" stroke="#bae6fd" stroke-width="1" stroke-dasharray="4 4"/>
+                            <path d="M 0,65 Q 125,68 250,63 T 500,65" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+                            <path d="M 15,60 Q 250,64 485,60 Q 250,56 15,60 Z" fill="#ffffff" stroke="#1e3a8a" stroke-width="2"/>
+                            
+                            <!-- Rower 1 -->
+                            <circle cx="100" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="100" y1="58" x2="105" y2="45" stroke="#334155" stroke-width="1"/>
+                            <line x1="105" y1="45" x2="80" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 80,25 L 72,21 L 75,27 Z" fill="#1e3a8a"/>
+                            
+                            <!-- Rower 2 -->
+                            <circle cx="140" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="140" y1="62" x2="145" y2="75" stroke="#334155" stroke-width="1"/>
+                            <line x1="145" y1="75" x2="120" y2="95" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 120,95 L 112,99 L 115,93 Z" fill="#1e3a8a"/>
+
+                            <!-- Rower 3 -->
+                            <circle cx="180" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="180" y1="58" x2="185" y2="45" stroke="#334155" stroke-width="1"/>
+                            <line x1="185" y1="45" x2="160" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 160,25 L 152,21 L 155,27 Z" fill="#1e3a8a"/>
+
+                            <!-- Rower 4 -->
+                            <circle cx="220" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="220" y1="62" x2="225" y2="75" stroke="#334155" stroke-width="1"/>
+                            <line x1="225" y1="75" x2="200" y2="95" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 200,95 L 192,99 L 195,93 Z" fill="#1e3a8a"/>
+
+                            <!-- Rower 5 -->
+                            <circle cx="260" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="260" y1="58" x2="265" y2="45" stroke="#334155" stroke-width="1"/>
+                            <line x1="265" y1="45" x2="240" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 240,25 L 232,21 L 235,27 Z" fill="#1e3a8a"/>
+
+                            <!-- Rower 6 -->
+                            <circle cx="300" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="300" y1="62" x2="305" y2="75" stroke="#334155" stroke-width="1"/>
+                            <line x1="305" y1="75" x2="280" y2="95" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 280,95 L 272,99 L 275,93 Z" fill="#1e3a8a"/>
+
+                            <!-- Rower 7 -->
+                            <circle cx="340" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="340" y1="58" x2="345" y2="45" stroke="#334155" stroke-width="1"/>
+                            <line x1="345" y1="45" x2="320" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 320,25 L 312,21 L 315,27 Z" fill="#1e3a8a"/>
+
+                            <!-- Rower 8 -->
+                            <circle cx="380" cy="60" r="3" fill="#1e293b"/>
+                            <line x1="380" y1="62" x2="385" y2="75" stroke="#334155" stroke-width="1"/>
+                            <line x1="385" y1="75" x2="360" y2="95" stroke="#f59e0b" stroke-width="1.5"/>
+                            <path d="M 360,95 L 352,99 L 355,93 Z" fill="#1e3a8a"/>
+
+                            <!-- 舵手位置 -->
+                            <circle cx="430" cy="60" r="2.5" fill="#ef4444"/>
+                            <text x="430" y="52" text-anchor="middle" class="text-[9px] font-black fill-red-600">舵手</text>
+
+                            <!-- 標記說明 -->
+                            <text x="250" y="112" text-anchor="middle" class="text-[11px] font-black fill-slate-500">交錯單槳 (Asymmetrical Sweep Riggers) 協調配合</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed font-medium">
+                        <strong>單槳設計特色：</strong> 單槳艇項目（如 8+ 艇）是沒有單人項目的，每個選手各操控一副槳架交錯的單邊船槳，需要配備一名在船尾坐著、不划槳但負責指引方向與控制節奏的**舵手 (Coxswain)**，極具團隊協作性。
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <!-- 左側：單槳與雙槳 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <span class="p-3 bg-sky-50 text-sky-600 rounded-lg text-xl">🚣‍♂️</span>
+                            <h3 class="font-extrabold text-2xl text-slate-900">單槳 vs 雙槳的分別</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="p-5 bg-slate-50 rounded-xl">
+                                <span class="text-base font-bold text-sky-600 block mb-2">雙槳項目 (Sculling) - 簡稱後加「X」</span>
+                                <p class="text-slate-600 text-base leading-relaxed font-medium">
+                                    每個選手手持<strong>左右兩副船槳</strong>。槳架是左右對稱的，平衡度與操控力相對靈活。常見如單人雙槳(1X)、雙人雙槳(2X)等。
+                                </p>
+                            </div>
+                            <div class="p-5 bg-slate-50 rounded-xl">
+                                <span class="text-base font-bold text-amber-600 block mb-2">單槳項目 (Sweep Rowing) - 無單人作賽</span>
+                                <p class="text-slate-600 text-base leading-relaxed font-medium">
+                                    每個選手只操控<strong>一副船槳</strong>。槳架左右交錯，需要隊友之間高度合作與協調。單槳艇中最少為雙人作賽。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100">
+                        <div class="text-base text-slate-400 font-bold">
+                            💡 有舵手標示為 <strong>(+)</strong>；無舵手標示為 <strong>(-)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中間：比賽艇極致的外型規格 (梭子比例圖) -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm lg:col-span-2 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-extrabold text-2xl text-slate-900 mb-2">比賽艇身外型與極端比例</h3>
+                        <p class="text-slate-500 text-base mb-8 font-medium">比賽艇外型像織布的梭子，極其狹長。以下直觀對比其長度與水線寬度：</p>
+
+                        <!-- 視覺化圖表 -->
+                        <div class="space-y-8">
+                            <!-- 8人艇 -->
+                            <div>
+                                <div class="flex justify-between items-center text-base font-bold mb-2">
+                                    <span class="text-slate-700">八人艇 (Length: 19.9m / Width: 55cm)</span>
+                                    <span class="text-sky-600">長寬比 ~ 36:1</span>
+                                </div>
+                                <div class="relative w-full h-10 bg-slate-100 rounded-full overflow-hidden flex items-center px-4">
+                                    <div class="bg-sky-500 h-3 rounded-full transition-all duration-1000" style="width: 100%"></div>
+                                </div>
+                                <span class="text-sm text-slate-400 block mt-2 font-medium">幾乎有4輛私家車排成一列長，但寬度僅相當於一張普通辦公椅！</span>
+                            </div>
+
+                            <!-- 單人艇 -->
+                            <div>
+                                <div class="flex justify-between items-center text-base font-bold mb-2">
+                                    <span class="text-slate-700">單人艇 (Length: 8m / Width: 27cm)</span>
+                                    <span class="text-sky-600">長寬比 ~ 30:1</span>
+                                </div>
+                                <div class="relative w-full h-10 bg-slate-100 rounded-full overflow-hidden flex items-center px-4">
+                                    <div class="bg-sky-400 h-3 rounded-full transition-all duration-1000" style="width: 40%"></div>
+                                </div>
+                                <span class="text-sm text-slate-400 block mt-2 font-medium">長達8米，然而寬度僅與一張普通平板電腦寬度相若（極難維持平衡！）。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 pt-8 border-t border-slate-100 text-base">
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <span class="font-bold text-slate-800 block text-lg mb-1">航道標準</span>
+                            <span class="text-slate-500 leading-relaxed font-medium">2000米長、12.5~13.5米寬直航道，靜水。終點有100米緩衝區。</span>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <span class="font-bold text-slate-800 block text-lg mb-1">輕量級限制</span>
+                            <span class="text-slate-500 leading-relaxed font-medium">賽艇手個人體重上限：男子72.5公斤、女子59公斤以下。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 版面：正確划艇技術 ==================== -->
+        <section id="tab-technique" class="tab-content scroll-mt-24 space-y-12 hidden">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-black text-base uppercase tracking-wider">UNIT 03</span>
+                <h2 class="text-4xl sm:text-5xl font-black mt-2 text-slate-900 leading-tight">正確技術、呼吸與示範短片</h2>
+                <p class="text-slate-500 text-xl mt-3 leading-relaxed font-medium">賽艇的力學核心是大腿肌肉與軀幹，結合專業的視像示範與正確呼吸，能大幅提升划槳效率、穩定上半身並預防運動傷害！</p>
+            </div>
+
+            <!-- 加插的專業基本技術教學短片 -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-md">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full border border-red-200 uppercase tracking-wider">
+                            📹 官方技術示範
+                        </span>
+                        <h3 class="font-black text-2xl text-slate-900 mt-2">室內賽艇導師課程視像教材：基本技術第一課</h3>
+                        <p class="text-slate-500 text-base mt-1 font-medium">由中國香港賽艇協會製作，本集著重於初學程序（完整動作分步拆解）及動作要點概括。</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- YouTube 嵌入 -->
+                    <div class="lg:col-span-7 relative w-full aspect-video rounded-2xl overflow-hidden shadow-inner border border-slate-200">
+                        <iframe 
+                            class="absolute top-0 left-0 w-full h-full" 
+                            src="https://www.youtube.com/embed/AZKRUKqMkjk" 
+                            title="室內賽艇導師課程視像教材：基本技術第一課" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <!-- 影片精華重點指南 -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <h4 class="font-bold text-slate-900 text-xl border-b border-slate-100 pb-2">🎯 影片學習指南（關鍵時間點）</h4>
+                        <ul class="space-y-3 text-base text-slate-600 leading-relaxed font-medium">
+                            <li class="flex items-start">
+                                <span class="text-sky-500 font-bold mr-2">0:05</span>
+                                <div><strong>初學程序（完整動作）：</strong> 觀察拉槳時腿部、核心及手臂的相互協調發力順序。</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-sky-500 font-bold mr-2">1:59</span>
+                                <div><strong>概括與要點總結：</strong> 複習划艇機動作中常見的力學核心和身體傾斜度控制。</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-emerald-600 font-bold mr-2">💡</span>
+                                <div class="text-xs text-slate-500 font-medium">影片來源：中國香港賽艇協會（HKCRA）。建議一邊播放影片，一邊對照下方「拉槳與恢復」的呼吸步驟進行模擬練習！</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                <!-- 左側：划行階段與呼吸配合 -->
+                <div class="space-y-8">
+                    <h3 class="font-extrabold text-2xl text-slate-900">划艇力學與呼吸二重奏</h3>
+                    <p class="text-slate-600 text-lg leading-relaxed font-medium">
+                        室內賽艇的技術關鍵，在於利用**大腿肌肉**向後蹬送，而非單純用手臂與上半身死命拉扯。
+                    </p>
+
+                    <div class="space-y-6">
+                        <!-- 蹬腿向後 -->
+                        <div class="flex items-start bg-sky-50 p-5 rounded-xl border border-sky-100">
+                            <div class="p-3 bg-sky-500 text-white rounded-lg font-bold text-sm shrink-0 mr-4">
+                                向後拉
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-lg">向後拉動時 ➔ 呼氣 (Exhale)</h4>
+                                <p class="text-sm text-slate-600 mt-2 leading-relaxed font-medium">
+                                    大腿發力伸展，在向後蹬送拉槳時配合<strong>呼氣</strong>，有助於緊縮腹部核心肌群，提供最大程度的核心支持力。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 恢復向前 -->
+                        <div class="flex items-start bg-emerald-50 p-5 rounded-xl border border-emerald-100">
+                            <div class="p-3 bg-emerald-500 text-white rounded-lg font-bold text-sm shrink-0 mr-4">
+                                向前滑
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-lg">向前恢復時 ➔ 吸氣 (Inhale)</h4>
+                                <p class="text-sm text-slate-600 mt-2 leading-relaxed font-medium">
+                                    身體慢慢回到起始位置。雙腿慢慢彎曲，此時進行<strong>吸氣</strong>，為大腦 and 肌肉重新注入充足氧氣，並令身體肌群放鬆。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：常見錯誤動作 & 傷害部位 -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-lg relative">
+                    <div class="absolute -top-4 right-6 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full border border-red-200">
+                        ⚠ 警惕運動受傷
+                    </div>
+                    <h3 class="font-extrabold text-2xl text-slate-900 mb-6">常見錯誤動作與高危受傷點</h3>
+
+                    <div class="space-y-6 text-base font-medium leading-relaxed">
+                        <div class="p-4 bg-red-50/50 rounded-lg flex items-start">
+                            <span class="text-red-600 font-black mr-3 text-lg">✗</span>
+                            <div>
+                                <strong class="text-slate-900 text-lg">過於著重上肢：</strong>
+                                <p class="text-slate-500 mt-1">很多初學者拼命使用手臂和肩膀拉。這樣非但不能產生持續推動力，更極易導致肩頸及手臂酸痛和拉傷。</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-red-50/50 rounded-lg flex items-start">
+                            <span class="text-red-600 font-black mr-3 text-lg">✗</span>
+                            <div>
+                                <strong class="text-slate-900 text-lg">上身過於傾前或擺後：</strong>
+                                <p class="text-slate-500 mt-1">這會給腰椎施加額外的剪力。一旦核心力量不足，<strong>腰、背部</strong>就成了最常見的受傷重災區！</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-red-50/50 rounded-lg flex items-start">
+                            <span class="text-red-600 font-black mr-3 text-lg">✗</span>
+                            <div>
+                                <strong class="text-slate-900 text-lg">膝蓋與髖關節壓迫：</strong>
+                                <p class="text-slate-500 mt-1">當滑座過度向前，大腿與小腿夾角過小時，容易引致<strong>膝蓋或髖關節屈肌壓迫性損傷</strong>。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 版面：一分鐘賽艇測試 ==================== -->
+        <section id="tab-oneminute" class="tab-content scroll-mt-24 space-y-12 hidden">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-black text-base uppercase tracking-wider">UNIT 04</span>
+                <h2 class="text-4xl sm:text-5xl font-black mt-2 text-slate-900 leading-tight">一分鐘賽艇測試（1-Min Test）</h2>
+                <p class="text-slate-500 text-xl mt-3 leading-relaxed font-medium">中國香港賽艇協會及學界最常用的體體評估，檢測你的心肺耐力、爆發力及全身協調性。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                <!-- 左側：知識要點與測試標準 -->
+                <div class="lg:col-span-7 space-y-8">
+                    <!-- 測試目的與應用 -->
+                    <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+                        <h3 class="font-extrabold text-2xl text-slate-900 mb-4 flex items-center">
+                            <span class="text-2xl mr-3">🎯</span> 測試目的與學界應用
+                        </h3>
+                        <ul class="space-y-4 text-slate-600 text-base leading-relaxed font-medium">
+                            <li class="flex items-start">
+                                <span class="text-sky-500 font-bold mr-3 text-lg">·</span>
+                                <span><strong>學界選材指標：</strong> 測試數據會輸入電腦進行科學分析，是教練團評估受試者是否具備賽艇發展潛力的重要指標。</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-sky-500 font-bold mr-3 text-lg">·</span>
+                                <span><strong>體適能與協調性：</strong> 1 分鐘極限測試要求受試者在賽艇機（Ergometer）上盡全力划行，完美考驗大腿、核心與上肢的高速協調與爆發耐力。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 評估標準對照表 -->
+                    <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+                        <h3 class="font-extrabold text-2xl text-slate-900 mb-6 flex items-center">
+                            <span class="text-2xl mr-3">📊</span> 一分鐘劃行距離評估標準
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-slate-500 text-sm">
+                                        <th class="py-3 px-4 font-bold">體能評估級別</th>
+                                        <th class="py-3 px-4 font-bold text-sky-600">男子組標準 ♂</th>
+                                        <th class="py-3 px-4 font-bold text-pink-600">女子組標準 ♀</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-base text-slate-700 font-medium">
+                                    <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                                        <td class="py-4 px-4 font-bold flex items-center">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mr-2"></span>
+                                            學界精英 / 發展潛能優異
+                                        </td>
+                                        <td class="py-4 px-4 font-semibold">330 公尺或以上</td>
+                                        <td class="py-4 px-4 font-semibold">290 公尺或以上</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                                        <td class="py-4 px-4 font-bold flex items-center">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 mr-2"></span>
+                                            優秀體適能標準
+                                        </td>
+                                        <td class="py-4 px-4">270 - 329 公尺</td>
+                                        <td class="py-4 px-4">240 - 289 公尺</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                                        <td class="py-4 px-4 font-bold flex items-center">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 mr-2"></span>
+                                            良好水平
+                                        </td>
+                                        <td class="py-4 px-4">210 - 269 公尺</td>
+                                        <td class="py-4 px-4">180 - 239 公尺</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50">
+                                        <td class="py-4 px-4 font-bold flex items-center">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 mr-2"></span>
+                                            初學入門階段
+                                        </td>
+                                        <td class="py-4 px-4 text-slate-500">210 公尺以下</td>
+                                        <td class="py-4 px-4 text-slate-500">180 公尺以下</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-4 leading-relaxed font-medium">
+                            * 註：成績會依據受試者的年齡、性別以及體重級別進行分級。一般而言，男子組在爆發力上要求較高的功率輸出，而女子組則講求穩定劃槳節奏與耐力的平衡。
+                        </p>
+                    </div>
+
+                    <!-- 實測技巧 -->
+                    <div class="bg-sky-50 border border-sky-100 p-8 rounded-2xl">
+                        <h3 class="font-extrabold text-xl text-sky-950 mb-4 flex items-center">
+                            <span class="text-2xl mr-3">💡</span> 實測奪分小技巧
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-sky-900 leading-relaxed font-medium">
+                            <div class="bg-white/80 p-4 rounded-xl border border-sky-100">
+                                <strong class="block mb-2 text-sky-950 text-base">1. 起步姿勢</strong>
+                                雙腿完全屈曲，雙手握緊把手，核心肌群收緊，背部挺直。
+                            </div>
+                            <div class="bg-white/80 p-4 rounded-xl border border-sky-100">
+                                <strong class="block mb-2 text-sky-950 text-base">2. 發力順序</strong>
+                                先蹬<strong>腿</strong> ➔ 再挺<strong>軀幹</strong>後仰 ➔ 最後用<strong>手</strong>拉槳。回槳時按反方向復位。
+                            </div>
+                            <div class="bg-white/80 p-4 rounded-xl border border-sky-100">
+                                <strong class="block mb-2 text-sky-950 text-base">3. 節奏控制</strong>
+                                阻力一般調在 <strong>3 - 5</strong> 之間。保持每分鐘 <strong>28 - 32 槳</strong>（Stroke Rate），初段切忌過早力竭。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：一分鐘成績挑戰評估器（互動工具） -->
+                <div class="lg:col-span-5 bg-slate-900 text-white p-8 rounded-3xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <span class="bg-sky-500/20 text-sky-300 text-xs font-bold px-3 py-1 rounded-full border border-sky-400/20 uppercase">
+                            互動評估器
+                        </span>
+                        <h3 class="text-2xl font-black mt-4 mb-2">1分鐘實力即時分析</h3>
+                        <p class="text-slate-400 text-base mb-6 font-medium">輸入你在一分鐘內划行的總距離（公尺），評估你的體能級別：</p>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm text-slate-300 font-semibold mb-2">選擇性別</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <button id="gender-m" onclick="setGender('M')" class="py-3 rounded-lg text-sm font-bold border transition-colors bg-sky-500 border-sky-500 text-slate-950">男子組 ♂</button>
+                                    <button id="gender-f" onclick="setGender('F')" class="py-3 rounded-lg text-sm font-bold border border-slate-700 hover:bg-slate-800 transition-colors text-slate-300">女子組 ♀</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-slate-300 font-semibold mb-2">划行總距離 (公尺)</label>
+                                <div class="relative">
+                                    <input id="one-min-dist" type="number" min="50" max="500" value="230" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white text-xl focus:ring-2 focus:ring-sky-500 focus:outline-none pr-16">
+                                    <span class="absolute right-4 top-3 text-sm text-slate-400 font-bold">公尺</span>
+                                </div>
+                            </div>
+
+                            <button onclick="evaluateOneMinTest()" class="w-full bg-sky-400 hover:bg-sky-300 transition-colors py-3 rounded-lg font-bold text-sm text-slate-950 uppercase tracking-wider">
+                                📊 分析體能水平
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 評估顯示 -->
+                    <div id="eval-result-box" class="mt-8 bg-slate-800 p-5 rounded-xl border border-slate-700 hidden">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">評估等級</span>
+                            <span id="eval-level-badge" class="bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold">一般標準</span>
+                        </div>
+                        <div id="eval-level-name" class="text-xl font-black text-white">230 公尺 (良好水平)</div>
+                        <p id="eval-level-desc" class="text-sm text-slate-300 mt-3 leading-relaxed font-medium">
+                            做得好！這說明你擁有不錯的全身協調性。建議多加練習「腿、軀幹、手」的發力順序，嘗試將槳頻維持在每分鐘 28-32 槳。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 版面：Concept2 PM5 顯示器解讀 ==================== -->
+        <section id="tab-concept2" class="tab-content scroll-mt-24 space-y-12 hidden">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-extrabold text-sm uppercase tracking-wider">UNIT 05</span>
+                <h2 class="text-4xl font-black mt-2 text-slate-900 leading-tight">Concept2 PM5 電子錶解讀與模擬</h2>
+                <p class="text-slate-500 text-xl mt-3 leading-relaxed font-medium">
+                    PM5 (Performance Monitor 5) 是全球賽艇訓練與學界競賽的黃金標準電子錶。學會解讀錶面數據，是科學化訓練的第一步。
+                </p>
+            </div>
+
+            <!-- PM5 物理仿真面板與互動解讀 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                
+                <!-- 左側：物理 PM5 電子錶模擬器 (大幅等比例放大) -->
+                <div class="lg:col-span-6 flex flex-col items-center">
+                    <!-- PM5 外殼邊框 (放大尺寸) -->
+                    <div class="w-full max-w-[460px] bg-slate-850 p-8 rounded-[40px] border-4 border-slate-700 shadow-2xl relative flex flex-col justify-between" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+                        <!-- 頂部 LOGO -->
+                        <div class="text-center text-slate-400 text-sm font-black tracking-widest mb-4 font-mono">
+                            concept 2 <span class="text-sky-500">PM5</span>
+                        </div>
+
+                        <!-- 顯示器邊框 -->
+                        <div class="bg-emerald-950 p-5 rounded-2xl border-8 border-slate-900 relative shadow-inner">
+                            <!-- LCD 綠色液晶發光螢幕 -->
+                            <div class="bg-[#a8dadc] text-slate-900 p-5 rounded-lg font-lcd h-[380px] flex flex-col justify-between shadow-inner relative overflow-hidden">
+                                <!-- 電池 & 藍牙圖標 -->
+                                <div class="flex justify-between items-center text-xs opacity-75 border-b border-slate-850/30 pb-1.5 font-bold">
+                                    <span>⚡ ROWING</span>
+                                    <span>[⨉] ANT+ 📶 100%</span>
+                                </div>
+
+                                <!-- 核心 LCD 顯示模塊 -->
+                                <div id="pm5-display-content" class="flex-grow flex flex-col justify-between mt-3 text-slate-900">
+                                    <!-- 模式一：全部數據 (All Data) - 默認 -->
+                                    <div id="pm5-mode-all" class="space-y-3 h-full flex flex-col justify-between">
+                                        <!-- 第一排：時間 -->
+                                        <div class="flex justify-between items-baseline border-b border-slate-800/15 pb-1.5">
+                                            <span class="text-sm font-black text-slate-800">TIME</span>
+                                            <span id="pm5-time" class="text-5xl font-black tracking-tight">00:00.0</span>
+                                        </div>
+                                        <!-- 第二排：槳頻 & 速度 -->
+                                        <div class="grid grid-cols-2 gap-2 border-b border-slate-800/15 pb-1.5">
+                                            <div>
+                                                <span class="text-xs font-black text-slate-800 block mb-0.5">STROKE RATE (s/m)</span>
+                                                <span id="pm5-sr" class="text-4xl font-black text-slate-900">24</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-xs font-black text-slate-800 block mb-0.5">⚡ CURRENT PACE</span>
+                                                <span id="pm5-pace" class="text-4xl font-black text-slate-900">2:15</span>
+                                                <span class="text-sm font-bold">/500m</span>
+                                            </div>
+                                        </div>
+                                        <!-- 第三排：距離 -->
+                                        <div class="flex justify-between items-baseline border-b border-slate-800/15 pb-1.5">
+                                            <span class="text-sm font-black text-slate-800">DISTANCE</span>
+                                            <span id="pm5-dist" class="text-5xl font-black tracking-tight">0</span>
+                                            <span class="text-sm font-bold">m</span>
+                                        </div>
+                                        <!-- 第四排：功率/能量消耗 -->
+                                        <div class="grid grid-cols-2 gap-2 text-base font-bold">
+                                            <div>
+                                                <span class="text-[10px] font-black text-slate-700 block">FORCE (WATTS)</span>
+                                                <span id="pm5-watts" class="text-2xl font-black">0 w</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-[10px] font-black text-slate-700 block">CALORIES</span>
+                                                <span id="pm5-cals" class="text-2xl font-black">0 cal/hr</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 模式二：力量曲線 (Force Curve) -->
+                                    <div id="pm5-mode-curve" class="hidden h-full flex flex-col justify-between">
+                                        <div class="flex justify-between text-sm border-b border-slate-800/15 pb-1.5 font-bold">
+                                            <span>SR: <span id="pm5-curve-sr" class="font-black">24</span> s/m</span>
+                                            <span>Pace: <span id="pm5-curve-pace" class="font-black">2:15</span></span>
+                                        </div>
+                                        <div class="flex-grow flex flex-col justify-center items-center py-2">
+                                            <span class="text-xs text-slate-800 font-bold self-start mb-1">FORCE (kg)</span>
+                                            <!-- 力量曲線動態 SVG -->
+                                            <svg class="w-full h-36" viewBox="0 0 100 50">
+                                                <!-- 格線 -->
+                                                <line x1="0" y1="45" x2="100" y2="45" stroke="#475569" stroke-width="0.5" stroke-dasharray="2 2"/>
+                                                <line x1="0" y1="5" x2="0" y2="45" stroke="#475569" stroke-width="0.5"/>
+                                                <!-- 力量曲線路徑 -->
+                                                <path id="pm5-curve-path" d="M 0,45 Q 10,45 20,45 T 60,45 T 100,45" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+                                            </svg>
+                                            <div class="flex justify-between w-full text-[10px] text-slate-700 font-bold mt-1">
+                                                <span>CATCH (起槳)</span>
+                                                <span>DRIVE (發力)</span>
+                                                <span>FINISH (收槳)</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center text-sm font-bold border-t border-slate-800/15 pt-1.5">
+                                            FORCE CURVE (力量曲線模式)
+                                        </div>
+                                    </div>
+
+                                    <!-- 模式三：大字體模式 (Large Print) -->
+                                    <div id="pm5-mode-large" class="hidden h-full flex flex-col justify-center items-center space-y-5">
+                                        <div class="text-center">
+                                            <span class="text-sm font-bold text-slate-700 block">CURRENT PACE /500m</span>
+                                            <span id="pm5-large-pace" class="text-7xl font-black tracking-tight">2:15</span>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-10 text-center w-full border-t border-slate-800/15 pt-5">
+                                            <div>
+                                                <span class="text-sm font-bold text-slate-700 block">TIME</span>
+                                                <span id="pm5-large-time" class="text-3xl font-black">00:00</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm font-bold text-slate-700 block">DISTANCE</span>
+                                                <span id="pm5-large-dist" class="text-3xl font-black">0 m</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 模式四：配速艇模式 -->
+                                    <div id="pm5-mode-boat" class="hidden h-full flex flex-col justify-between">
+                                        <div class="flex justify-between text-xs border-b border-slate-850/30 pb-1.5 font-bold">
+                                            <span>TIME: <span id="pm5-boat-time" class="font-black">00:00.0</span></span>
+                                            <span>DIST: <span id="pm5-boat-dist" class="font-black">0</span>m</span>
+                                        </div>
+                                        <div class="flex-grow flex flex-col justify-around py-4 relative">
+                                            <!-- 我的賽艇 -->
+                                            <div class="space-y-1">
+                                                <span class="text-[10px] font-bold text-slate-700 block">YOU (YOUR BOAT)</span>
+                                                <div class="w-full h-4 bg-slate-300 rounded relative">
+                                                    <div id="pm5-boat-my-marker" class="absolute top-0 bottom-0 w-3 bg-sky-600 rounded transition-all duration-300" style="left: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <!-- 配速艇 -->
+                                            <div class="space-y-1">
+                                                <span class="text-[10px] font-bold text-slate-700 block">TARGET (PACE BOAT - 2:15)</span>
+                                                <div class="w-full h-4 bg-slate-300 rounded relative">
+                                                    <div id="pm5-boat-target-marker" class="absolute top-0 bottom-0 w-3 bg-amber-500 rounded transition-all duration-300" style="left: 0%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="pm5-boat-diff" class="text-center text-xs font-bold border-t border-slate-850/30 pt-1.5 text-slate-700">
+                                            等候出發...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 物理按鍵區域 -->
+                        <div class="grid grid-cols-5 gap-2 mt-4">
+                            <button onclick="togglePM5Mode('all')" class="bg-slate-700 hover:bg-slate-600 text-white font-mono text-[10px] py-2 rounded-lg border border-slate-600 active:scale-95 transition-all text-center font-bold">ALL DATA</button>
+                            <button onclick="togglePM5Mode('curve')" class="bg-slate-700 hover:bg-slate-600 text-white font-mono text-[10px] py-2 rounded-lg border border-slate-600 active:scale-95 transition-all text-center font-bold">FORCE</button>
+                            <button onclick="togglePM5Mode('large')" class="bg-slate-700 hover:bg-slate-600 text-white font-mono text-[10px] py-2 rounded-lg border border-slate-600 active:scale-95 transition-all text-center font-bold">LARGE</button>
+                            <button onclick="togglePM5Mode('boat')" class="bg-slate-700 hover:bg-slate-600 text-white font-mono text-[10px] py-2 rounded-lg border border-slate-600 active:scale-95 transition-all text-center font-bold">BOAT</button>
+                            <button onclick="togglePM5Units()" class="bg-slate-600 hover:bg-slate-500 text-white font-mono text-[10px] py-2 rounded-lg border border-slate-500 active:scale-95 transition-all text-center font-bold">UNITS</button>
+                        </div>
+
+                        <!-- 實時模擬槳頻控制器 -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3 mt-4">
+                            <div class="flex justify-between items-center text-sm font-bold text-slate-300">
+                                <span>🎚️ 調整模擬槳頻 (Stroke Rate)</span>
+                                <span id="pm5-sr-val-display" class="text-sky-400 font-black text-base">24 s/m</span>
+                            </div>
+                            <input id="pm5-sr-slider" type="range" min="16" max="36" value="24" oninput="updatePM5SR(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                            <div class="flex justify-between text-[10px] text-slate-500 font-bold">
+                                <span>16 s/m (長途有氧)</span>
+                                <span>36 s/m (極限衝刺)</span>
+                            </div>
+                        </div>
+
+                        <!-- 啟動/暫停控制大按鍵 -->
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <button id="btn-pm5-start" onclick="togglePM5Simulation()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-sm transition-all active:scale-95 text-center">
+                                🏁 開始模擬划行
+                            </button>
+                            <button onclick="resetPM5Simulation()" class="bg-rose-700 hover:bg-rose-600 text-slate-200 font-bold py-3 rounded-xl text-sm transition-all active:scale-95 text-center">
+                                🔄 數據重置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：PM5 錶面核心數據詳解 -->
+                <div class="lg:col-span-6 space-y-8">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                        <h3 class="font-extrabold text-2xl text-slate-900 flex items-center">
+                            <span class="mr-2">📖</span> PM5 核心數據圖文指南
+                        </h3>
+
+                        <div class="space-y-6 text-base text-slate-600 leading-relaxed font-medium">
+                            <!-- STROKE RATE -->
+                            <div class="border-l-4 border-sky-500 pl-4 space-y-1">
+                                <h4 class="font-bold text-slate-900 text-lg">1. 槳頻 (Stroke Rate / s-m)</h4>
+                                <p class="text-sm">
+                                    指<strong>每分鐘划槳的次數 (Strokes per Minute)</strong>。有氧划行時建議維持在 <strong>18-24 s/m</strong>；進行一分鐘爆發力測試或衝刺時，槳頻則一般拉高至 <strong>28-32 s/m</strong>。
+                                </p>
+                            </div>
+
+                            <!-- PACE -->
+                            <div class="border-l-4 border-emerald-500 pl-4 space-y-1">
+                                <h4 class="font-bold text-slate-900 text-lg">2. 500米段速 (Pace per 500m / Split)</h4>
+                                <p class="text-sm">
+                                    電子錶上最核心的「速度」衡量指標。代表<strong>若以當前力量划行，完成 500 公尺所需的預估時間</strong>。段速愈小，代表划行速度愈快。這直接取決於你大腿蹬送的爆發力與核心配合度。
+                                </p>
+                            </div>
+
+                            <!-- FORCE CURVE -->
+                            <div class="border-l-4 border-amber-500 pl-4 space-y-1">
+                                <h4 class="font-bold text-slate-900 text-lg">3. 力量曲線 (Force Curve) 的科學</h4>
+                                <p class="text-sm">
+                                    力量曲線是圖形化反饋。<strong>平滑、飽滿的拱形曲線</strong>代表你的蹬腿、挺身和拉槳發力鏈非常順暢。若曲線中段出現凹陷，代表發力銜接脫節，容易導致肌肉酸痛。
+                                </p>
+                            </div>
+
+                            <!-- ENERGY -->
+                            <div class="border-l-4 border-indigo-500 pl-4 space-y-1">
+                                <h4 class="font-bold text-slate-900 text-lg">4. 瓦特 (Watts) 與卡路里 (Calories)</h4>
+                                <p class="text-sm">
+                                    <strong>瓦特 (Watts)</strong> 測量你每一槳產生的即時「機械功率」輸出；<strong>卡路里 (Cal/hr)</strong> 則估算你身體即時的「熱量消耗速率」。可按下 <strong>UNITS</strong> 鍵進行一鍵單位切換。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 版面：室內賽艇「段速」計算機 (一體化配速盤) ==================== -->
+        <section id="tab-calculator" class="tab-content scroll-mt-24 space-y-12 hidden">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-extrabold text-sm uppercase tracking-wider">UNIT 06</span>
+                <h2 class="text-4xl font-black mt-2 text-slate-900">段速與生理指標配速控制台</h2>
+                <p class="text-slate-500 text-lg mt-3 font-medium leading-relaxed">
+                    「段速」(Split Time) 是指在室內賽艇機上拉完 <strong>500 米</strong> 所需的時間。它是衡量拉槳力量與心肺系統有氧/無氧臨界點的最核心指標。
+                </p>
+            </div>
+
+            <!-- 全新一體化控制台 -->
+            <div class="bg-slate-900 text-white rounded-[32px] p-8 sm:p-12 shadow-xl border border-slate-800 space-y-10">
+                
+                <!-- 頂部區間標籤指示燈 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-base font-bold">
+                    <button id="tag-olympic" onclick="applyConsoleSeconds(75)" class="text-left p-5 rounded-2xl border-2 border-slate-800 bg-slate-950/40 hover:bg-slate-950/80 transition-all">
+                        <span class="text-xs font-bold text-red-500 block mb-1">● 奧運神級區間</span>
+                        <span class="text-xl font-black text-slate-100 block">1 分 15 秒</span>
+                        <span class="text-xs text-slate-400 block mt-1">頂尖選手無氧爆發輸出</span>
+                    </button>
+                    <button id="tag-elite" onclick="applyConsoleSeconds(105)" class="text-left p-5 rounded-2xl border-2 border-slate-800 bg-slate-950/40 hover:bg-slate-950/80 transition-all">
+                        <span class="text-xs font-bold text-emerald-500 block mb-1">● 學界精英區間</span>
+                        <span class="text-xl font-black text-slate-100 block">1 分 45 秒</span>
+                        <span class="text-xs text-slate-400 block mt-1">體能傑出乳酸閾值訓練</span>
+                    </button>
+                    <button id="tag-healthy" onclick="applyConsoleSeconds(135)" class="text-left p-5 rounded-2xl border-2 border-slate-800 bg-slate-950/40 hover:bg-slate-950/80 transition-all">
+                        <span class="text-xs font-bold text-sky-500 block mb-1">● 健康有氧區間</span>
+                        <span class="text-xl font-black text-slate-100 block">2 分 15 秒</span>
+                        <span class="text-xs text-slate-400 block mt-1">中高強度帶氧燃脂瘦身</span>
+                    </button>
+                    <button id="tag-beginner" onclick="applyConsoleSeconds(165)" class="text-left p-5 rounded-2xl border-2 border-slate-800 bg-slate-950/40 hover:bg-slate-950/80 transition-all">
+                        <span class="text-xs font-bold text-amber-500 block mb-1">● 初學放鬆區間</span>
+                        <span class="text-xl font-black text-slate-100 block">2 分 45 秒</span>
+                        <span class="text-xs text-slate-400 block mt-1">低強度熱身與正確技術復健</span>
+                    </button>
+                </div>
+
+                <!-- 中間：無級大滑桿與數值大字體展示 -->
+                <div class="bg-slate-950/80 p-8 rounded-2xl border border-slate-800/80 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- 數值控制與滑動 -->
+                    <div class="md:col-span-7 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-base text-slate-400 font-extrabold">🎚️ 拖動無級滑桿調整 500m 段速</span>
+                            <span class="text-xs text-slate-500 font-bold">1:10 - 3:30 範圍</span>
+                        </div>
+                        
+                        <!-- 核心大滑桿 -->
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xs text-slate-500 font-bold">1:10</span>
+                            <input id="rowing-pace-slider" type="range" min="70" max="210" value="135" oninput="onConsoleSliderInput(this.value)" class="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                            <span class="text-xs text-slate-500 font-bold">3:30</span>
+                        </div>
+
+                        <!-- 微調小按鈕 -->
+                        <div class="flex justify-between items-center text-xs text-slate-400 font-bold">
+                            <span>微調段速：</span>
+                            <div class="space-x-2">
+                                <button onclick="adjustConsoleSeconds(-5)" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded-lg border border-slate-700 active:scale-95 transition-all">-5秒 (加快)</button>
+                                <button onclick="adjustConsoleSeconds(-1)" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded-lg border border-slate-700 active:scale-95 transition-all">-1秒</button>
+                                <button onclick="adjustConsoleSeconds(1)" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded-lg border border-slate-700 active:scale-95 transition-all">+1秒</button>
+                                <button onclick="adjustConsoleSeconds(5)" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded-lg border border-slate-700 active:scale-95 transition-all">+5秒 (減速)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 當前設定配速大字體 -->
+                    <div class="md:col-span-5 bg-slate-900 p-6 rounded-2xl border border-slate-800 text-center flex flex-col justify-center">
+                        <span class="text-xs text-slate-400 font-black tracking-widest uppercase mb-1">當前自訂 500 米段速</span>
+                        <div id="console-display-pace" class="text-5xl font-black text-sky-400 font-lcd">2:15</div>
+                        <span class="text-xs text-slate-500 font-bold mt-1">/500m</span>
+                    </div>
+
+                </div>
+
+                <!-- 下方：大字體即時物理換算 & 生理能耗區間分析 -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    
+                    <!-- 物理反饋數據 -->
+                    <div class="md:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800 text-center">
+                            <span class="text-xs text-slate-400 block mb-1">每秒移動速率</span>
+                            <span id="console-speed-ms" class="text-2xl font-black text-sky-400">3.70 m/s</span>
+                        </div>
+                        <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800 text-center">
+                            <span class="text-xs text-slate-400 block mb-1">時速換算</span>
+                            <span id="console-speed-kmh" class="text-2xl font-black text-sky-400">13.33 km/h</span>
+                        </div>
+                        <div class="bg-sky-500/10 p-5 rounded-2xl border border-sky-500/20 text-center">
+                            <span class="text-xs text-sky-300 block mb-1">2000米預估時間</span>
+                            <span id="console-est-2000" class="text-2xl font-black text-sky-400 font-lcd">09:00</span>
+                        </div>
+                    </div>
+
+                    <!-- 生理區間智能分析 -->
+                    <div class="md:col-span-6 bg-slate-950/40 p-6 rounded-2xl border border-slate-800 flex items-start space-x-4">
+                        <div class="text-3xl">🫁</div>
+                        <div class="space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs text-slate-400 font-black">體能訓練效能評估：</span>
+                                <span id="console-physio-zone" class="bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] px-2 py-0.5 rounded-full font-bold">高效帶氧燃脂區</span>
+                            </div>
+                            <p id="console-physio-desc" class="text-xs text-slate-300 leading-relaxed font-medium">
+                                此區間主要依靠有氧脂肪供能，能有效減少體脂肪、建立紮實的心肺血管基礎耐力，對關節與肌肉的負荷適中，適合長時間有氧交叉鍛煉。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ==================== 版面：知識挑戰站 ==================== -->
+        <section id="tab-quiz" class="tab-content scroll-mt-24 space-y-12 hidden">
+            <div class="border-b border-slate-200 pb-6">
+                <span class="text-sky-600 font-extrabold text-sm uppercase tracking-wider">KNOWLEDGE CHECK</span>
+                <h2 class="text-4xl font-black mt-2 text-slate-900">體育學科：知識挑戰站</h2>
+                <p class="text-slate-500 text-lg mt-3 font-medium">自學完畢後，來測驗一下自己對賽艇歷史、規格與正確力學技術的掌握程度吧！</p>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 sm:p-12">
+                <div class="max-w-4xl mx-auto">
+                    <!-- 第一題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q1</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">現代賽艇在 1829 年流傳至今的著名校際賽艇比賽，是由哪兩所大學進行？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(1, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 哈佛大學 與 耶Yale大學</button>
+                            <button onclick="checkAnswer(1, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 劍橋大學 與 牛津大學</button>
+                            <button onclick="checkAnswer(1, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 香港大學 與 中文大學</button>
+                            <button onclick="checkAnswer(1, 'D', this)" class="option-btn text-left p-4 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 帝國理工 與 倫敦大學</button>
+                        </div>
+                        <div id="feedback-1" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第二題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q2</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">室內賽艇拉五百米所需的時間，其速度的標準測量方法在體育學筆記中稱作什麼？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(2, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 槳頻 (Stroke Rate)</button>
+                            <button onclick="checkAnswer(2, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 阻力係數 (Drag Factor)</button>
+                            <button onclick="checkAnswer(2, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 段速 (Split Time)</button>
+                            <button onclick="checkAnswer(2, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 耗氧速率 (Oxygen Rate)</button>
+                        </div>
+                        <div id="feedback-2" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第三題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q3</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">在室內賽艇機正確化艇動作力學中，當你「向後拉動」時，正確的呼吸動作應為？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(3, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 吸氣 (Inhale)</button>
+                            <button onclick="checkAnswer(3, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 呼氣 (Exhale)</button>
+                            <button onclick="checkAnswer(3, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 憋氣 (Hold breath)</button>
+                            <button onclick="checkAnswer(3, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 急促短呼吸</button>
+                        </div>
+                        <div id="feedback-3" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第四題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q4</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">中國香港賽艇協會及學界常用的「一分鐘賽艇測試」，其主要測試目的是什麼？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(4, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 評估選手對船槳水面角度的敏感度</button>
+                            <button onclick="checkAnswer(4, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 評估心肺耐力、爆發力及全身肌肉協調性</button>
+                            <button onclick="checkAnswer(4, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 測試學生的體重是否達標</button>
+                            <button onclick="checkAnswer(4, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 評估在水上賽艇中當舵手的指揮能力</button>
+                        </div>
+                        <div id="feedback-4" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第五題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q5</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">在進行一分鐘賽艇測試時，以下哪項有關節奏與阻力的設定描述是正確的？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(5, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 一開頭就要用100%力量拉，阻力調到最大10</button>
+                            <button onclick="checkAnswer(5, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 阻力設定在3-5之間，保持每分鐘28-32槳的穩定功率輸出</button>
+                            <button onclick="checkAnswer(5, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 槳頻應保持得越慢越好，大概每分鐘10槳以節省體能</button>
+                            <button onclick="checkAnswer(5, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 雙腿應保持伸直，完全不用蹬腿以保護膝關節</button>
+                        </div>
+                        <div id="feedback-5" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第六題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q6</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">學術與亞運規格上，水上競賽艇的外型極為狹長，其形狀常被生動地比喻為以下哪一種工具？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(6, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 流線型木勺</button>
+                            <button onclick="checkAnswer(6, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 織布的梭子</button>
+                            <button onclick="checkAnswer(6, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 圓潤的剖筒竹筏</button>
+                            <button onclick="checkAnswer(6, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 長型橄欖球</button>
+                        </div>
+                        <div id="feedback-6" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第七題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q7</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">在賽艇項目分類與縮寫規定中，左右手各自手持船槳的「雙槳項目」，其簡稱英文字母後方必須加上哪一個標記？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(7, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 加「S」字樣</button>
+                            <button onclick="checkAnswer(7, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 加「P」字樣</button>
+                            <button onclick="checkAnswer(7, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 加「X」字樣</button>
+                            <button onclick="checkAnswer(7, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 加「-」減號</button>
+                        </div>
+                        <div id="feedback-7" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第八題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q8</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">奧運及亞運等標準水上賽艇賽事，其最核心且直航道的競賽標準距離，通常為多少公尺？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(8, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 500 公尺</button>
+                            <button onclick="checkAnswer(8, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 1000 公尺</button>
+                            <button onclick="checkAnswer(8, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 1500 公尺</button>
+                            <button onclick="checkAnswer(8, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 2000 公尺</button>
+                        </div>
+                        <div id="feedback-8" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第九題 -->
+                    <div class="quiz-item space-y-8 mb-12 border-b border-slate-100 pb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q9</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">為什麼體育課本筆記中指出，室內賽艇是一項極為理想的陸上「交叉訓練 (Cross Training)」有氧運動？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(9, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 它可以完全替代心肺跑步，不需任何力量輸出</button>
+                            <button onclick="checkAnswer(9, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 身體坐於特設滑座上，動作並無關節體重負荷</button>
+                            <button onclick="checkAnswer(9, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 它是唯一只鍛煉上肢肩膀，對大腿沒有任何要求</button>
+                            <button onclick="checkAnswer(9, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 它的段速跟划艇者者的心肺及肌肉無關</button>
+                        </div>
+                        <div id="feedback-9" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 第十題 -->
+                    <div class="quiz-item space-y-8 mb-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-sky-100 text-sky-800 text-base sm:text-lg font-black px-4 py-2 rounded-lg">Q10</span>
+                            <h3 class="font-black text-xl sm:text-2xl text-slate-800 leading-snug">在奧運會及亞運會「輕量級」賽艇競賽中，關於運動員個人體重的上限標準，下列何者正確？</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base sm:text-lg">
+                            <button onclick="checkAnswer(10, 'A', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">A. 男子 75 公斤以下、女子 60 公斤以下</button>
+                            <button onclick="checkAnswer(10, 'B', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">B. 男子 72.5 公斤以下、女子 59 公斤以下</button>
+                            <button onclick="checkAnswer(10, 'C', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">C. 男子 70 公斤以下、女子 55 公斤以下</button>
+                            <button onclick="checkAnswer(10, 'D', this)" class="option-btn text-left p-5 sm:p-6 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-150 font-bold transition-all shadow-sm w-full">D. 男子 80 公斤以下、女子 65 公斤以下</button>
+                        </div>
+                        <div id="feedback-10" class="hidden text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed shadow-inner"></div>
+                    </div>
+
+                    <!-- 分數小計 -->
+                    <div class="mt-16 pt-10 border-t border-slate-100 text-center">
+                        <h4 class="font-black text-slate-900 text-2xl">你的總得分</h4>
+                        <div class="text-5xl font-black text-sky-600 mt-3" id="score-display">0 / 10</div>
+                        <p class="text-sm text-slate-400 mt-2">作答完畢後，看看自己得到了幾分！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-slate-900 text-slate-400 text-sm py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <div>
+                <p class="font-bold text-slate-200 text-base">聖公會李炳中學 SKH Li Ping Secondary School</p>
+                <p class="mt-1 text-xs">體育科筆記線上課件 (室內賽艇篇)</p>
+            </div>
+            <div class="text-slate-500 text-right text-xs">
+                <p>資料來源：聖公會李炳中學體育科課堂筆記、教育局課程發展處 (Rowing TC)</p>
+                <p class="mt-1">&copy; 2026 聖公會李炳中學. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // 客製化 Toast 通知取代原生 alert
+        function triggerNotification(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            
+            // 顯示
+            toast.classList.remove('opacity-0', '-translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            // 3秒後自動隱藏
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-4');
+            }, 3500);
+        }
+
+        // 版面(Tab)切換邏輯
+        function switchTab(tabId) {
+            // 隱藏所有板塊
+            document.querySelectorAll('.tab-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            // 顯示當前板塊
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+
+            // 更新所有導航按鈕的樣式
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.className = "tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 bg-sky-500 text-slate-950";
+                } else {
+                    btn.className = "tab-btn px-5 py-3.5 rounded-xl font-black transition-all flex items-center space-x-2 text-slate-300 hover:bg-slate-800 hover:text-white";
+                }
+            });
+
+            // 切換時自動置頂右側視窗
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const mainContent = document.querySelector('main');
+            if (mainContent) {
+                mainContent.scrollTop = 0;
+            }
+        }
+
+        // 一分鐘測試評估器邏輯
+        let selectedGender = 'M';
+
+        function setGender(gender) {
+            selectedGender = gender;
+            const btnM = document.getElementById('gender-m');
+            const btnF = document.getElementById('gender-f');
+            if (gender === 'M') {
+                btnM.className = "py-3 rounded-lg text-sm font-bold border transition-colors bg-sky-500 border-sky-500 text-slate-950";
+                btnF.className = "py-3 rounded-lg text-sm font-bold border border-slate-700 hover:bg-slate-800 transition-colors text-slate-300";
+            } else {
+                btnF.className = "py-3 rounded-lg text-sm font-bold border transition-colors bg-sky-500 border-sky-500 text-slate-950";
+                btnM.className = "py-3 rounded-lg text-sm font-bold border border-slate-700 hover:bg-slate-800 transition-colors text-slate-300";
+            }
+        }
+
+        function evaluateOneMinTest() {
+            const dist = parseInt(document.getElementById('one-min-dist').value) || 0;
+            const resBox = document.getElementById('eval-result-box');
+            const levelBadge = document.getElementById('eval-level-badge');
+            const levelName = document.getElementById('eval-level-name');
+            const levelDesc = document.getElementById('eval-level-desc');
+
+            if (dist < 50 || dist > 600) {
+                triggerNotification('請輸入合理的划行距離 (50 至 600 公尺)！');
+                return;
+            }
+
+            resBox.classList.remove('hidden');
+
+            let level = "";
+            let badgeClass = "";
+            let desc = "";
+
+            if (selectedGender === 'M') {
+                if (dist >= 330) {
+                    level = "學界精英 / 發展潛能優異 (Elite/High Potential)";
+                    badgeClass = "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "太震撼了！你在 1 分鐘內展現了極強的爆發力與心肺輸出。此成績已達到學界精英或具備運動員選材潛質的頂尖水平！繼續保持這股力量，完美契合「腿 ➔ 軀幹 ➔ 手」的黃金拉槳發力鏈。";
+                } else if (dist >= 270) {
+                    level = "優秀體適能標準 (Excellent)";
+                    badgeClass = "bg-sky-400/20 text-sky-300 border border-sky-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "非常優秀！你的全身大肌肉協調性及心肺耐力極佳。在測試中保持著穩定的功率輸出。建議可以將阻力固定在 3-5，並多練習起步時前幾槳的爆發性蹬腿。";
+                } else if (dist >= 210) {
+                    level = "青年組良好水平 (Good/Average)";
+                    badgeClass = "bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "很不錯的成績！你擁有健康的體適能基礎。若想突破 270米，可以試著調整槳頻至每分鐘 28-32 槳，並注意「向後拉呼氣、向前復位吸氣」，這會讓你的上半身更穩定、不易腰酸。";
+                } else {
+                    level = "初學入門階段 (Beginner)";
+                    badgeClass = "bg-rose-400/20 text-rose-300 border border-rose-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "加油！這是你探索賽艇的起步。初學者常因「過度使用手臂拉、未用大腿蹬送」而容易疲勞，建議回歸基本功，專注在大腿發力及上半身直挺姿勢，你的距離一定會突飛猛進！";
+                }
+            } else {
+                // 女子組標準
+                if (dist >= 290) {
+                    level = "學界精英 / 發展潛能優異 (Elite/High Potential)";
+                    badgeClass = "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "無與倫比！你的節奏感、協調性與耐力平衡做得非常完美，已具備優秀賽艇選手的選材潛力。請繼續發揮「蹬、仰、拉」的順暢度，你的一分鐘功率輸出非常強悍！";
+                } else if (dist >= 240) {
+                    level = "優秀體適能標準 (Excellent)";
+                    badgeClass = "bg-sky-400/20 text-sky-300 border border-sky-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "棒極了！這是一個值得驕傲的成績，代表你的全身協調性與中軸核心力量控制得當。繼續維持每分鐘 28-32 槳的穩定高頻，並多做陸上有氧交叉訓練以增強體能。";
+                } else if (dist >= 180) {
+                    level = "青年組良好水平 (Good/Average)";
+                    badgeClass = "bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "做得好！你的成績符合良好標準。在 1 分鐘極限測試中，後半段保持吸呼節奏是關鍵（向後拉時呼氣以收緊核心）。試著每天維持 20-40 分鐘的室內賽艇有氧訓練，距離會再提升！";
+                } else {
+                    level = "初學入門階段 (Beginner)";
+                    badgeClass = "bg-rose-400/20 text-rose-300 border border-rose-400/30 text-xs px-2.5 py-1 rounded-full font-bold";
+                    desc = "很棒的嘗試！賽艇首重姿勢與安全。請注意不要在起步時過度前傾腰椎，這容易造成疲勞或受傷。多專注在「蹬腿發力」的感覺，用大腿大肌肉帶動，你會拉得既輕鬆又遠！";
+                }
+            }
+
+            levelBadge.className = badgeClass;
+            levelName.innerText = dist + " 公尺 (" + level + ")";
+            levelDesc.innerText = desc;
+        }
+
+        // ==================== 段速控制台邏輯 ====================
+        
+        const physioZones = {
+            olympic: {
+                title: "🔴 極限無氧爆發區 (Anaerobic / ATP-CP)",
+                desc: "此區間強度極高，主要依賴肌肉內的 ATP-CP 系統和無氧醣解供能，大腿大肌群會瞬間產生乳酸，適合短程衝刺訓練，不能維持太久。能極大程度地提升全身的絕對爆發力與速度力量！"
+            },
+            elite: {
+                title: "🟡 乳酸閾值 / 最大攝氧量區 (Lactate Threshold / VO₂ Max)",
+                desc: "此區間為高強度訓練區。最大攝氧量（VO₂ Max）會被完全激活，乳酸開始快速在血液中累積。此時的呼吸非常急促，是提升學界中長距離賽事耐力與配速穩定度的「黃金訓練區」。"
+            },
+            healthy: {
+                title: "🟢 高效有氧耐力 / 帶氧燃脂區 (Aerobic Fat-Burning)",
+                desc: "此區間主要依靠帶氧脂肪和醣類混合供能。心肺負荷適中，能有效強化心肌、增加血管網密度並提高燃脂效率。這是室內賽艇 20-40 分鐘自主有氧交叉訓練的最推薦區間！"
+            },
+            beginner: {
+                title: "🔵 帶氧恢復 / 姿勢協調基礎區 (Active Recovery)",
+                desc: "此區間強度低、極其安全，主要用於運動後的積極性復健或初期熱身。在此配速下，同學們應百分之百專注於「腿（蹬） ➔ 軀幹（後仰） ➔ 手（拉）」的正確力學發力順序與平穩呼吸配合。"
+            }
+        };
+
+        // 按下預設區塊卡片時的邏輯：平滑變更滑桿值並更新
+        function applyConsoleSeconds(seconds) {
+            const slider = document.getElementById('rowing-pace-slider');
+            slider.value = seconds;
+            updateConsoleMetrics(seconds);
+            triggerNotification(`已套用區間配速`);
+        }
+
+        // 段速微調按鈕
+        function adjustConsoleSeconds(offset) {
+            const slider = document.getElementById('rowing-pace-slider');
+            let newVal = parseInt(slider.value) + offset;
+            if (newVal < 70) newVal = 70;
+            if (newVal > 210) newVal = 210;
+            slider.value = newVal;
+            updateConsoleMetrics(newVal);
+        }
+
+        // 當滑動無級滑桿時觸發
+        function onConsoleSliderInput(val) {
+            updateConsoleMetrics(parseInt(val));
+        }
+
+        // 更新控制盤內的所有物理數據及生理學分析
+        function updateConsoleMetrics(totalSeconds) {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            const formattedPace = `${mins}:${secs < 10 ? '0' + secs : secs}`;
+            
+            document.getElementById('console-display-pace').innerText = formattedPace;
+
+            // 同步更新 PM5 錶面
+            pm5CurrentMin = mins;
+            pm5CurrentSec = secs;
+            updatePM5PaceDisplay();
+
+            const speedMeterPerSecond = 500 / totalSeconds;
+            const speedKmh = speedMeterPerSecond * 3.6;
+
+            const total2000mSeconds = totalSeconds * 4;
+            const minutes2000m = Math.floor(total2000mSeconds / 60);
+            const seconds2000m = total2000mSeconds % 60;
+            const formatted2000m = `${minutes2000m < 10 ? '0' + minutes2000m : minutes2000m}:${seconds2000m < 10 ? '0' + seconds2000m : seconds2000m}`;
+
+            document.getElementById('console-speed-ms').innerText = speedMeterPerSecond.toFixed(2) + ' m/s';
+            document.getElementById('console-speed-kmh').innerText = speedKmh.toFixed(2) + ' km/h';
+            document.getElementById('console-est-2000').innerText = formatted2000m;
+
+            const tags = {
+                olympic: document.getElementById('tag-olympic'),
+                elite: document.getElementById('tag-elite'),
+                healthy: document.getElementById('tag-healthy'),
+                beginner: document.getElementById('tag-beginner')
+            };
+            Object.values(tags).forEach(tag => {
+                if (tag) {
+                    tag.classList.remove('border-red-500', 'border-emerald-500', 'border-sky-500', 'border-amber-500', 'bg-slate-950/80');
+                    tag.classList.add('border-slate-800', 'bg-slate-950/40');
+                }
+            });
+
+            const zoneTitle = document.getElementById('console-physio-zone');
+            const zoneDesc = document.getElementById('console-physio-desc');
+
+            if (totalSeconds <= 90) { // 1:30 以下
+                if (tags.olympic) tags.olympic.className = "text-left p-5 rounded-2xl border-2 border-red-500 bg-slate-950/80 transition-all scale-[1.02]";
+                zoneTitle.innerText = physioZones.olympic.title;
+                zoneTitle.className = "bg-red-500/20 text-red-300 border border-red-500/30 text-[11px] px-2 py-0.5 rounded-full font-bold";
+                zoneDesc.innerText = physioZones.olympic.desc;
+            } else if (totalSeconds <= 120) { // 1:31 - 2:00
+                if (tags.elite) tags.elite.className = "text-left p-5 rounded-2xl border-2 border-emerald-500 bg-slate-950/80 transition-all scale-[1.02]";
+                zoneTitle.innerText = physioZones.elite.title;
+                zoneTitle.className = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] px-2 py-0.5 rounded-full font-bold";
+                zoneDesc.innerText = physioZones.elite.desc;
+            } else if (totalSeconds <= 150) { // 2:01 - 2:30
+                if (tags.healthy) tags.healthy.className = "text-left p-5 rounded-2xl border-2 border-sky-500 bg-slate-950/80 transition-all scale-[1.02]";
+                zoneTitle.innerText = physioZones.healthy.title;
+                zoneTitle.className = "bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[11px] px-2 py-0.5 rounded-full font-bold";
+                zoneDesc.innerText = physioZones.healthy.desc;
+            } else { // 2:31 以上
+                if (tags.beginner) tags.beginner.className = "text-left p-5 rounded-2xl border-2 border-amber-500 bg-slate-950/80 transition-all scale-[1.02]";
+                zoneTitle.innerText = physioZones.beginner.title;
+                zoneTitle.className = "bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[11px] px-2 py-0.5 rounded-full font-bold";
+                zoneDesc.innerText = physioZones.beginner.desc;
+            }
+        }
+
+        function calculateMetricsFromTab() {
+            const slider = document.getElementById('rowing-pace-slider');
+            updateConsoleMetrics(parseInt(slider.value));
+        }
+
+        // ==================== Concept2 PM5 實時動態模擬邏輯 ====================
+        let pm5ActiveMode = 'all'; // all, curve, large, boat
+        let pm5UnitMode = 'pace';  // pace, watts, cals
+        let pm5SimulationInterval = null;
+        let pm5IsRunning = false;
+
+        let pm5TimeElapsed = 0; 
+        let pm5Distance = 0.0;
+        let pm5CurrentSR = 24; 
+        let pm5CurrentMin = 2;
+        let pm5CurrentSec = 15;
+        let pm5CaloriesBase = 0;
+        let pm5WattsBase = 0;
+
+        function updatePM5SR(val) {
+            pm5CurrentSR = parseInt(val);
+            document.getElementById('pm5-sr-val-display').innerText = val + ' s/m';
+            document.getElementById('pm5-sr').innerText = val;
+            if (document.getElementById('pm5-curve-sr')) {
+                document.getElementById('pm5-curve-sr').innerText = val;
+            }
+        }
+
+        function togglePM5Mode(mode) {
+            pm5ActiveMode = mode;
+            document.getElementById('pm5-mode-all').classList.add('hidden');
+            document.getElementById('pm5-mode-curve').classList.add('hidden');
+            document.getElementById('pm5-mode-large').classList.add('hidden');
+            document.getElementById('pm5-mode-boat').classList.add('hidden');
+
+            if (mode === 'all') {
+                document.getElementById('pm5-mode-all').classList.remove('hidden');
+            } else if (mode === 'curve') {
+                document.getElementById('pm5-mode-curve').classList.remove('hidden');
+                drawStaticForceCurve(); 
+            } else if (mode === 'large') {
+                document.getElementById('pm5-mode-large').classList.remove('hidden');
+            } else if (mode === 'boat') {
+                document.getElementById('pm5-mode-boat').classList.remove('hidden');
+            }
+            triggerNotification(`PM5 顯示模式切換至：${mode.toUpperCase()}`);
+            updatePM5DisplayUI();
+        }
+
+        function togglePM5Units() {
+            if (pm5UnitMode === 'pace') {
+                pm5UnitMode = 'watts';
+                triggerNotification('PM5 數據單位切換為：功率瓦特 (Watts)');
+            } else if (pm5UnitMode === 'watts') {
+                pm5UnitMode = 'cals';
+                triggerNotification('PM5 數據單位切換為：卡路里/小時 (Cal/hr)');
+            } else {
+                pm5UnitMode = 'pace';
+                triggerNotification('PM5 數據單位切換為：500米段速 (Pace/500m)');
+            }
+            updatePM5DisplayUI();
+        }
+
+        function updatePM5PaceDisplay() {
+            const totalSeconds = (pm5CurrentMin * 60) + pm5CurrentSec;
+            const pacePerMeter = totalSeconds / 500;
+            if (pacePerMeter > 0) {
+                pm5WattsBase = Math.round(2.80 / Math.pow(pacePerMeter, 3));
+            } else {
+                pm5WattsBase = 0;
+            }
+            pm5CaloriesBase = Math.round(pm5WattsBase * 4 * 0.85 + 300);
+            updatePM5DisplayUI();
+        }
+
+        function togglePM5Simulation() {
+            const btn = document.getElementById('btn-pm5-start');
+            if (pm5IsRunning) {
+                clearInterval(pm5SimulationInterval);
+                pm5IsRunning = false;
+                btn.innerText = '🏁 開始模擬划行';
+                btn.className = "bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-sm transition-all active:scale-95 text-center";
+                triggerNotification('模擬划行已暫停');
+            } else {
+                pm5IsRunning = true;
+                btn.innerText = '⏸️ 暫停模擬划行';
+                btn.className = "bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl text-sm transition-all active:scale-95 text-center";
+                triggerNotification('開始模擬划行！拉槳中...');
+                
+                const currentSeconds = parseInt(document.getElementById('rowing-pace-slider').value) || 135;
+                pm5CurrentMin = Math.floor(currentSeconds / 60);
+                pm5CurrentSec = currentSeconds % 60;
+                
+                pm5CurrentSR = parseInt(document.getElementById('pm5-sr-slider').value) || 24;
+                updatePM5PaceDisplay();
+
+                let strokeCycle = 0; 
+
+                pm5SimulationInterval = setInterval(() => {
+                    pm5TimeElapsed += 1; 
+
+                    const totalSecs = pm5TimeElapsed / 10;
+                    const mins = Math.floor(totalSecs / 60);
+                    const secs = Math.floor(totalSecs % 60);
+                    const tenths = pm5TimeElapsed % 10;
+                    const formattedTime = `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}.${tenths}`;
+                    
+                    document.getElementById('pm5-time').innerText = formattedTime;
+                    document.getElementById('pm5-large-time').innerText = `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+                    document.getElementById('pm5-boat-time').innerText = formattedTime;
+
+                    strokeCycle += 1;
+                    const cycleThreshold = Math.round(600 / pm5CurrentSR);
+                    
+                    if (strokeCycle >= cycleThreshold) {
+                        strokeCycle = 0;
+                        if (pm5ActiveMode === 'curve') {
+                            drawDynamicForceCurve();
+                        }
+                        const fluctuatedWatts = Math.round(pm5WattsBase * (0.94 + Math.random() * 0.12));
+                        if (pm5UnitMode === 'pace') {
+                            document.getElementById('pm5-watts').innerText = `${fluctuatedWatts} w`;
+                        }
+                    }
+
+                    const paceSeconds = (pm5CurrentMin * 60) + pm5CurrentSec;
+                    const distancePerTenth = (500 / paceSeconds) * 0.1;
+                    pm5Distance += distancePerTenth;
+
+                    const dispDistance = Math.floor(pm5Distance);
+                    document.getElementById('pm5-dist').innerText = dispDistance;
+                    document.getElementById('pm5-large-dist').innerText = `${dispDistance} m`;
+                    document.getElementById('pm5-boat-dist').innerText = dispDistance;
+
+                    if (pm5ActiveMode === 'boat') {
+                        const targetDistance = (totalSecs * (500 / paceSeconds)); 
+                        const myPercentage = Math.min((pm5Distance / 100) * 100, 100);
+                        const targetPercentage = Math.min((targetDistance / 100) * 100, 100);
+
+                        document.getElementById('pm5-boat-my-marker').style.left = `${myPercentage}%`;
+                        document.getElementById('pm5-boat-target-marker').style.left = `${targetPercentage}%`;
+
+                        const diff = dispDistance - Math.floor(targetDistance);
+                        const diffBox = document.getElementById('pm5-boat-diff');
+                        if (diff > 0) {
+                            diffBox.className = "text-center text-xs font-black pt-1 text-emerald-800 border-t border-slate-800/10";
+                            diffBox.innerText = `領先配速艇 +${diff} 米`;
+                        } else if (diff < 0) {
+                            diffBox.className = "text-center text-xs font-black pt-1 text-rose-700 border-t border-slate-800/10";
+                            diffBox.innerText = `落後配速艇 ${diff} 米`;
+                        } else {
+                            diffBox.className = "text-center text-xs font-black pt-1 text-slate-700 border-t border-slate-800/10";
+                            diffBox.innerText = `與配速艇並行中`;
+                        }
+                    }
+
+                    document.getElementById('pm5-sr').innerText = pm5CurrentSR;
+                    if (document.getElementById('pm5-curve-sr')) {
+                        document.getElementById('pm5-curve-sr').innerText = pm5CurrentSR;
+                    }
+
+                }, 100); 
+            }
+        }
+
+        function resetPM5Simulation() {
+            clearInterval(pm5SimulationInterval);
+            pm5IsRunning = false;
+            pm5TimeElapsed = 0;
+            pm5Distance = 0.0;
+            
+            const btn = document.getElementById('btn-pm5-start');
+            btn.innerText = '🏁 開始模擬划行';
+            btn.className = "bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-sm transition-all active:scale-95 text-center";
+
+            document.getElementById('pm5-time').innerText = "00:00.0";
+            const sliderSR = parseInt(document.getElementById('pm5-sr-slider').value) || 24;
+            pm5CurrentSR = sliderSR;
+            document.getElementById('pm5-sr').innerText = pm5CurrentSR;
+            
+            document.getElementById('pm5-dist').innerText = "0";
+            document.getElementById('pm5-large-time').innerText = "00:00";
+            document.getElementById('pm5-large-dist').innerText = "0 m";
+            document.getElementById('pm5-boat-time').innerText = "00:00.0";
+            document.getElementById('pm5-boat-dist').innerText = "0";
+            document.getElementById('pm5-boat-my-marker').style.left = "0%";
+            document.getElementById('pm5-boat-target-marker').style.left = "0%";
+            document.getElementById('pm5-boat-diff').innerText = "等候出發...";
+
+            updatePM5PaceDisplay();
+            if (pm5ActiveMode === 'curve') {
+                drawStaticForceCurve();
+            }
+            triggerNotification('PM5 模擬數據已重置！');
+        }
+
+        function updatePM5DisplayUI() {
+            const formattedPace = `${pm5CurrentMin}:${pm5CurrentSec < 10 ? '0' + pm5CurrentSec : pm5CurrentSec}`;
+            
+            document.getElementById('pm5-pace').innerText = formattedPace;
+            document.getElementById('pm5-large-pace').innerText = formattedPace;
+            if (pm5ActiveMode === 'curve') {
+                document.getElementById('pm5-curve-pace').innerText = formattedPace;
+            }
+
+            const wattsText = document.getElementById('pm5-watts');
+            const calsText = document.getElementById('pm5-cals');
+            
+            if (pm5UnitMode === 'pace') {
+                wattsText.innerText = `${pm5WattsBase} w`;
+                calsText.innerText = `${pm5CaloriesBase} cal/hr`;
+            } else if (pm5UnitMode === 'watts') {
+                wattsText.innerText = `${pm5WattsBase} w`;
+                calsText.innerText = `POWER MODE`;
+            } else {
+                wattsText.innerText = `CALORIES MODE`;
+                calsText.innerText = `${pm5CaloriesBase} cal/hr`;
+            }
+        }
+
+        function drawStaticForceCurve() {
+            const path = document.getElementById('pm5-curve-path');
+            path.setAttribute('d', 'M 0,45 Q 15,10 40,15 T 80,42 T 100,45');
+        }
+
+        function drawDynamicForceCurve() {
+            const path = document.getElementById('pm5-curve-path');
+            const peakY = Math.floor(Math.random() * (16 - 8 + 1)) + 8; 
+            const peakX = Math.floor(Math.random() * (45 - 35 + 1)) + 35;
+            
+            path.setAttribute('d', `M 0,45 Q 12,35 22,${peakY + 5} T ${peakX},${peakY} T 82,40 T 100,45`);
+        }
+
+
+        // ==================== 知識問答邏輯 ====================
+        const correctAnswers = {
+            1: 'B', 2: 'C', 3: 'B', 4: 'B', 5: 'B', 6: 'B', 7: 'C', 8: 'D', 9: 'B', 10: 'B'
+        };
+
+        const scoreTracker = {
+            1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0
+        };
+
+        const explanations = {
+            1: "正確答案是 B。1829 年首屆在倫敦泰晤士河舉行的賽艇賽事，是由牛津與劍橋兩所著名大學進行，此對抗賽流傳至今，也是現代水上賽艇的核心起源。",
+            2: "正確答案是 C。筆記中明確提到，室內賽艇機速度的標準測量方法稱為「段速」(Split)，代表划行五百米所需的時間。",
+            3: "正確答案是 B。正確划艇力學中，當你「向後拉動（大腿肌肉出力蹬送）」時應配合『呼氣』，能穩定並緊縮腹部核心肌群；而在「向前恢復（滑動）」時則進行『吸氣』。",
+            4: "正確答案是 B。一分鐘賽艇測試（1-Minute Ergometer Test）是中國香港賽艇協會及學界最常用的體能測試，主要用於評估受試者的心肺耐力、爆發力及全身大肌肉協調性。",
+            5: "正確答案是 B。在一分鐘極限測試中，良好的節奏控制和功率輸出是關鍵。建議將賽艇機阻力係數調在 3-5 之間（不要太大以防拉傷），並維持每分鐘 28-32 槳的穩定速率。",
+            6: "正確答案是 B。課堂小知識中提到，水上競賽艇外型極端狹長、形狀猶如織布時穿梭的「梭子」，因此被廣泛比喻為織布梭子，強調其極低水阻的設計特點。",
+            7: "正確答案是 C。根據競賽規範，左右手各握一槳的「雙槳項目（Sculling）」在項目英文簡寫後，會加上一個代表交叉的對稱字母「X」進行區分（如單人雙槳 1X）。",
+            8: "正確答案是 D。亞運、奧運及學界常規直航道水上賽艇比賽的標準長度均為 2000 米，並且終點後必須留有至少 100 米緩衝水域。",
+            9: "正確答案是 B。室內賽艇因為身體坐在滑座上，在拉槳過程中骨骼和關節不需承載身體重力負荷，相較於跑步能提供關節絕佳的安全保護，是非常優秀的交叉訓練手段。",
+            10: "正確答案是 B。筆記及亞運規範中明確規定，「輕量級」項目對選手個人體重的上限要求為：男子必須在 72.5 公斤以下，女子必須在 59 公斤以下。"
+        };
+
+        function checkAnswer(questionNum, selectedOption, buttonElement) {
+            const feedbackDiv = document.getElementById(`feedback-${questionNum}`);
+            const siblingButtons = buttonElement.parentNode.querySelectorAll('button');
+
+            // 禁用同一題其他按鈕
+            siblingButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('bg-slate-50', 'hover:bg-slate-100');
+                if (btn !== buttonElement) {
+                    btn.classList.add('opacity-55');
+                }
+            });
+
+            // 檢查對錯
+            const isCorrect = selectedOption === correctAnswers[questionNum];
+            if (isCorrect) {
+                buttonElement.className = "option-btn text-left p-5 sm:p-6 bg-emerald-100 border border-emerald-500 text-emerald-800 rounded-2xl font-bold transition-all shadow-md w-full";
+                feedbackDiv.className = "text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed bg-emerald-50 text-emerald-800 border border-emerald-200 mt-4";
+                feedbackDiv.innerText = "⭐ 回答正確！" + explanations[questionNum];
+                scoreTracker[questionNum] = 1;
+            } else {
+                buttonElement.className = "option-btn text-left p-5 sm:p-6 bg-red-100 border border-red-500 text-red-800 rounded-2xl font-bold transition-all shadow-md w-full";
+                feedbackDiv.className = "text-base sm:text-lg p-5 rounded-2xl font-bold leading-relaxed bg-red-50 text-red-800 border border-red-200 mt-4";
+                feedbackDiv.innerText = "❌ 回答錯誤。" + explanations[questionNum];
+                scoreTracker[questionNum] = 0;
+
+                // 標記正確答案
+                siblingButtons.forEach(btn => {
+                    if (btn.innerText.startsWith(correctAnswers[questionNum])) {
+                        btn.className = "option-btn text-left p-5 sm:p-6 bg-emerald-50 border-emerald-300 text-emerald-700 rounded-2xl font-black transition-all shadow-md w-full";
+                        btn.classList.remove('opacity-55');
+                    }
+                });
+            }
+
+            feedbackDiv.classList.remove('hidden');
+            updateTotalScore();
+        }
+
+        function updateTotalScore() {
+            const total = Object.values(scoreTracker).reduce((a, b) => a + b, 0);
+            document.getElementById('score-display').innerText = total + " / 10";
+        }
+
+        // 初始化
+        window.onload = function() {
+            calculateMetricsFromTab();
+            updatePM5PaceDisplay();
+        };
+    </script>
+</body>
+</html>
