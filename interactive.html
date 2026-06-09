@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>體育互動專區 - 聖公會李炳中學體育科</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .liping-blue { background-color: #003366; }
+        .liping-border { border-color: #d32f2f; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <nav class="liping-blue text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-3 mb-4 md:mb-0">
+                <div class="bg-white p-1 rounded-full text-blue-900 font-bold w-10 h-10 flex items-center justify-center">LP</div>
+                <div>
+                    <h1 class="text-lg font-bold leading-none">聖公會李炳中學</h1>
+                    <p class="text-xs opacity-80 italic">體育科 PE Department</p>
+                </div>
+            </div>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="text-blue-200 hover:text-white transition">最新資訊</a></li>
+                <li><a href="resources.html" class="text-blue-200 hover:text-white transition">學習資源</a></li>
+                <li><a href="interactive.html" class="font-bold border-b-2 border-white pb-1">互動專區</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="bg-white border-b-4 liping-border py-12 mb-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">⚡ 體育互動專區 <span class="text-blue-600">Interactive Zone</span></h2>
+            <p class="mt-2 text-slate-500">體適能評估系統：0-5分累積總分獎勵計劃（涵蓋 12 - 17 歲或以上）</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
+                <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-yellow-500"></i> 體適能積分獎勵換算系統
+                </h3>
+                <p class="text-sm text-gray-500 mb-6">輸入成績後，系統會自動轉換為 0-5 分並計算總累積得分。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-slate-50 rounded-xl">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">學生性別</label>
+                        <select id="fit-gender" class="w-full border rounded-lg p-2 bg-white outline-none">
+                            <option value="男">男生 (Male)</option>
+                            <option value="女">女生 (Female)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">學生年齡 (Age)</label>
+                        <select id="fit-age" class="w-full border rounded-lg p-2 bg-white outline-none">
+                            <option value="12">12 歲</option>
+                            <option value="13">13 歲</option>
+                            <option value="14">14 歲</option>
+                            <option value="15">15 歲</option>
+                            <option value="16">16 歲</option>
+                            <option value="17">17 歲或以上</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">1分鐘仰臥起坐 (次)</label>
+                        <input type="number" id="val-situp" placeholder="次數" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-situp" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">坐位體前屈 (cm)</label>
+                        <input type="number" id="val-flex" placeholder="厘米" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-flex" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">15米折返跑 (次)</label>
+                        <input type="number" id="val-shuttle" placeholder="圈數" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-shuttle" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">手握力總和 (kg)</label>
+                        <input type="number" id="val-grip" placeholder="公斤" class="w-full border rounded-lg p-2 outline-none">
+                        <div id="badge-grip" class="mt-1 text-xs font-bold text-center hidden rounded py-0.5"></div>
+                    </div>
+                </div>
+
+                <button onclick="analyzeFitness()" class="w-full bg-blue-900 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-md">
+                    <i class="fa-solid fa-calculator mr-1"></i> 計算累積總分與獎勵
+                </button>
+                
+                <div id="fitness-summary" class="mt-6 p-5 rounded-xl hidden text-center"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-blue-600"></i> BMI 簡易計算器
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">身高 (cm)</label>
+                            <input type="number" id="bmi-height" placeholder="例如: 170" class="w
