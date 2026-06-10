@@ -150,7 +150,8 @@
     </footer>
 
     <script>
-        const SPREADSHEET_ID = '2PACX-1vS-_qE6XPHlEI2czLW37um9rnlWHC76xeYM9GTeDai2IWzHdS9LKW-iQVrxUKqhV0uxC4hzYvZXTChX';
+        // 🚀 這裡已經更新為您提供的新 Google 試算表 ID
+        const SPREADSHEET_ID = '1v1gulGgdR1mmLsiSrsDEwSatJ3KYZMejTXPJREfPqKs';
         const STANDARDS_GID = '464966980'; 
 
         let standardsDatabase = [];
@@ -187,7 +188,7 @@
                             score5: parseFloat(cols[7]) || 0
                         });
                     }
-                    console.log("全新整合版標準庫已成功對齊！");
+                    console.log("新試算表資料庫連線就緒！");
                 });
         };
 
@@ -197,7 +198,6 @@
             
             if(standardsDatabase.length === 0) { alert('標準資料庫連線中，請稍候！'); return; }
 
-            // 已修正為 9分鐘跑 與 掌上壓
             const items = [
                 { id: 'situp', name: '仰臥起坐' },
                 { id: 'flex', name: '體前屈' },
@@ -212,7 +212,7 @@
                 const userVal = parseFloat(document.getElementById(`val-${item.id}`).value);
                 const badge = document.getElementById(`badge-${item.id}`);
                 
-                // 💡 關鍵修正：若欄位空白不填，直接跳過不計算，不再強制阻擋結算
+                // 若欄位空白不填，直接跳過不計算
                 if (isNaN(userVal)) {
                     badge.classList.add('hidden');
                     return;
@@ -253,7 +253,7 @@
                 return;
             }
 
-            // 💡 關鍵修正：直接以目前填寫的項目總分進行獎勵結算
+            // 直接以目前填寫的項目總分進行即時獎勵結算
             let awardText = "";
             let colorClasses = "";
 
